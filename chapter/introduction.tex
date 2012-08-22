@@ -1,0 +1,103 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}
+\label{cha:introduction}
+Intro
+
+TODO
+\begin{itemize}
+	\item Verteidigung: 15-20min präsi, 30min diskussion
+	\item UTF8 Tokens enclosing
+	\item Version of XText, eclipse, etc.
+	\item Xtext java, EMF java
+	\item MOF, Ecore, restricted MOF 
+	\item Disinguish text editor with model aware editor.
+	\item Suggest text representation for: 
+	\item editing (with STokens)
+	\item serialization (with mixed XMI containments)
+	\item presentation (wo/ IDTokens)?
+	\item Explain intermixed Txt, Graph, Txt
+	\item Mention existence of unassigned values in a choice but not in AST (“bla” | “blubb”) and defaults
+	\item EMF Compare
+	\item Pretty print vs. unparse
+	\item Edits
+	\item embrace amiguity
+	\item ambiguity vs non-determinism
+	\item Conclusion: Parser generator not the problem and well understood.
+	\item UTF8, Masquerading, Lexer resolves EObj. . Do S-Tokens need associativity? If, mention problem with left.
+
+Refs:
+	\item EObj ? Text
+	\item Txt ? EObj
+	\item to persist
+	\item Widen meaning of Annotation
+	\item solved incomplete information but can specialization types be handled if just supertypes are known? 
+	\item Explain Backtracking
+	\item Mention that SAEBNF ? MM constrain each other
+	\item Lazy Obj creation means on first access
+	\item EMF vs Ecore model
+\end{itemize}
+Other Constraining thesis
+\begin{itemize}
+	\item AST <-> TokenStream
+	\item Error Case
+\end{itemize}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Motivation}
+This thesis started from the basic idea to leverage internal domain specific languages with domain specific notation and editors interchangeable. In order for this to work, all language representations have to operate on the same abstract syntax. As this is common for graphical editors, widespread textual solutions are missing. Though projectional editors are by definition predestined for this task, their user guidance requires to always keep the abstract syntax in a valid state. This constraint restricts the user in his common workflow and requires him to abandon universal free text manipulation concepts. In order to select between the benefits of textual and graphical editing, a bidirectional synchronized bridge between text and abstract syntax has to be establised.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Scope}
+\emph{Research Questions}
+How are multiple views on an AbstractSyntax possible
+\begin{itemize}
+	\item if described with BNF
+	\item textual views on AST (syntactic sugar)
+	\item multiple intermixed (/integrated) editors possible
+\end{itemize}
+Impedance missmatch
+\begin{itemize}
+	\item  Model <-> Text (Ecore BNF)
+	\begin{itemize}
+		\item not just mapping but also constraints.
+	\end{itemize}
+	\item Parser <-> Editors
+	\begin{itemize}
+		\item Bi-Directionality
+		\item how are updates handeled (equality vs. IDs) \\
+		- what's their scope (replace whole tree, substree) \\
+		-	reuse of nodes (incremental parser reuse nodes to save time, not to keep identity)
+		\item how is incomplete information?
+		\item editors on a text possible?
+		\item Is it, and if how is it possible to present textual views on a model which present a different structure than the underlying model (annotations).
+	\end{itemize}
+\end{itemize}
+Existing Frameworks:
+\begin{itemize}
+	\item  which concepts are they based on?
+	\item  (how) can they be extended to fit these requirements?
+	\item  How are updates handled?
+\end{itemize}
+
+\emph{Constraining thesis}
+\begin{itemize}
+	\item  AST ? TokenStream
+	\item  Error Case
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
+... % \cite{bonerdataflow} .
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Outline}
+Definitions contain formal definitions for wide spread concepts of computer science. Basics lay the common ground for further explanations. An available solutions of creating EMF models from text is used to present the current state. The concepts XText in regards to this thesis are explained and discussed to gain problem awareness and to expose room for improvement. //Present Notation model, discuss resource impl. Etc. 
+\begin{itemize}
+	\item Present XText
+	\item describe problems
+	\item argume why resource impl is a fail (ref. Integrity breaks without extrensic UUID)
+	\item present GMF notation model
+	\item Rule := Controller?
+	\item Problem solutions of other frameworks are suggested.
+	\item Own Grammar
+\end{itemize}

@@ -47,10 +47,10 @@
 \makeatother
 
 %% Document properties %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\projname}{ScalaFlow}
-\newcommand{\titel}{ScalaFlow}
-\newcommand{\untertitel}{Continuation Based DataFlow Concurrency in Scala}
-\newcommand{\Datum}{September 2nd, 2010}
+\newcommand{\projname}{TextPart}
+\newcommand{\titel}{TextPart}
+\newcommand{\untertitel}{Approach to nest EMF based visual and text editors}
+\newcommand{\Datum}{September 13th, 2012}
 
 \ifpdf
   \usepackage{hyperref}
@@ -63,13 +63,54 @@
     , urlcolor=darkblue
     , pdftitle={\projname -- \untertitel}
     , pdfsubject={Master's Thesis}
-    , pdfauthor={Kai H. Meder}
+    , pdfauthor={Stefan Kuhn}
     }
 \else
 \fi
 
 %% Listings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \usepackage{listings}
+\KOMAoptions{listof=totoc} % necessary because of scrhack
+\renewcommand{\lstlistlistingname}{List of Listings}
+\lstset
+  { basicstyle=\small\ttfamily
+  , breaklines=true
+  , captionpos=b
+  , showstringspaces=false
+  , keywordstyle={}
+  }
+
+\lstnewenvironment{inlinehaskell}
+{\spacing{1}\lstset{language=haskell,nolol,aboveskip=\bigskipamount}}
+{\endspacing}
+
+\lstnewenvironment{inlinexml}
+{\spacing{1}\lstset{language=XML,nolol,aboveskip=\bigskipamount}}
+{\endspacing}
+
+\newcommand{\haskellinput}[2][]{
+  \begin{spacing}{1}
+  \lstinputlisting[language=Haskell,nolol,aboveskip=\bigskipamount,#1]{#2}
+  \end{spacing}
+}
+
+
+\newcommand{\haskellcode}[2][]{\mylisting[#1,language=Haskell]{#2}}
+
+\newcommand{\mylisting}[2][]{
+\begin{spacing}{1}
+\lstinputlisting[frame=lines,aboveskip=2\bigskipamount,#1]{#2}
+\end{spacing}
+}
+
+%% additional commands
+\newcommand{\todo}[1]{\marginpar{\textbf{TODO}} \textcolor{red}{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+%%% Kai >>
+
 \lstdefinelanguage{scala}{
   morekeywords={abstract,case,catch,class,def,%
     do,else,extends,false,final,finally,%
@@ -86,21 +127,6 @@
   morestring=[b]',
   morestring=[b]"""
 }
-\KOMAoptions{listof=totoc} % necessary because of scrhack
-\renewcommand{\lstlistlistingname}{List of Listings}
-\lstset
-  { basicstyle=\small\ttfamily
-  , breaklines=true
-  , captionpos=b
-  , showstringspaces=false
-  , keywordstyle={}
-  }
-
-%\newcommand{\scala}[2][]{
-%\begin{spacing}{1}
-%\lstset{language=scala,aboveskip=\bigskipamount,#2}{#1}
-%\end{spacing}
-%}
 
 \definecolor{lstbg}{gray}{.95}
 
@@ -109,34 +135,46 @@
   {\endspacing}
 
 
-%\lstnewenvironment{inlinescala}
-%{\spacing{1}\lstset{language=scala,nolol,aboveskip=\bigskipamount}}
-%{\endspacing}
-%
-%\lstnewenvironment{inlinexml}
-%{\spacing{1}\lstset{language=XML,nolol,aboveskip=\bigskipamount}}
-%{\endspacing}
-
-%\newcommand{\scalainput}[2][]{
-%  \begin{spacing}{1}
-%  \lstinputlisting[language=Scala,nolol,aboveskip=\bigskipamount,#1]{#2}
-%  \end{spacing}
-%}
+%% ich <<<
 
 
+\lstdefinelanguage{Xtext2}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}
 
-%\newcommand{\scalacode}[2][]{\mylisting[#1,language=Scala]{#2}}
-%
-%\newcommand{\mylisting}[2][]{
-%\begin{spacing}{1}
-%\lstinputlisting[frame=lines,aboveskip=2\bigskipamount,#1]{#2}
-%\end{spacing}
-%}
 
-%% additional commands
-\newcommand{\todo}[1]{\marginpar{\textbf{TODO}} \textcolor{red}{#1}}
-%\newcommand{\todob}[1]{\marginpar{\textbf{TODO@Björn}} \textcolor{red}{#1}}
-%\newcommand{\todos}[1]{\marginpar{\textbf{TODO@Stefan}}\textcolor{red}{#1}}
+\lstdefinelanguage{xtext}{
+  keywords={import, grammar, as, terminal, returns, generate, with}, 
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[s]{'}{'},
+  morestring=[s]{"}{"},
+  alsoletter={&,\&},
+  alsoother={&,\&}
+}
 
-\newcommand{\code}[1]{\texttt{#1}}
-%\newcommand{\code}[1]{\texttt{\begin{verbatim}#1\end{verbatim}}}
+\lstnewenvironment{xtxt}[1][]
+  {\spacing{1}\lstset{language=xtext,frame=single,backgroundcolor=\color{lstbg},aboveskip=\bigskipamount,numberbychapter=true,#1}}
+  {\endspacing}
+  
+% \newcommand{\kode}[1] {\begin{lstlisting}^^M foo \end{lstlisting}}
+%{\lstset{language=xtext,{#1}}}
+
+\newcommand\kodeN[1]{\lstinline[basicstyle=\tt]{#1}} 
+\def\kode{\lstinline[basicstyle=\ttfamily]} 
+
+% \newcommand{\kode2}[1]{\begin{xtxt}#1\stop{xtxt}}
+%{\start{xtxt}#1}}
