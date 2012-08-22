@@ -134,7 +134,7 @@ Z returns BorC	: "B";
 \end{xtxt}
 The effect of this feature can't be overstated.  It decouples the EObject type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraint strongly limited it's usablitly. Return types raise the abtraction level, because an EObject of the abstract syntax can have a context dependant representation. It also allows multiple representations of the same EObject type.
 
-On the other hand, this changes the time complexity of unparsing from O(n) to O(exp(n)) of the current XText implementation. The following explanation of choice mappings hint the problem \todo{really, should I do this here or just mention that isomorphism of a type to a grammar rule is lost}, but it's explained in detail at Unparsing \todo{REF}.
+On the other hand, this changes the time complexity of unparsing from O(n) to O(exp(n)) of the current XText implementation. The following explanation of choice mappings hint the problem, but it's explained in detail at Unparsing \todo{really, should I do this here or just mention that isomorphism of a type to a grammar rule is lost}\todo{REF}.
 \begin{xtxt}
 Z 	:  "A" v=ID;
 \end{xtxt}
