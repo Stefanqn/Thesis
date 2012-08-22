@@ -2,24 +2,24 @@
 \chapter{Basics}
 \label{cha:basics}
 \section{Definitions}
-\subsection{Language}[DragonBook]
-A language is any countable set of words over some fixed alphabet. The set of all context-free languages is identical to the set of languages that is accepted by pushdown automata.
+\subsection{Language}
+A language is any countable set of words over some fixed alphabet. The set of all context-free languages is identical to the set of languages that is accepted by pushdown automata.\cite{DragonBook}
 
-\subsection{Alphbet} [DragonBook]
-"An alphabet is any finite set of symbols." Examples of symbols are letters and digits.
+\subsection{Alphbet}
+"An alphabet is any finite set of symbols." Examples of symbols are letters and digits.\cite{DragonBook}
 
-\subsection{Word}  [DragonBook]
-A word over an alphabet is a finite sequence of symbols drawn from that alphabet. In language theory, the terms "sentence", "word" and "string" are used as synonyms.
+\subsection{Word} 
+A word over an alphabet is a finite sequence of symbols drawn from that alphabet. In language theory, the terms "sentence", "word" and "string" are used as synonyms.\cite{DragonBook}
 
-\subsection{Kleene Star}  [DragonBook]
-The (Kleene) closure of a language L, denoted L*, is the set of strings received by concatenating L zero or more times. 
-
-
-\subsection{Syntax \& Semantic}  [DragonBook]
-The syntax of a language describes its proper form, while the semantics of the language defines what it means
+\subsection{Kleene Star} 
+The (Kleene) closure of a language L, denoted L*, is the set of strings received by concatenating L zero or more times. \cite{DragonBook}
 
 
-\subsection{CFG} [DragonBook]
+\subsection{Syntax \& Semantic}  
+The syntax of a language describes its proper form, while the semantics of the language defines what it means. \cite{DragonBook}
+
+
+\subsection{Context Free Grammar (CFG)}
 A context-free grammar is decribed by a quadtupel, consisting of terminals, nonterminals, a start symbol, and productions. \\
 G = (T, N, S, R)\\
 \begin{enumerate}
@@ -33,48 +33,48 @@ G = (T, N, S, R)\\
 		\item The right side consisting of zero or more terminals and nonterminals. The components of the body describe one way in which words of the nonterminal at the head can be constructed.
 	\end{enumerate}
 \end{enumerate}
- R is a finite relation from V to (V u T)*, where * is the Kleene star. Members of R are productions of the form a -> b.
+ R is a finite relation from V to (V u T)*, where * is the Kleene star. Members of R are productions of the form a -> b.\cite{DragonBook}
 
 
-\subsection{Tokens \& Terminals}  [DragonBook]
-A token consists of a name and an attribute value. The names are abstract symbols used by the parser for syntax analysis. These token names are often called terminals. The attribute value contains additional information.
+\subsection{Tokens \& Terminals}  
+A token consists of a name and an attribute value. The names are abstract symbols used by the parser for syntax analysis. These token names are often called terminals. The attribute value contains additional information.\cite{DragonBook}
 
 
-\subsection{Lexer} [DragonBook]
-A lexical analyzer, also called Lexer, allows a parser to treat multicharacter constructs like identifiers as units called tokens during syntax analysis.
+\subsection{Lexer}
+A lexical analyzer, also called Lexer, allows a parser to treat multicharacter constructs like identifiers as units called tokens during syntax analysis.\cite{DragonBook}
 
-\subsection{Parsing} [ParserBook]
-"Parsing is the process of structuring a linear representation in accordance with a given grammar."
+\subsection{Parsing} 
+"Parsing is the process of structuring a linear representation in accordance with a given grammar."\cite{ParserBook}
 
-\subsection{ParseTree} [DragonBook]
-Given a context-free grammar, a parse tree according to the grammar is a tree with theise properties:
+\subsection{ParseTree}
+Given a context-free grammar, a parse tree according to the grammar is a tree with these properties \cite{DragonBook}:
 \begin{enumerate}
 	\item he start symbol is the roots label
 	\item The leafs are labeled by a terminal or by $\epsilon$.
 	\item Interior nodes are labeled by nonterminals.
-	\item If A is a nonterminal which labels an interior node and XI, Xz, . . . , Xn are the labels of the children of that node from left to right, then there must be a production A  -> X1X2 . . Xn. So X1, X2, . . . , X, stand for a symbol each that is either a terminal or a nonterminal. If A -> c is a production, then a node labeled A may have a single child labeled E. as a special case.
+	\item If A is a nonterminal which labels an interior node and XI, Xz, . . . , Xn are the labels of the children of that node from left to right, then there must be a production A  -> X1X2 . . Xn. So X1, X2, . . . , X, stand for a symbol each that is either a terminal or a nonterminal. If A -> c is a production, then a node labeled A may have a single child labeled E. as a special case. 
 \end{enumerate}
  
-\subsection{Ambiguity} [DragonBook]
-A grammar which can generate more than one parse tree for a given string of terminals is said to be ambiguous.
+\subsection{Ambiguity} 
+A grammar which can generate more than one parse tree for a given string of terminals is said to be ambiguous.\cite{DragonBook}
 
-\subsection{AST}  [DragonBook]
-The abstract syntax trees  represents the hierarchical syntactic structure of a language.  Abstract syntax trees resemble parse trees to an extent. In the parse tree interior nodes represent nonterminals including"helpers" of one sort of another. In the syntax tree, these helpers typically dropped. 
+\subsection{Abstract Syntax Tree (AST)}  
+The abstract syntax trees  represents the hierarchical syntactic structure of a language.  Abstract syntax trees resemble parse trees to an extent. In the parse tree interior nodes represent nonterminals including "helpers" of one sort of another. In the syntax tree, these helpers typically dropped. \cite{DragonBook}
 
-\subsection{S-Attributed Grammar} [ParserBook]
-An Attributed Grammar formally defines a way to attach attributes to tree nodes created in regards to production rules of a formal grammar. If  the evaluation rule of the attribute value only depends on its children, it's called a synthesized attribute. An S-Attributed Grammar is an Attributed Grammar, which is only based on synthesized attributes. The evaluation of S-attributed grammars can be incorperated in top-down, as well as in bottom-up parsing.
+\subsection{S-Attributed Grammar} 
+An Attributed Grammar formally defines a way to attach attributes to tree nodes created in regards to production rules of a formal grammar. If  the evaluation rule of the attribute value only depends on its children, it's called a synthesized attribute. An S-Attributed Grammar is an Attributed Grammar, which is only based on synthesized attributes. The evaluation of S-attributed grammars can be incorperated in top-down, as well as in bottom-up parsing.\cite{ParserBook}
  
 
-\subsection{EBNF} [ParserBuch]
-The Backus-Naur Form (BNF) is a notation to describe context-free grammars. It is based on the paper [BNF] and defines ":=" and "|" as metaliguistic connectives and characters enclosed by "<" and ">" as metalinguistic variables.\\
+\subsection{Extended Backus-Naur Form (EBNF)} 
+The Backus-Naur Form (BNF) is a notation to describe context-free grammars. It is based \cite{BNF} and defines ":=" and "|" as metaliguistic connectives and characters enclosed by "<" and ">" as metalinguistic variables.\\
  <nonterminal> ::= sequence\\
-The sequence consists of one or more nontermials or terminals and may contain a vertical bar to indicate a choice. The whole sequence replaces the symbol on the right. The extended Backus-Naur Form (EBNF) is a familiy of BNF dialects with the same power as BNF, but with imporived readability. Common extensions are grouping, the kleene star denoting a zero or more multiplicity, the kleene cross denoting a multiplicity of one or more, and an option denoting a multiplicity of zero or one. 
+The sequence consists of one or more nontermials or terminals and may contain a vertical bar to indicate a choice. The whole sequence replaces the symbol on the right. The extended Backus-Naur Form (EBNF) is a familiy of BNF dialects with the same power as BNF, but with imporived readability. Common extensions are grouping, the kleene star denoting a zero or more multiplicity, the kleene cross denoting a multiplicity of one or more, and an option denoting a multiplicity of zero or one. \cite{ParserBook}
 
-\subsection{Parse Forest} [Parser Buch]
-A set of parse trees. If duplictated subtrees are combined, the resulting structure is called a parse graph.
+\subsection{Parse Forest} 
+A set of parse trees. If duplictated subtrees are combined, the resulting structure is called a parse graph.\cite{ParserBook}
 
-\subsection{Sentential}  Forms [Parser Buch]
-The intermetdiate form for creating sentences from a formal grammar a called sentential forms
+\subsection{Sentential Forms}   
+The intermediate form for creating sentences from a formal grammar are called sentential forms. \cite{ParserBook}
 
 
 
@@ -82,6 +82,6 @@ The intermetdiate form for creating sentences from a formal grammar a called sen
 Syntax Directed vs Syntax aware
 EMF
 
-\section{Parsing as CSP } [Parser Book]
-Beside answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Contraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules.It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parser identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree.
+\section{Parsing as Constraint Satisfaction Problem (CSP)} 
+Beside answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Contraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules.It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parser identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree.\cite{ParserBook}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

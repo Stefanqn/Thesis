@@ -3,10 +3,10 @@
 \label{cha:grammar}
 
 
-\section{Relation of Metamodels and CFG}
+\section{Relation of Metamodels and Context Free Grammars}
 To connect the textual languages, which are typically denoted by context free grammas and modelling languages, which are described by metamodels, a mapping between the concepts of BNF and Ecore has to be established. Because Ecore is more expressive than BNF, it is possible to map BNF to Ecore, but just a subset of Ecore to BNF.
 
-Algorithms for mapping a subset of MOF to BNF and BNF to MOF are described in [MOF2BNF]. Note that [MOF2BNF] uses a subset of MOF which is also a subset of Ecore and uses enumerations for fixed string literals (keywords), which is optional specialization of the presented attribute mapping. Also,  [MOF2BNF] maintains an attribute order by generating lexical ordered structural feature names. Whereby an attribute order is crucial, this is not necessary regarding Ecore. EMF implements unordered multiple values as lists, which are ordered. This implementation characteristic is documented [EMF2nd].  [MOF2BNF] mentions that it's possible to create "invaild" models of the grammar metamodel, which requires additional verification with the target context free grammar. This topic is discussed later in //TODO\\ // Example?
+Algorithms for mapping a subset of MOF to BNF and BNF to MOF are described in \cite{MofCfg}. Note that \cite{MofCfg} uses a subset of MOF which is also a subset of Ecore and uses enumerations for fixed string literals (keywords), which is optional specialization of the presented attribute mapping. Also,  \cite{MofCfg} maintains an attribute order by generating lexical ordered structural feature names. Whereby an attribute order is crucial, this is not necessary regarding Ecore. EMF implements unordered multiple values as lists, which are ordered. This implementation characteristic is documented \cite{EMF2nd}.  \cite{MofCfg} mentions that it's possible to create "invaild" models of the grammar metamodel, which requires additional verification with the target context free grammar. This topic is discussed later in \todo{ Example?}
 
 The general idea of CFG to MM mappings is:
 \begin{enumerate}
@@ -22,18 +22,16 @@ Mapping MM to CFG adds the problem of representing cross-references for which th
 
 This mapping defines the foundation to bridge between MM and CFGs. It describes how a model represents a ParseTree. The ParseTree is bound by the concrete textual syntax. In general however, Ecore models describe the abstract syntax of a language and not the ParseTree of one textual representation. To gain more flexibility, the EBNF description is enriched by an S-attributed grammar which defines the AST. The mapping between S-attributed Grammar and Ecore will be decribed after a discussion of XTexts grammar. 
 
-[MOF2BNF]
-Alanen, Marcus ; Porres, Ivan: A Relation Between Context-Free Grammars
-and Meta Object Facility Metamodels / TUCS. 2004
 
-\section{XText Intro?}
+
+\section{XText Introduction}
 Before XTexts Grammar is explained and discussed, there are some prerequistes which need to be explained in advance.
 
 \subsection{XText Phases during deserialzation}
 The parsing process in XText is seperated into following phases:
 \begin{enumerate}
 	\item Lexing and Parsing: The lexing phase transforms a sequence of characters into tokens. Tokens are a strongly typed part of the input sequence. Their represent an atomic symbol and their type is determined by a particular terminal rule or keyword. The parsing phase requests tokens and builds a ParseTree and an AST according to the grammar rules.
-	\item Linking resolves the Cross References after parsing is complete. (updateInternalState)
+	\item Linking resolves the Cross References after parsing is complete.
 	\item The Validation Phase is optional.
 \end{enumerate}
 
@@ -72,7 +70,7 @@ terminal SL_COMMENT returns ecore::EString : "//" !'\n'* '\n';
 The return type is optional and by default EString. The order of terminal rules is important, because they shadow each other. Terminal rule names are written in capital letters as a naming convention. Terminal rules are mapped to the data type following the returns keyword and are converted to it using the ValueConverters.
 
 \subsection{Parser Rules}
-A parser rule produces at runtime a tree of terminal and non-terminal tokens and all parser rules together produce the ParseTree, which is also referred as node model in Xtext. Addionaly, parser rules are the building plan for the creation of EDataTypes or EObjects which form the AST. XText also calles the AST semantic model. EObjects are created lazy by default. Actions and assignments are used to derive types, to force their instance creation and to build the AST accordingly. The first parser rule in the grammar is the start production. It's possible to hide terminal tokens from the parser, like comments. Hidden tokens are ignored in the parser, but should be perserved during deserialization.
+A parser rule produces at runtime a tree of terminal and non-terminal tokens and all parser rules together produce the ParseTree, which is also referred as node model in Xtext. Additionally, parser rules are the building plan for the creation of EDataTypes or EObjects which form the AST. XText also calles the AST semantic model. EObjects are created lazy by default. Actions and assignments are used to derive types, to force their instance creation and to build the AST accordingly. The first parser rule in the grammar is the start production. It's possible to hide terminal tokens from the parser, like comments. Hidden tokens are ignored in the parser, but should be perserved during deserialization.
 
 \subsection{DataType Rules}
 Data type rules are parsing-phase rules, which return EDataTypes. They are similar to terminal rules, but because they are parser rules, they are context sensitive. Rules that don't call parser rules, nor contain actions or assigments are considered data type rules with the default return type EString. 
@@ -82,12 +80,18 @@ Number returns ecore::EInt : NUM ('.' NUM*)?;}
 
 \subsection{Assignments}
 Assignments are the S-attributation of the EBNF dialect. Assignments are used to assign the information of a consumed symbol to the structual feature of the currently produced object. E.g.:
+\begin{xtxt}
 Person : "Person" age=Number;
+\end{xtxt}
 This creates a Metaclass named Person with an attribute named age of type EInt. 
 The type of the current object(a subtype of EClass) is the return type of the parser rule. The types name is equal to the rules name by default.
+\begin{xtxt}
 Person : "Person" ("alias:" aliases+=ID)+;
+\end{xtxt}
 This rule creates a multi-valued structural feature for aliases and adds each ID occurrence to it. Also '?=' exists which assigns true to a boolean value if the right side was consumed
+\begin{xtxt}
 Class : "class" (public?="public")?
+\end{xtxt}
 
 The right hand side of an assignment can be a rule call, a keyword, a cross-reference or an alternative composed by the former.
 
@@ -98,7 +102,7 @@ AbstractToken :	TokenA |	TokenB |	TokenC
 If a rule doesn't contain any assignments, but calls Parser Rules, it's called an unassigned rule. The return type of this rule is an abstract class, which has to be a supertype of returned types of TokenA, TokenB and TokenC. Xtext generates an abstract class named \code{AbstractToken} for this example by default.
 
 \subsection{Linking}
-Xtext allows the declaration of cross-references in the grammar as terminal tokens, but not the not the linking semantics because it's S-attributed context free nature. The actual resolving process is done programatically and not of interest, for this thesis. The general idea is discussed in //TODO, the XText runtime\\.
+Xtext allows the declaration of cross-references in the grammar as terminal tokens, but not the not the linking semantics because it's S-attributed context free nature. The actual resolving process is done programatically and not of interest, for this thesis. The general idea is discussed in \ref{sec:xtextarch:Linking}.
 e.g. 
 \begin{xtxt}
 Reference:  "Ref" event = [MyEvent| VALID_EVENT_ID]
@@ -128,7 +132,9 @@ XText also offers to explicitly name the return type. e.g.
 \begin{xtxt}
 Z returns BorC	: "B";
 \end{xtxt}
-The effect of this feature can't be overstated.  It decouples the EObject type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraint strongly limited it's usablitly. Return types raise the abtraction level, because an EObject of the abstract syntax can have a context dependant representation. It also allows multiple representations of the same EObject type. //TODO examples necessary? \\ On the other hand, this changes the time complexity of unparsing from O(n) to O(exp(n)) of the current XText implementation. The following explanation of choice mappings hint the problem (//TODO really, should I do this here or just mention that isomorphism of a type to a grammar rule is lost), but it's explained in detail at Unparsing //TODO ref\\.
+The effect of this feature can't be overstated.  It decouples the EObject type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraint strongly limited it's usablitly. Return types raise the abtraction level, because an EObject of the abstract syntax can have a context dependant representation. It also allows multiple representations of the same EObject type.
+
+On the other hand, this changes the time complexity of unparsing from O(n) to O(exp(n)) of the current XText implementation. The following explanation of choice mappings hint the problem \todo{really, should I do this here or just mention that isomorphism of a type to a grammar rule is lost}, but it's explained in detail at Unparsing \todo{REF}.
 \begin{xtxt}
 Z 	:  "A" v=ID;
 \end{xtxt}

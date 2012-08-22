@@ -1,6 +1,16 @@
+## other
+__ebooks/
 _bibliography/
 _chapter/
 _gfx/
+thesis.pdf
+thesis.lol
+thesis.synctex
+thesis.tps
+
+
+*.bak
+## github
 *.aux
 *.bbl
 *.blg
