@@ -1,0 +1,142 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass
+  [ twoside            % beidseitiger Druck
+  , BCOR=10mm          % Bindekorrektur
+  , openright          % Kapitel beginnen auf einer rechten Seite
+  , listof=totoc       % Verzeichnisse im Inhaltsverzeichnis
+  , bibliography=totoc % Literaturverzeichnis im Inhaltsverzeichnis
+  , parskip=half       % Absätze durch einen vergrößerten Zeilenabstand getrennt
+%  , draft              % Entwurfsversion
+  ]{scrreprt}          % Dokumentenklasse: KOMA-Script Buch
+
+\usepackage{scrhack}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\usepackage{ifpdf}
+\ifpdf
+  \usepackage{ae}               % Fonts für pdfLaTeX, falls keine cm-super-Fonts installiert
+  \usepackage{microtype}        % optischer Randausgleich, falls pdflatex verwandt
+  \usepackage[pdftex]{graphicx} % Grafiken in pdfLaTeX
+\else
+  \usepackage[dvips]{graphicx}  % Grafiken und normales LaTeX
+\fi
+
+\usepackage[utf8]{inputenc}         % Input encoding (allow direct use of special characters like "ä")
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[automark]{scrpage2} 	% Schickerer Satzspiegel mit KOMA-Script
+\usepackage{setspace}           	% Allow the modification of the space between lines
+\usepackage{booktabs}           	% Netteres Tabellenlayout
+\usepackage{multicol}               % Mehrspaltige Bereiche
+\usepackage{quotchap}               % Beautiful chapter decoration
+\usepackage[printonlyused]{acronym} % list of acronyms and abbreviations
+\usepackage{subfig}                 % allow sub figures
+\usepackage{tabularx}              % Tabellen mit fester Breite
+
+% Layout
+\pagestyle{scrheadings}
+%\pagestyle{empty}
+\clubpenalty = 10000
+\widowpenalty = 10000
+\displaywidowpenalty = 10000
+
+\makeatletter
+\renewcommand{\fps@figure}{htbp}
+\makeatother
+
+%% Document properties %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\projname}{ScalaFlow}
+\newcommand{\titel}{ScalaFlow}
+\newcommand{\untertitel}{Continuation Based DataFlow Concurrency in Scala}
+\newcommand{\Datum}{September 2nd, 2010}
+
+\ifpdf
+  \usepackage{hyperref}
+  \definecolor{darkblue}{rgb}{0,0,.5}
+  \hypersetup
+  	{ colorlinks=true
+  	, breaklinks=true
+    , linkcolor=darkblue
+    , menucolor=darkblue
+    , urlcolor=darkblue
+    , pdftitle={\projname -- \untertitel}
+    , pdfsubject={Master's Thesis}
+    , pdfauthor={Kai H. Meder}
+    }
+\else
+\fi
+
+%% Listings %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listings}
+\lstdefinelanguage{scala}{
+  morekeywords={abstract,case,catch,class,def,%
+    do,else,extends,false,final,finally,%
+    for,if,implicit,import,match,mixin,%
+    new,null,object,override,package,%
+    private,protected,requires,return,sealed,%
+    super,this,throw,trait,true,try,%
+    type,val,var,while,with,yield},
+  otherkeywords={=>,<-,<\%,<:,>:,\#,@},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[n]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]"""
+}
+\KOMAoptions{listof=totoc} % necessary because of scrhack
+\renewcommand{\lstlistlistingname}{List of Listings}
+\lstset
+  { basicstyle=\small\ttfamily
+  , breaklines=true
+  , captionpos=b
+  , showstringspaces=false
+  , keywordstyle={}
+  }
+
+%\newcommand{\scala}[2][]{
+%\begin{spacing}{1}
+%\lstset{language=scala,aboveskip=\bigskipamount,#2}{#1}
+%\end{spacing}
+%}
+
+\definecolor{lstbg}{gray}{.95}
+
+\lstnewenvironment{scala}[1][]
+  {\spacing{1}\lstset{language=scala,frame=single,backgroundcolor=\color{lstbg},aboveskip=\bigskipamount,numberbychapter=true,#1}}
+  {\endspacing}
+
+
+%\lstnewenvironment{inlinescala}
+%{\spacing{1}\lstset{language=scala,nolol,aboveskip=\bigskipamount}}
+%{\endspacing}
+%
+%\lstnewenvironment{inlinexml}
+%{\spacing{1}\lstset{language=XML,nolol,aboveskip=\bigskipamount}}
+%{\endspacing}
+
+%\newcommand{\scalainput}[2][]{
+%  \begin{spacing}{1}
+%  \lstinputlisting[language=Scala,nolol,aboveskip=\bigskipamount,#1]{#2}
+%  \end{spacing}
+%}
+
+
+
+%\newcommand{\scalacode}[2][]{\mylisting[#1,language=Scala]{#2}}
+%
+%\newcommand{\mylisting}[2][]{
+%\begin{spacing}{1}
+%\lstinputlisting[frame=lines,aboveskip=2\bigskipamount,#1]{#2}
+%\end{spacing}
+%}
+
+%% additional commands
+\newcommand{\todo}[1]{\marginpar{\textbf{TODO}} \textcolor{red}{#1}}
+%\newcommand{\todob}[1]{\marginpar{\textbf{TODO@Björn}} \textcolor{red}{#1}}
+%\newcommand{\todos}[1]{\marginpar{\textbf{TODO@Stefan}}\textcolor{red}{#1}}
+
+\newcommand{\code}[1]{\texttt{#1}}
+%\newcommand{\code}[1]{\texttt{\begin{verbatim}#1\end{verbatim}}}
