@@ -49,10 +49,10 @@ A lexical analyzer, also called Lexer, allows a parser to treat multicharacter c
 \subsection{ParseTree}
 Given a context-free grammar, a parse tree according to the grammar is a tree with these properties \cite{DragonBook}:
 \begin{enumerate}
-	\item he start symbol is the roots label
+	\item the start symbol is the roots label
 	\item The leafs are labeled by a terminal or by $\epsilon$.
 	\item Interior nodes are labeled by nonterminals.
-	\item If A is a nonterminal which labels an interior node and XI, Xz, . . . , Xn are the labels of the children of that node from left to right, then there must be a production A  -> X1X2 . . Xn. So X1, X2, . . . , X, stand for a symbol each that is either a terminal or a nonterminal. If A -> c is a production, then a node labeled A may have a single child labeled E. as a special case. 
+	\item If A is a nonterminal which labels an interior node and $X_1, X_2, . . . , X_n$ are the labels of the children of that node from left to right, then there must be a production $A  \rightarrow X_1X_2 ... X_n$. So $X_1, X_2, ... , X_n$ stand for a symbol each that is either a terminal or a nonterminal. If $A\rightarrow c$ is a production, then a node labeled A may have a single child labeled $\epsilon$ as a special case. 
 \end{enumerate}
  
 \subsection{Ambiguity} 
