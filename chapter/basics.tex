@@ -2,6 +2,9 @@
 \chapter{Basics}
 \label{cha:basics}
 \section{Definitions}
+\subsection{Lexeme}
+A lexeme is a sequence of characters on the character stream that matches a specific token pattern and is identified by the lexical analyzer as an instance of that token.\cite{DragonBook}
+
 \subsection{Language}
 A language is any countable set of words over some fixed alphabet. The set of all context-free languages is identical to the set of languages that is accepted by pushdown automata.\cite{DragonBook}
 
@@ -20,7 +23,7 @@ The syntax of a language describes its proper form, while the semantics of the l
 
 
 \subsection{Context Free Grammar (CFG)}
-A context-free grammar is decribed by a quadtupel, consisting of terminals, nonterminals, a start symbol, and productions. \\
+A context-free grammar is decribed by a quadtupel, consisting of terminals, nonterminals, a start symbol and productions. \\
 G = (T, N, S, R)\\
 \begin{enumerate}
 	\item Terminals are the basic symbols from which words are formed.  They are created by the lexical analyzer.

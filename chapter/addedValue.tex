@@ -36,6 +36,28 @@ The restriction of a limited number of available identifiers could be solved by 
 
 
 \section{NotationModel}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.8]{gfx/ex/GrammarUML} 
+\caption{EBNF Sample Grammar}
+\label{MM:GrammarUML}
+\end{figure}
+\todo{Recreate from topcased. Lexemes now}
+Figure \ref{MM:GrammarUML} shows a metamodel for an EBNF grammar. It is a reduced 
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{gfx/ex/grammarExample} 
+\caption{Example Rule ``A := (w |x y)+ B? | z C''}
+\label{MM:GrammarExample}
+\end{figure}
+\FloatBarrier
+
+Figure \ref{MM:GrammarExample} shows the model instance of the grammar  \code{A := (w |x y)+ B? | z C}. The grammar rules B and C are left out, as well as the start rule reference and the references to the symbols w, x, y and z are replaced with the name of the referenced symbol.
+
+
+%	-------------- Latex testing --------------
 The Notation model is an EMF model to describe a tree. A node or leaf contains a reference to the describing language model element.T he notation model bridges the token stream and the abstract syntax. It is the parse tree, and thus also describes a valid concrete syntax representation of the model.  It is a mandatory to updated or created it when generating a concrete representation of the model. If the notation model (element) was created to complement a language model (element), the notation model (element) serves as a disambiguis bulding plan to create the token stream for a valid concrete representation. In gereral, the notation model saves information which is not stored in the language model but relevant for presentation. It also keeps a generic, type save reference on the represented language object.\\
 Each notation element represents (part of) a language element and should be a stable container for different visual representations of that element with addionaly layout information.  Due to this, if an element has multiple semantically equivalent representations, it is possible to switch the representation without switching the notation element. A switch would invalidade the descendants of the current node. A notion element therefore contains a transient structural feature containing all possible valid concrete representation rules, the non-transient last representation rule and optional the last user selected representation rule. In case these representation rules are grammar rules, they must be complemented with addionional information in order to make the token production unambigious. For example a grammar rule like:
 \begin{xtxt}

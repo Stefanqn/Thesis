@@ -1,4 +1,27 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Textual Editing Framework - TEF}
+With TEF it is possible to integrate textual editing in an existing MVC editor. This is done by selecting an element, showing its textual representation in an extra overlay and execute the changes when the overlay is closed. 
+The basic steps are:
+\begin{enumerate}
+	\item copying the selected element and all its directly and indirectly contained elements
+	\item create a initial representation in an overlay text editor using backtracking
+	\item use background parsing the constantly create new models at the location if the copy
+	\item replace the edited model element if the overlay was closed with a commit in an command.
+\end{enumerate}
+
+\includegraphics[scale=0.7]{gfx/tef.png}
+
+Replacing has two fundamental problems:
+\begin{itemize}
+	\item all references to the replaced element break.
+	\item Information which is contained in the orginal model, but not displayed in the textual representation is lost.
+\end{itemize}
+In order to solve the problems by reassingning the references and merging the models, identification is required. \cite{TefPaper} demands language-specific identification. 
+
+TEF doesn't require the whole model to be describeable textually, only the elements and it's directly or indirectly contained elements which should be textually displayable must be specified using a CFG.
+
+TEF creates a Parse-tree from the model by traversing the model along its composition and determines a set of suitable grammar rules based on constraints. It uses backtracking for that and \cite{TefPaper} also suggest to enable the language engineer to priotise grammar rules if multiple parse trees are possible.
+
 \chapter{XText Architecture}
 \label{cha:xtextarch}
 This section describes how XText realizes the concepts described by tha grammar. It focueses on Parsing, Unparsing, the gap between abstract syntax and parse tree, Referential Integrity. \todo{sounds like shit}
@@ -106,7 +129,7 @@ Y returns N  	: 	"otherkeyword" 	v="0";
 C 			:  	 "C" ;
 Z 			: 	 "Z" ;
 \end{xtxt}
-following AST will be constructed\\
+following AST will be constructed \todo{fix this} \\ 
       Obj			\\
      /   \textbackslash		\\
 N(v='0')   C	\\
