@@ -36,39 +36,176 @@ The private use characters are intended for softwaredevelopers. They can be comp
 
 The restriction of a limited number of available identifiers could be solved by implementing a non-standard character encoding, probably a variable-with enconding.
 
+\section{Unparser}
+\todo{Explain unparse tree.}
+all solutions not first, but select most promising one (always create default)
+preferences:
+follow hints first of existing notations
+number of notation reuse
+use of default values
+avoid EObjects
 
-\section{Notation Model}
+unparse all -> forest -> compress -> DAG -> present -> path (as linearized tree)-> all nodes with distance 1 to path -> unparse tree
+
+User does not select whole tree as alternative, but picks a choice and let the unparse to the rest. if wanted, not iterative but selective.
+
+\section{Notation Metamodel}
 In order to bridge the gap between a model and a token stream a notation model is developed. A notation model will refer grammar elements, so before the notation metamodel can be developed, an EBNF grammar metamodel must be defined. 
 
-Figure \ref{MM:GrammarUML} shows a metamodel for an EBNF grammar. Compared to Xtext abilities, it misses the definition of lexemes in the grammar and the attributation. Compared to the definition of a CFG, the non terminals are the set of \code{NonTerminalName}s of \code{Rule}, the terminals are the set of \code{name}s of \code{TerminalType}, the start symbol is \code{Rule} refered by \code{Grammar} and the productions are implicit described by the directly and indirectly contained elements of the \code{Rule}s. The \code{NonTerminal} and \code{Terminal} elements in the grammar are just refences to them. This denomination allows for example in following rule
+\todo{mention abstract not shown in svg export , transient is private static}
+
+\todo{explicit}
+
+Rule unparse parse if no mandatory symbols without default val exist
+Design desicions:
+\begin{itemize}
+	\item Parse Tree - complete
+	\item Hint -distiguish, up to parse tree level
+	\item EObject min. 1 View
+\end{itemize}
+
+\subsection{Grammar Metamodel}
+%%%%%%%% GrammarMM	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering
+\includegraphics[scale=0.85]{gfx/ex/Grammar_CFG} 
+\caption{EBNF Grammar Metamodel}
+\label{MM:EBNF}
+\end{figure}
+
+Figure \ref{MM:EBNF} shows a metamodel for an EBNF grammar. The metamodel lacks the ability to define lexemes  \\
+Compared to the definition of a CFG, the non terminals are the set of \code{NonTerminalName}s of \code{Rule}, the terminals are the set of \code{name}s of \code{TerminalType}, the start symbol is the \code{Rule} refered by \code{Grammar} and the productions are implicit described by the directly and indirectly contained elements of the \code{Rule}s. The \code{NonTerminal} and \code{Terminal} elements in the grammar are just refences to the real non terminals and terminals. This definition overlap is owed to the fact that the same terminal may appear multiple times in productions, which must be distinguishable . This denomination allows for example in following rule
 \\\begin{code}
 A : b$_1$ C b$_2$
 \end{code}\\
-
 to be \code{b$_1$} an instance of \code{Terminal}, \code{C} and instance of \code{NonTerminal} and \code{b$_2$} another instance of \code{Terminal}, but refering to the same \code{TerminalType}.
 
-\begin{figure}
-\centering
-\includegraphics[scale=0.8]{gfx/ex/GrammarUML} 
-\caption{EBNF Sample Grammar}
-\label{MM:GrammarUML}
-\end{figure}
-%\todo{Recreate from topcased. Lexemes now}
+The \code{Grammar} has at least one \code{Rule} and one \code{TerminalType}. The \code{Grammar} has exactly one \code{start rule}. The \code{Rule}s have a name and contain exactly one element as their \code{rightHandSide}. This element might be either a \code{NonTerminal}, a \code{Terminal}, a \code{Sequence} or an \code{Alternative}. \code{Sequence}s and \code{Alternative}s are containers for at least two \code{RHS-Element}s. \code{Sequence} are \code{a b c} or \code{(a b)+} for example. \code{Terminal} and \code{NonTerminal} hold references to their unique type they represent. \code{Symbol} just provides abstraction but does not add expressivity to the language itself. Every \code{RHS-Element} has a \code{Multiplicity}, so exactly one \code{1}, one or none \code{?}, zero or more \code{+} or any mutltiplicity \code{*} can be expressed. Subclasses of \code{TerminalType} are present to allow a more detailed specification of \code{TerminalType} in later models.
 
 
+%%%%%% GrammarMM()	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Grammar Instance
+\subsection{Grammar Example}
 \begin{figure}
 \centering
 \includegraphics[scale=0.7]{gfx/ex/grammarExample} 
 \caption{Example Rule ``A := (w |x y)+ B? | z C''}
 \label{MM:GrammarExample}
 \end{figure}
-\FloatBarrier
+Figure \ref{MM:GrammarExample} shows the model instance of the EBNF metamodel \ref{MM:GrammarCFG} of the grammar  \code{A := (w |x y)+ B? | z C}. The grammar rules \code{B} and \code{C} are left out, as well as the start rule reference. The references to the symbols \code{w}, \code{x}, \code{y} and \code{z} are replaced with the name of the referenced symbol.
 
-Figure \ref{MM:GrammarExample} shows the model instance of the grammar  \code{A := (w |x y)+ B? | z C}. The grammar rules B and C are left out, as well as the start rule reference and the references to the symbols w, x, y and z are replaced with the name of the referenced symbol.
+\subsection{Attributed Grammar}
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{gfx/ex/Grammar_Attributed} 
+\caption{Attributed Grammar metamodel extension}
+\label{MM:AEBNF}
+\end{figure}
+
+The metamodel defined in \ref{MM:AEBNF} adds attributation and default values to the grammar. It uses metaclasses from the metamodel \ref{MM:EBNF} for CFGs. The packaging is for documentation purpose only, because the metaclasses of the CFG metamodel refer to the current metaclasses. \\
+Each \code{Rule} has a \code{RuleReturnType}, which might be an \code{EClass}, if it is a an \code{EObject} returning rule or an \code{EDataType}, if it is a Data Type Rule. The addionaly distinction in \code{EObjectTypeRule} and \code{DataTypeRule} is for presentation purposes only, this makes it obvious in the diagram when an \code{EObjectTypeRule} is used. For a real implementation a reference from \code{Rule} to an \code{EClassifier} would be sufficient. \code{EClassifier} is the supertype of \code{EClass} and \code{EDataType}. \code{Symbol} now can contain a  \code{defaultValue}, which is a \code{String}.  \code{String}s are structureless, so the use of \code{DefaultValue}s is restricted to  \code{NonTerminal}s refering \code{DataTypeRule}s and  \code{Terminal}s only. The  \code{String} must not violate the  \code{Symbol}s constraints. Given the example \code{attribute+=TerminalSymbol}, an attribute assignment is realized by \code{TerminalSymbol} containing a  \code{FeatureOperation} with \code{kind} set to  \code{add} and a reference to the  \code{EStructuralFeature} named \code{attribute}. The \code{EStructuralFeature} must be contained in the  \code{EClass} of the returned \code{EObject}s type. In contrast to Xtext, it is possible to assign statically a structureless value to an attribute, for example 
+\begin{xtxt}
+Rule : {ruleAttribute="true"} "1"
+\end{xtxt}   
+which means that if the rule matches \code{ruleAttribute} is assigned to \code{"true"}. This can be done for an abitrary amount of \code{EStructuralFeatures}. \code{NotationPersistedElement} allows to persist a String in the notation model, this allows to share data between \code{Alternatives}. \\
+\code{Alternatives} also contain a \code{ValueAssignment}. This could be omitted if 
+\begin{xtxt}
+attribute= (a | B)
+\end{xtxt}
+would not be allowed and instead only the alternative 
+\begin{xtxt}
+(attribute = a | attribute = B)
+\end{xtxt}
+would be allowed.
+%% Grammar Instance()
+
+\subsection{Notation Metamodel}
+%% Prod
+\begin{figure}
+\centering
+\includegraphics[scale=0.65]{gfx/ex/Notation_Prod} 
+\caption{Production part of Notation metamodel}
+\label{MM:Not:Prod}
+\end{figure}
+
+The diagram \ref{MM:Not:Prod} shows the section of the notation metamodel which is relevant for its function representing a parse tree and guiding unparsing. It is able to represent parse trees up to terminals, but does not contain the token values.\\
+
+\subsubsection{Evolving from a simple parse tree metamodel}
+\begin{figure}
+\centering
+\includegraphics[scale=0.75]{gfx/ex/Notation_ParseTree} 
+\caption{Simple parse tree metamodel}
+\label{MM:Not:PT}
+\end{figure}
+The metamodel in diagram \ref{MM:Not:PT} is sufficient to describe a parse tree, where \code{TerminalNotation}s represent the leafs and \code{NonTerminalNotation} the branches. It contains a subset of elements of the notation model, namely \code{NonTerminalNotation}, \code{TerminalNotation} and \code{ProductionPart}. The relationship of the subset elements differs from \ref{MM:Not:Prod} in that \code{NonTerminalNotation} contains \code{ProductionParts} direcly, but more importantly also that \code{NonTerminalNotation} can contain multiple \code{ProductionPart}s. \code{NonTerminalNotation} and \code{TerminalNotation} are of a generic type, to determine which Symbol they represent, they refer to \code{NonTerminal} and \code{Terminal}. The distance to the symbol is one, the distance to the symbol type is two. 
+For example, in the following grammar, the type of the \code{b}s are equal, but the \code{b}s are not:\\
+\code{S : b c | b d} \\
+A verbose representation of this grammar would be: \\
+\code{S : b$_1$ c | b$_2$ d} \\
+\code{TerminalNotation}s refer to the exact position in the grammar, in the previous example for example to \code{b$_1$} and the position in refers to the type \code{b}. For an concrete parser implementation, this means that in case of a shift reduce parser, the reference to the \code{NonTerminal} can be at least one production later as normal, because the type is known when the rule is reduced but the position is not known until its producing production is reduced. The exact positions is useful to guide unparsing and the referecing solution provides flexibility while keeping stable \code{NonTerminalNotation}s and \code{TerminalNotatation}s. The parse trees is created by this metamodel need post processing to group make their structure. For example acessing the last \code{b} in the tree created for the grammar:\\
+\begin{xtxt}
+A : b+ c b 
+\end{xtxt}
+with the input \code{b b b c b} requires to iterate over each element. 
+
+\subsubsection{Term parse tree metamodel}A metamodel able to hold terms structured is shown in \ref{MM:Not:TT}. The \code{NonTerminalNotation} holds exactly one reference to a \code{ProductionPart} named \code{production}. The distinction in different terms is held by \code{SequenceNotation} which contains an \code{n-tupel} of at least two \code{ProductionParts}. A \code{List} holds \code{Symbol}s with a possible multiplicity higher than one. It might be benefical to directly support multiple values per \code{ProductionPart}, for example \code{a+}, but this would not render \code{List} obsolete in order to support \code{(a | B)+}. Since alternatives do not occur in a parse tree, because one choice must have been used, they have no equivalent in a parse tree. 
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.75]{gfx/ex/Notation_TermTree} 
+\caption{Term parse tree metamodel}
+\label{MM:Not:TT}
+\end{figure}
+
+\subsubsection{Production part of the Notation model}
+Figure \ref{MM:Not:Prod} shows the final production part of the notation metamodel. It differs from the one used for terms in following points:
+\begin{itemize}
+	\item an additional indirection from \code{NonTerminalNotation} to \code{ProductionPart} was introduced. 
+	\item \code{AlternativeNotation} to represent \code{Alternative}s was added.
+	\item The multiplicites of the references are less constrained regarding the lower bound.
+	\item \code{AlterableElement} was added.
+\end{itemize}
+The use of the additional indirection from \code{NonTerminalNotation} to \code{ProductionPart} via \code{Production} decouples the \code{Production}. The reason for this is the use of \code{Production} as the complementing element for a language element. This is described in more detail in \todo{ref} and is one of the main design targets of the notation model.\\
+As stated in \todo{ref} is of no direct use for parse tree  \code{
+
+(a | b)
+((a | b) | (c | d)) 
 
 
+
+
+
+%% Prod
+\begin{figure}
+\centering
+\includegraphics[scale=0.8]{gfx/ex/Notation_LangRel} 
+\caption{Language model connection}
+%\label{MM:GrammarExample}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.65]{gfx/ex/Notation_DataLink} 
+\caption{Token value connection}
+%\label{MM:GrammarExample}
+\end{figure}
+
+
+\subsubsection{Introduction}
+Requirements:
+\begin{itemize}
+	\item In contrast to Xtexts node model which is just updated during parsing and used to guide unparsing, the Notation metamodel must be equivalent to a valid token stream and therefore describe it unambigiously. 
+	\item It must contain or refer to all information to nesessary to create a specific token stream together with a language model and a grammar model.   
+	\item it has to be a parsetree in order to create language elements if the correspoding tokens exist.
+	\item it should offer GMF stuff elements \todo{add what GMF has interesting}
+	explicit, seperated from language model
+\end{itemize}
+
+\subsection{old ==>}
 %	-------------- Latex testing --------------
-The Notation model is an EMF model to describe a tree. A node or leaf contains a reference to the describing language model element.T he notation model bridges the token stream and the abstract syntax. It is the parse tree, and thus also describes a valid concrete syntax representation of the model.  It is a mandatory to updated or created it when generating a concrete representation of the model. If the notation model (element) was created to complement a language model (element), the notation model (element) serves as a disambiguis bulding plan to create the token stream for a valid concrete representation. In gereral, the notation model saves information which is not stored in the language model but relevant for presentation. It also keeps a generic, type save reference on the represented language object.\\
+The Notation model is an EMF model to describe a tree. A node or leaf contains a reference to the describing language model element.The notation model bridges the token stream and the abstract syntax. It is the parse tree, and thus also describes a valid concrete syntax representation of the model.  It is a mandatory to updated or created it when generating a concrete representation of the model. If the notation model (element) was created to complement a language model (element), the notation model (element) serves as a disambiguis bulding plan to create the token stream for a valid concrete representation. In gereral, the notation model saves information which is not stored in the language model but relevant for presentation. It also keeps a generic, type save reference on the represented language object.\\
 Each notation element represents (part of) a language element and should be a stable container for different visual representations of that element with addionaly layout information.  Due to this, if an element has multiple semantically equivalent representations, it is possible to switch the representation without switching the notation element. A switch would invalidade the descendants of the current node. A notion element therefore contains a transient structural feature containing all possible valid concrete representation rules, the non-transient last representation rule and optional the last user selected representation rule. In case these representation rules are grammar rules, they must be complemented with addionional information in order to make the token production unambigious. For example a grammar rule like:
 \begin{xtxt}
 A : (B | C) "myKeyword"
@@ -86,6 +223,12 @@ Finally, a notation model element should contain a flag if it is currently textu
 \todo{ reason that a representation in text editor is necessary}
 \todo{mention that addtionaly layout information can be added to a node}
 
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Unparser}
 The unparser is responsible to find all valid parse trees for the current language model. To save space and allow the user to selectivly choose for a specific element between different representations, the desired result is a compressed format of the parse forest as a directed asyclic graph (DAG).  As described in XText bla \todo{ref}, this is a CSP to find a valid assignment of grammar rules to the current language model. The currently observered implementation of XText uses backtracking with O(exp(n)) runtime to solve this problem for a particular chase. To find all possible solutions, the average runtime will likely drastically increase. Furthermore, this algorithm doesn't compress the parse forest in general. Additionally, it is strongly desireable to guide the resolution process to, e.g. Prefer user selected representations or to avoid special representations, e.g. Representations containing ID tokens. Improving the unparsers runtime is crucial for real world applications of the size of average computer programs.
 
@@ -99,6 +242,13 @@ To extend the use of an ID token, it could be extended with an associatitivy: ri
 It is therefore mandatory to save this addional information in an associated resource. The above restriction to an EObject ensures XMI serializablitiy. The resource should contain a map from ID token to a triple containing the associativity, the ID or UUID and an EObject). The associativity determines if it's a plain ID or as a reference token. Non associative tokens are EObject references. The second place can't be shared in case the extrensic UUID of the EObject should be preserved.
 
 ID tokens could be implemented by wrapping the existent lexical analyser. The wrapping lexer loads the additional resource and resolves the token if it is recongized on the input strema. If a non associative ID token is resolved and regular the next token of the normal lexer is after the ID token, it is cached and the resolved ID token is returned. In case the current position on the character stream is not smaller than the positition of the ID token, the token of the regular parser is returned. In case of plain ID tokens with right associativtiy the ID is assigned to a property of the token return by the wrapped lexer. Left associative tokens require a lookahead of one regular token and should be avoided for this reason. Also, in the case the wrapping parser doesn't know about the ignored characters, this requires that it inspects the returned normal token to recongnize errors where an ID token was contained in a regular token. The primary use of an ID token is likely to let the lexer return an EObject to the parser as an atomic token.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.55]{gfx/ex/Lexer} 
+\caption{EMF Lexer extension}
+%\label{MM:GrammarUML}
+\end{figure}
 
 
 \section{Use cases}
