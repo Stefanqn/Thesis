@@ -22,10 +22,13 @@ Stable to LanguageObjects</body>
       <body>Several Subclasses are left out</body>
     </ownedComment>
     <ownedComment xmi:id="_P3vHgPQWEeGxD_eMRcsKsQ" annotatedElement="_HY6sSvPCEeGEAt5ki1isvA _f74lAPNwEeGJnprbyco2Kw">
-      <body>type constrains type &#xD;
+      <body>type of refered EObjectTypeRule constrains type &#xD;
 of refered EObject</body>
     </ownedComment>
-    <packagedElement xmi:type="uml:Class" xmi:id="_a3uHkPNwEeGJnprbyco2Kw" name="LanguageEObjectView">
+    <ownedComment xmi:id="_zU3X4PVdEeG2xuI_QJtSZA" annotatedElement="_0X_zsPP7EeGEAt5ki1isvA">
+      <body>must not refer to a DataTypeProduction</body>
+    </ownedComment>
+    <packagedElement xmi:type="uml:Class" xmi:id="_a3uHkPNwEeGJnprbyco2Kw" name="EObjectProduction">
       <generalization xmi:id="_CQ_eo_QOEeGEAt5ki1isvA" general="_Ano7MPQOEeGEAt5ki1isvA"/>
       <ownedAttribute xmi:id="_tUlbUPP7EeGEAt5ki1isvA" name="children" type="_a3uHkPNwEeGJnprbyco2Kw" isUnique="false" aggregation="composite" association="_tUq66vP7EeGEAt5ki1isvA">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_tUlbUfP7EeGEAt5ki1isvA" value="*"/>
@@ -44,7 +47,7 @@ of refered EObject</body>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_HLAkAPN-EeGJnprbyco2Kw" name="TerminalNotation"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_K1dcgPN-EeGJnprbyco2Kw" name="NonTerminalNotation">
-      <ownedAttribute xmi:id="_l-SOEPP5EeGEAt5ki1isvA" name="dataTypeRule" type="_-FcC0PPOEeGEAt5ki1isvA" isDerived="true" aggregation="composite" association="_l-XtqfP5EeGEAt5ki1isvA">
+      <ownedAttribute xmi:id="_l-SOEPP5EeGEAt5ki1isvA" name="nonEObjectProduction" type="_XDJtEPRdEeGsvLBYUT-8aA" isDerived="true" aggregation="composite" association="_l-XtqfP5EeGEAt5ki1isvA">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l-SOEfP5EeGEAt5ki1isvA" value="1"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l-SOEvP5EeGEAt5ki1isvA"/>
       </ownedAttribute>
@@ -95,8 +98,8 @@ of refered EObject</body>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HY6sUPPCEeGEAt5ki1isvA" value="1"/>
       </ownedEnd>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_-FcC0PPOEeGEAt5ki1isvA" name="DataTypeRule">
-      <generalization xmi:id="_DZEhA_QOEeGEAt5ki1isvA" general="_Ano7MPQOEeGEAt5ki1isvA"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_-FcC0PPOEeGEAt5ki1isvA" name="DataTypeProduction">
+      <generalization xmi:id="_DZEhA_QOEeGEAt5ki1isvA" general="_XDJtEPRdEeGsvLBYUT-8aA"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_l-XtqfP5EeGEAt5ki1isvA" name="A_&lt;nonTerminalNotation>_&lt;dataTypeRule>" memberEnd="_l-XtqvP5EeGEAt5ki1isvA _l-SOEPP5EeGEAt5ki1isvA">
       <ownedEnd xmi:id="_l-XtqvP5EeGEAt5ki1isvA" name="nonTerminalNotation" type="_K1dcgPN-EeGJnprbyco2Kw" association="_l-XtqfP5EeGEAt5ki1isvA">
@@ -113,9 +116,9 @@ of refered EObject</body>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_tUq67fP7EeGEAt5ki1isvA" value="1"/>
       </ownedEnd>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_xbg0cPP7EeGEAt5ki1isvA" name="NotationModel Root">
-      <ownedAttribute xmi:id="_0X8JUPP7EeGEAt5ki1isvA" name="content" type="_a3uHkPNwEeGJnprbyco2Kw" isUnique="false" aggregation="composite" association="_0X_zsPP7EeGEAt5ki1isvA">
-        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0X8JUfP7EeGEAt5ki1isvA" value="*"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_xbg0cPP7EeGEAt5ki1isvA" name="NotationModelRoot">
+      <ownedAttribute xmi:id="_0X8JUPP7EeGEAt5ki1isvA" name="rootProduction" type="_Ano7MPQOEeGEAt5ki1isvA" isUnique="false" aggregation="composite" association="_0X_zsPP7EeGEAt5ki1isvA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_0X8JUfP7EeGEAt5ki1isvA" value="1"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_0X8JUvP7EeGEAt5ki1isvA"/>
       </ownedAttribute>
     </packagedElement>
@@ -167,5 +170,21 @@ of refered EObject</body>
       </ownedEnd>
     </packagedElement>
     <packagedElement xmi:type="uml:Dependency" xmi:id="_8adeNPQPEeGEAt5ki1isvA" name="Dependency1" supplier="_QVA90PNwEeGJnprbyco2Kw" client="_CW8rYPO7EeGEAt5ki1isvA"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_XDJtEPRdEeGsvLBYUT-8aA" name="EObjectLessProduction">
+      <generalization xmi:id="_nxsG8PRdEeGsvLBYUT-8aA" general="_Ano7MPQOEeGEAt5ki1isvA"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Og37MPUnEeG2xuI_QJtSZA" name="UnassignedRuleProduction">
+      <generalization xmi:id="_Tr51o_UnEeG2xuI_QJtSZA" general="_XDJtEPRdEeGsvLBYUT-8aA"/>
+      <ownedAttribute xmi:id="_n3zuQPUnEeG2xuI_QJtSZA" name="nextProduction" type="_Ano7MPQOEeGEAt5ki1isvA" aggregation="composite" association="_n32xmvUnEeG2xuI_QJtSZA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_n3zuQfUnEeG2xuI_QJtSZA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_n3zuQvUnEeG2xuI_QJtSZA"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_n32xmvUnEeG2xuI_QJtSZA" name="A_&lt;unassignedRuleProduction>_&lt;production>" memberEnd="_n32xm_UnEeG2xuI_QJtSZA _n3zuQPUnEeG2xuI_QJtSZA">
+      <ownedEnd xmi:id="_n32xm_UnEeG2xuI_QJtSZA" name="unassignedRuleProduction" type="_Og37MPUnEeG2xuI_QJtSZA" association="_n32xmvUnEeG2xuI_QJtSZA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_n32xnPUnEeG2xuI_QJtSZA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_n32xnfUnEeG2xuI_QJtSZA" value="1"/>
+      </ownedEnd>
+    </packagedElement>
   </packagedElement>
 </uml:Model>

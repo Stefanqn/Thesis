@@ -114,7 +114,7 @@ MyRule: (xval+=ID | yval+=INT)*;
 \end{xtxt}
 first all xvals and then all yvals will be written to the token stream indicates that XText follows the  EObject containment order instead of the one of the node model.
 
-\subsection{Parse Tree Constructor}
+\subsection{Parse Tree Constructor}  \label{xtxt:ptc}
 Actually the ParseTree constructor (PTC) doesn't construct nodes of the node model, it just finds valid grammar rules for each EObject of the AST. It succeeds if all EObjects are visisted and no concrete syntax validation constraint is violated. So the PTC has to find a valid allocation for the traversed AST in which all grammar constraints hold.  This is, like parsing, a constraint satisfaction problem (CSP). XText solves this CSP  using top down backtracking, which results in exponential runtime of the serialization of a model. This is done by PTC finding valid 'paths' from the root to a leaf node constrained by the grammar. The PTC does The PTC stops after the first valid solution has been found. 
 
 For example, if the following grammar parses \kode{somekeyword 0 C}:

@@ -62,7 +62,7 @@
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_O-GnoPHjEeGsQZT95WPJew" name="Sequence">
       <generalization xmi:id="_XvhHEPOdEeGEAt5ki1isvA" general="_ogi8kPHiEeGsQZT95WPJew"/>
-      <ownedAttribute xmi:id="_noSCYPHjEeGsQZT95WPJew" name="elements" type="_ogi8kPHiEeGsQZT95WPJew" isOrdered="true" isUnique="false" aggregation="composite" association="_noYJAPHjEeGsQZT95WPJew">
+      <ownedAttribute xmi:id="_noSCYPHjEeGsQZT95WPJew" name="elements" type="_ogi8kPHiEeGsQZT95WPJew" isUnique="false" aggregation="composite" association="_noYJAPHjEeGsQZT95WPJew">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_noSCYfHjEeGsQZT95WPJew" value="*"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_noSCYvHjEeGsQZT95WPJew" value="2"/>
       </ownedAttribute>

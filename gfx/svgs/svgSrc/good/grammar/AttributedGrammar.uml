@@ -8,7 +8,7 @@ could be left out if&#xD;
 is the appropriate form of&#xD;
 attr = (a | b)</body>
     </ownedComment>
-    <ownedComment xmi:id="_kzzGMPQgEeGxD_eMRcsKsQ" annotatedElement="_Z1-twPQgEeGxD_eMRcsKsQ">
+    <ownedComment xmi:id="_kzzGMPQgEeGxD_eMRcsKsQ">
       <body>Must be valid to Symbol constrains &#xD;
 AND &#xD;
 is just allowed for NonTerminals&#xD;
@@ -16,9 +16,7 @@ refering to DataTypeRules&#xD;
 </body>
     </ownedComment>
     <ownedComment xmi:id="_o5Rb4PQiEeGxD_eMRcsKsQ" annotatedElement="_fDYKQPQhEeGxD_eMRcsKsQ">
-      <body>single assignment of&#xD;
-EStructuralFeature.&#xD;
-Only allowed for NonTerminals &#xD;
+      <body>Only allowed for NonTerminals &#xD;
 referring to DataTypeRules</body>
     </ownedComment>
     <packagedElement xmi:type="uml:Class" xmi:id="_5I0eAPOxEeGEAt5ki1isvA" name="DataTypeRule">
@@ -55,16 +53,21 @@ referring to DataTypeRules</body>
     </packagedElement>
     <packagedElement xmi:type="uml:Package" xmi:id="__u9rkPOxEeGEAt5ki1isvA" name="Ecore">
       <ownedComment xmi:id="_JLLccPO0EeGEAt5ki1isvA" annotatedElement="_xqDmYPOxEeGEAt5ki1isvA">
-        <body>is feature of returned Objects EClass</body>
+        <body>is feature of returned EObjects EClass</body>
       </ownedComment>
       <packagedElement xmi:type="uml:Class" xmi:id="_xqDmYPOxEeGEAt5ki1isvA" name="EStructuralFeature"/>
-      <packagedElement xmi:type="uml:Class" xmi:id="_zXpwoPOxEeGEAt5ki1isvA" name="EClass"/>
+      <packagedElement xmi:type="uml:Class" xmi:id="_zXpwoPOxEeGEAt5ki1isvA" name="EClass">
+        <ownedAttribute xmi:id="_bmO4QfTBEeG2xuI_QJtSZA" name="eStructuralFeaturea" type="_xqDmYPOxEeGEAt5ki1isvA" isUnique="false" aggregation="composite" association="_bmTJsPTBEeG2xuI_QJtSZA">
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bmO4QvTBEeG2xuI_QJtSZA" value="*"/>
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bmO4Q_TBEeG2xuI_QJtSZA"/>
+        </ownedAttribute>
+      </packagedElement>
       <packagedElement xmi:type="uml:Class" xmi:id="_COKx8PP_EeGEAt5ki1isvA" name="EDataType"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_QPA9gPOyEeGEAt5ki1isvA" name="EObjectTypeRule">
       <generalization xmi:id="_iIaoAPOyEeGEAt5ki1isvA" general="_e1UfkPOyEeGEAt5ki1isvA"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_e1UfkPOyEeGEAt5ki1isvA" name="RuleReturnType"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_e1UfkPOyEeGEAt5ki1isvA" name="RuleReturnType" isAbstract="true"/>
     <packagedElement xmi:type="uml:Association" xmi:id="_kN5t2vOyEeGEAt5ki1isvA" name="A_&lt;rule>_&lt;ruleReturnType>" memberEnd="_kN5t2_OyEeGEAt5ki1isvA _kN5t3vOyEeGEAt5ki1isvA" navigableOwnedEnd="_kN5t3vOyEeGEAt5ki1isvA">
       <ownedEnd xmi:id="_kN5t2_OyEeGEAt5ki1isvA" name="rule" type="_MxrJYPOxEeGEAt5ki1isvA" association="_kN5t2vOyEeGEAt5ki1isvA">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_kN5t3POyEeGEAt5ki1isvA" value="1"/>
@@ -90,8 +93,8 @@ referring to DataTypeRules</body>
       <generalization xmi:id="_hezjg_QkEeGxD_eMRcsKsQ" general="_a1j-oPQkEeGxD_eMRcsKsQ"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Enumeration" xmi:id="_JlvG8POzEeGEAt5ki1isvA" name="OperationType">
-      <ownedLiteral xmi:id="_PyrKUPOzEeGEAt5ki1isvA" name="set"/>
       <ownedLiteral xmi:id="_Tc9DsPOzEeGEAt5ki1isvA" name="add"/>
+      <ownedLiteral xmi:id="_PyrKUPOzEeGEAt5ki1isvA" name="set"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_l_oUuvOzEeGEAt5ki1isvA" name="A_&lt;attributableElement>_&lt;featureOperation>" memberEnd="_l_oUu_OzEeGEAt5ki1isvA _l_kDQPOzEeGEAt5ki1isvA">
       <ownedEnd xmi:id="_l_oUu_OzEeGEAt5ki1isvA" name="attributableElement" type="_ObuQYPOxEeGEAt5ki1isvA" association="_l_oUuvOzEeGEAt5ki1isvA">
@@ -148,7 +151,7 @@ referring to DataTypeRules</body>
       <generalization xmi:id="_3idS0_QiEeGxD_eMRcsKsQ" general="_kxIXQPQhEeGxD_eMRcsKsQ"/>
       <ownedAttribute xmi:id="_yPZTMPQhEeGxD_eMRcsKsQ" name="value : String"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_kxIXQPQhEeGxD_eMRcsKsQ" name="AttributeOperation">
+    <packagedElement xmi:type="uml:Class" xmi:id="_kxIXQPQhEeGxD_eMRcsKsQ" name="AttributeOperation" isAbstract="true">
       <ownedAttribute xmi:id="_UjmisPOzEeGEAt5ki1isvA" name="kind" type="_JlvG8POzEeGEAt5ki1isvA"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_cOfV6fQjEeGxD_eMRcsKsQ" name="A_&lt;symbol>_&lt;attributeAssignment>" memberEnd="_cOfV6vQjEeGxD_eMRcsKsQ _cObrgPQjEeGxD_eMRcsKsQ">
@@ -163,11 +166,17 @@ referring to DataTypeRules</body>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_kWKnrfQjEeGxD_eMRcsKsQ" value="1"/>
       </ownedEnd>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_a1j-oPQkEeGxD_eMRcsKsQ" name="ValueAssignment"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_a1j-oPQkEeGxD_eMRcsKsQ" name="ValueAssignment" isAbstract="true"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_nGryAPQkEeGxD_eMRcsKsQ" name="NotationPersistedElement">
       <generalization xmi:id="_W5sJg_QlEeGxD_eMRcsKsQ" general="_a1j-oPQkEeGxD_eMRcsKsQ"/>
       <ownedAttribute xmi:id="_MmZ70PQlEeGxD_eMRcsKsQ" name="kind" type="_JlvG8POzEeGEAt5ki1isvA"/>
       <ownedAttribute xmi:id="_UsFCcPQlEeGxD_eMRcsKsQ" name="key : String"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_bmTJsPTBEeG2xuI_QJtSZA" name="A_&lt;eClass>_&lt;eStructuralFeature>" memberEnd="_bmTJsfTBEeG2xuI_QJtSZA _bmO4QfTBEeG2xuI_QJtSZA">
+      <ownedEnd xmi:id="_bmTJsfTBEeG2xuI_QJtSZA" name="eClass" type="_zXpwoPOxEeGEAt5ki1isvA" association="_bmTJsPTBEeG2xuI_QJtSZA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_bmTJsvTBEeG2xuI_QJtSZA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_bmTJs_TBEeG2xuI_QJtSZA" value="1"/>
+      </ownedEnd>
     </packagedElement>
   </packagedElement>
 </uml:Model>

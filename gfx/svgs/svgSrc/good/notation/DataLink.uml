@@ -8,6 +8,9 @@
       <body>Grammar Model&#xD;
 </body>
     </ownedComment>
+    <ownedComment xmi:id="__jjf0PRAEeGMrPrZyclOyg" annotatedElement="_XpcMoPQ_EeGMrPrZyclOyg">
+      <body>For unassigned rule calls</body>
+    </ownedComment>
     <packagedElement xmi:type="uml:Class" xmi:id="_a3uHkPNwEeGJnprbyco2Kw" name="LanguageEObjectView">
       <generalization xmi:id="_Cyg2UPQZEeGxD_eMRcsKsQ" general="_13q-gPN-EeGJnprbyco2Kw"/>
       <generalization xmi:id="_UIlYA_QeEeGxD_eMRcsKsQ" general="_13q-gPN-EeGJnprbyco2Kw"/>
@@ -28,7 +31,7 @@
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_HLAkAPN-EeGJnprbyco2Kw" name="TerminalNotation"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_K1dcgPN-EeGJnprbyco2Kw" name="NonTerminalNotation">
-      <ownedAttribute xmi:id="_l-SOEPP5EeGEAt5ki1isvA" name="dataTypeRule" type="_-FcC0PPOEeGEAt5ki1isvA" isDerived="true" aggregation="composite" association="_l-XtqfP5EeGEAt5ki1isvA">
+      <ownedAttribute xmi:id="_l-SOEPP5EeGEAt5ki1isvA" name="nonEObjectProduction" type="_XpcMoPQ_EeGMrPrZyclOyg" isDerived="true" aggregation="composite" association="_l-XtqfP5EeGEAt5ki1isvA">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l-SOEfP5EeGEAt5ki1isvA" value="1"/>
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l-SOEvP5EeGEAt5ki1isvA"/>
       </ownedAttribute>
@@ -65,6 +68,7 @@
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_4nEFsPO6EeGEAt5ki1isvA" name="NotationTokenContent">
       <generalization xmi:id="_exsSQ_P-EeGEAt5ki1isvA" general="_71O1YPO7EeGEAt5ki1isvA"/>
+      <ownedAttribute xmi:id="_J3LBYPXFEeGMIqyNakkJWw" name="index : Int"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_CW8rYPO7EeGEAt5ki1isvA" name="LanguageTokenContent" clientDependency="_O1K_QPO-EeGEAt5ki1isvA">
       <generalization xmi:id="_f34eQ_P-EeGEAt5ki1isvA" general="_71O1YPO7EeGEAt5ki1isvA"/>
@@ -91,9 +95,9 @@
         <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_HY6sUPPCEeGEAt5ki1isvA" value="1"/>
       </ownedEnd>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_-FcC0PPOEeGEAt5ki1isvA" name="DataTypeRule">
+    <packagedElement xmi:type="uml:Class" xmi:id="_-FcC0PPOEeGEAt5ki1isvA" name="DataTypeProduction">
       <generalization xmi:id="_CyeaEPQZEeGxD_eMRcsKsQ" general="_13q-gPN-EeGJnprbyco2Kw"/>
-      <generalization xmi:id="_Tei8g_QeEeGxD_eMRcsKsQ" general="_13q-gPN-EeGJnprbyco2Kw"/>
+      <generalization xmi:id="_o-jeU_Q_EeGMrPrZyclOyg" general="_XpcMoPQ_EeGMrPrZyclOyg"/>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_l-XtqfP5EeGEAt5ki1isvA" name="A_&lt;nonTerminalNotation>_&lt;dataTypeRule>" memberEnd="_l-XtqvP5EeGEAt5ki1isvA _l-SOEPP5EeGEAt5ki1isvA">
       <ownedEnd xmi:id="_l-XtqvP5EeGEAt5ki1isvA" name="nonTerminalNotation" type="_K1dcgPN-EeGJnprbyco2Kw" association="_l-XtqfP5EeGEAt5ki1isvA">
@@ -104,9 +108,12 @@
     <packagedElement xmi:type="uml:Package" xmi:id="_p46bIPP6EeGEAt5ki1isvA" name="Ecore">
       <packagedElement xmi:type="uml:Class" xmi:id="_QVA90PNwEeGJnprbyco2Kw" name="EObject"/>
     </packagedElement>
-    <packagedElement xmi:type="uml:Package" xmi:id="_1mQMAPP6EeGEAt5ki1isvA" name="Grammar Metamodel">
+    <packagedElement xmi:type="uml:Package" xmi:id="_1mQMAPP6EeGEAt5ki1isvA" name="Attributed Grammar Metamodel">
       <packagedElement xmi:type="uml:Class" xmi:id="_5rj0gPP6EeGEAt5ki1isvA" name="Literal">
         <ownedAttribute xmi:id="_7Sd5MPQAEeGEAt5ki1isvA" name="value : String"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_aH2QAPXEEeG2xuI_QJtSZA" name="NotationPersistedElement">
+        <ownedAttribute xmi:id="_aH2QAfXEEeG2xuI_QJtSZA" name="key : String"/>
       </packagedElement>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_ZRti4PP7EeGEAt5ki1isvA" name="A_&lt;grammarTokenContent>_&lt;literal>" memberEnd="_ZRti4fP7EeGEAt5ki1isvA _ZRti5PP7EeGEAt5ki1isvA" navigableOwnedEnd="_ZRti5PP7EeGEAt5ki1isvA">
@@ -121,7 +128,10 @@
     </packagedElement>
     <packagedElement xmi:type="uml:Class" xmi:id="_64VewPP8EeGEAt5ki1isvA" name="NotationProperty">
       <ownedAttribute xmi:id="_Ak1ukPP9EeGEAt5ki1isvA" name="key : String"/>
-      <ownedAttribute xmi:id="_C4i2kPP9EeGEAt5ki1isvA" name="value : String"/>
+      <ownedAttribute xmi:id="_C4i2kPP9EeGEAt5ki1isvA" name="value : String" isUnique="false">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_JziLkPQlEeGxD_eMRcsKsQ" value="*"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_JiT4sPQlEeGxD_eMRcsKsQ"/>
+      </ownedAttribute>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_-cQRcPP8EeGEAt5ki1isvA" name="A_&lt;languageEObjectView>_&lt;notationProperty>" memberEnd="_-cQRcfP8EeGEAt5ki1isvA _-cI8sPP8EeGEAt5ki1isvA">
       <ownedEnd xmi:id="_-cQRcfP8EeGEAt5ki1isvA" name="languageEObjectView" type="_a3uHkPNwEeGJnprbyco2Kw" association="_-cQRcPP8EeGEAt5ki1isvA">
@@ -171,7 +181,7 @@
       </ownedEnd>
       <ownedEnd xmi:id="_l-V3fvQEEeGEAt5ki1isvA" name="tokenContentAdapter" type="_71O1YPO7EeGEAt5ki1isvA" association="_l-V3evQEEeGEAt5ki1isvA">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_l-V3f_QEEeGEAt5ki1isvA" value="1"/>
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l-V3gPQEEeGEAt5ki1isvA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_l-V3gPQEEeGEAt5ki1isvA"/>
       </ownedEnd>
     </packagedElement>
     <packagedElement xmi:type="uml:Association" xmi:id="_nAxk0PQEEeGEAt5ki1isvA" name="A_&lt;terminal>_&lt;tokenContentAdapter>" memberEnd="_nAxk0fQEEeGEAt5ki1isvA _nAxk1PQEEeGEAt5ki1isvA" navigableOwnedEnd="_nAxk1PQEEeGEAt5ki1isvA">
@@ -181,7 +191,30 @@
       </ownedEnd>
       <ownedEnd xmi:id="_nAxk1PQEEeGEAt5ki1isvA" name="tokenContentAdapter" type="_71O1YPO7EeGEAt5ki1isvA" association="_nAxk0PQEEeGEAt5ki1isvA">
         <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_nAxk1fQEEeGEAt5ki1isvA" value="1"/>
-        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nAxk1vQEEeGEAt5ki1isvA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_nAxk1vQEEeGEAt5ki1isvA"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_XpcMoPQ_EeGMrPrZyclOyg" name="EObjectLessProduction">
+      <generalization xmi:id="_Tei8g_QeEeGxD_eMRcsKsQ" general="_13q-gPN-EeGJnprbyco2Kw"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_rwbTkPRAEeGMrPrZyclOyg" name="A_&lt;eObjectLessProduction>_&lt;production>" memberEnd="_rwbTkfRAEeGMrPrZyclOyg _rwbTlPRAEeGMrPrZyclOyg" navigableOwnedEnd="_rwbTlPRAEeGMrPrZyclOyg">
+      <ownedEnd xmi:id="_rwbTkfRAEeGMrPrZyclOyg" name="eObjectLessProduction" type="_XpcMoPQ_EeGMrPrZyclOyg" association="_rwbTkPRAEeGMrPrZyclOyg">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rwbTkvRAEeGMrPrZyclOyg" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rwbTk_RAEeGMrPrZyclOyg" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_rwbTlPRAEeGMrPrZyclOyg" name="production" type="_13q-gPN-EeGJnprbyco2Kw" association="_rwbTkPRAEeGMrPrZyclOyg">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_rwbTlfRAEeGMrPrZyclOyg" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_rwbTlvRAEeGMrPrZyclOyg"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_mKcfOvXEEeG2xuI_QJtSZA" name="A_&lt;notationTokenContent>_&lt;notationPersistedElement>" memberEnd="_mKcfO_XEEeG2xuI_QJtSZA _mKcfPvXEEeG2xuI_QJtSZA" navigableOwnedEnd="_mKcfPvXEEeG2xuI_QJtSZA">
+      <ownedEnd xmi:id="_mKcfO_XEEeG2xuI_QJtSZA" name="notationTokenContent" type="_4nEFsPO6EeGEAt5ki1isvA" association="_mKcfOvXEEeG2xuI_QJtSZA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mKcfPPXEEeG2xuI_QJtSZA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mKcfPfXEEeG2xuI_QJtSZA" value="1"/>
+      </ownedEnd>
+      <ownedEnd xmi:id="_mKcfPvXEEeG2xuI_QJtSZA" name="notationPersistedElement" type="_aH2QAPXEEeG2xuI_QJtSZA" association="_mKcfOvXEEeG2xuI_QJtSZA">
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_mKcfP_XEEeG2xuI_QJtSZA" value="1"/>
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_mKcfQPXEEeG2xuI_QJtSZA" value="1"/>
       </ownedEnd>
     </packagedElement>
   </packagedElement>
