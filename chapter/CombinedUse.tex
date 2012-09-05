@@ -1,32 +1,48 @@
 \chapter{Combined Use}
+
+
 \todo{Intro, mention stable ecore model as req., cross ref prob. for serialization}
 
 \section{Sentential Forms}
-The EMF Lexer \todo{ref} allows serialization of arbitrary \code{EObject}s as atomic characters. Thus, it is possible to serialize symbols by serializing their correspoding nodes of the notation model. In order to enable the parser to handle these ``synthetic'' tokens, postprocessing the grammar definition before it is used for parse table generation is an option. \\
+The EMF Lexer \todo{ref} allows serialization of arbitrary \code{EObject}s as atomic characters. Thus, it is possible to serialize symbols by serializing their corresponding nodes of the notation model. In order to enable the parser to handle these ``synthetic'' tokens, post processing the grammar definition before it is used for parse table generation is an option. \\
 The steps of the suggested solution are:
 \begin{enumerate}
 	\item rename the left hand side of every rule, so every non terminal \code{S} to \code{S$_O$}
-	\item create a terminal \code{S$_S$} for every symbol \code{S}. Configure the lexer that it sets the token name to \code{S$_S$}, if the \code{EObject} resolved by the ID character on the character stream is of type \code{ProductionPart} and refers to the symbols type which was just replaced. 
-	\item replace every occurence of \code{S} on the right hand side of every rule, so in every production, by \code{(S$_O$ | S$_S$)}
+	\item create a terminal \code{S$_S$} for every symbol \code{S}. Configure the Lexer that it sets the token name to \code{S$_S$}, if the \code{EObject} resolved by the ID character on the character stream is of type \code{ProductionPart} and refers to the symbols type which was just replaced. 
+	\item replace every occurrence of \code{S} on the right hand side of every rule, so in every production, by \code{(S$_O$ | S$_S$)}
 \end{enumerate}
 
 This procedure allows the serialization of sentential forms of the language to the character stream. The \code{visible} flag of the production part indicates if the notation element of a symbol should be serialized as an ID character or not. 
 
 \section{Graphical Editing}
-The ID character hides the sentential form of a word in a tree structure. It is therefore possible to edit this structure in a graphical editor and use the ID character as the root for the graphical editor. Instead of displaying the ID character in the text and the graphical editor seperatly, the suggested solution is to display the graphical editor instead of the ID character at its position.
+The ID character hides the sentential form of a word in a tree structure. It is therefore possible to edit this structure in a graphical editor and use the ID character as the root for the graphical editor. Instead of displaying the ID character in the text and the graphical editor separately, the suggested solution is to display the graphical editor instead of the ID character at its position.
 
 The graphical editor could work on the parse tree of a specific symbol \code{S}.  As long as the underlying tree structure is a production for \code{S}, the edit is valid. The edit might still be valid, if it does not result in a production for \code{S}. In that case, the parse tree has to be pretty printed and the complete word has to be parsed again. This approach has the following drawbacks:
 \begin{itemize}
-	\item the editor works directly on the parsetree. This means that editor developer can not benefit from the gained abstraction of the AST.
-	\item a reparse is necessary even if different productions or different non terminals are legitimate at the current position. 
+	\item the editor works directly on the parse tree. This means that editor developer can not benefit from the gained abstraction of the AST.
+	\item a re-parse is necessary even if different productions or different non terminals are legitimate at the current position. 
 \end{itemize}
 
 Another option is to let the graphical editor work on the AST and use a hint for the sentential token. Even if the hint changes, the graphical editor could remain stable if it supports the new production. \todo{explicit, sounds like sh*t}
 
 
+
 \section{Critical View}
 drawbacks 
 dependencies (stable lang mod)
+ide dep - lock
+
+\section{Problems of current Model Text Bridges}
+\begin{itemize}
+	\item Rule := Controller?
+	\item Problem solutions of other frameworks are suggested.
+\item how are updates handled (equality vs. IDs) \\
+		- what's their scope (replace whole tree, substree) \\
+		-	reuse of nodes (incremental parser reuse nodes to save time, not to keep identity)
+\end{itemize}	
+
 
 \section{Conclusion}
-todo
+\begin{itemize}
+	\item Conclusion: Parser generator not the problem and well understood.
+\end{itemize}	
