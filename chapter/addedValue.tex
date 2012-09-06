@@ -1,4 +1,4 @@
-\chapter{MyAddedValue}
+\chapter{Unsorted}
 
 \section{Text Editor}
 as reasoned in \todo{REF XTEXT Conclusion} it is just possible to view the non augmented textual serialized representations of language without potential loss of referential integrity. As a result the modeled data must be described entirely by the word. To seamlessly integrate textual languages in EMF, referential integrity must be kept. To maintain referential integrity, extrinsic IDs could be added  to the token stream. The text editor must be able to handle IDs or the user editing the serialized representation must comply to a contract. A simple example is that an ID is kept unique. Allowing exactly this case might be beneficial because the double occurrence  of an ID indicates the semantics of a change: that one element was copied. A special integration layer between the token stream leaving the text editor and the token stream entering the model parser could handle this case. This is not always true, for example if the original element was referred and the clone can not be distinguished from the original. \\
