@@ -36,8 +36,7 @@ Other Constraining thesis
 	\item Error Case
 \end{itemize}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Context}
-
+\section{Intoduction}
 Studies show, that software developers spend more time reading source code than writing. Lowering the cognitive burden to understand the presented program sources is a key factor to increase productivity. \\
 %DSLs 
 Presenting the program specific to the qualifications and domain of the reader helps lowering the entrance barrier. Domain specific languages help non software developers to be integrated in the developing process and help them understanding and correcting the program. Embedded or internal domain specific languages have a low entry barrier, but lack the ability for visual editing and domain specific feedback. Because they are embedded in a host language, internal domain specific languages have to follow their syntax constraints. Internal domain specific languages are source code, which is often repelling for non software developers. External domain specific languages are flexible in notation and user guidance, but development and maintenance costs are higher. Additional tools or an additional tool chain is required and changes in the language are much more effort. External domain specific languages are integrated in the runtime either by using their result as a configuration for an interpreter or by generating source code. Interpreting the word of a language completely decouples the external domain specific language from the source code. With the generative approach, generated source code from the domain specific description coexistence in general side by side with hand written code. External languages in general are no general purpose languages, otherwise their complexity goes towards the target language making their development expensive and the target language obsolete. Coexistence of general and hand written code is not consensual, because source code generation is unidirectional and overwriting in most cases. Integration with hand written code must be designed carefully and it is impossible, incremental development is hindered and synchronicity is not maintained. No fluent transition from internal to external domain specific languages is possible.   
@@ -51,7 +50,20 @@ Modeling tools for visual languages on the other hand are strongly based on the 
 % Model <-> Text
 Several tools \footnote{\raggedright XText, Textual Editing Framework, EMFText} already bridge the gap between the description of a language by a context free grammar and by models. They require a full textual representation of a model element and its content do not allow the user to select alternative textual presentations of semantic equivalent element. Projectional editors like Meta Programming Systems offer form based textual views on data structures, whose design approach is 	 predestined to show just parts of the model or to present certain model elements differently. Projectional editors enforce a special the user guidance, which is more restrictive to free textual editing. Additionally, they require continuous structural correctness while editing, which enforces the user to make edits in steps which are at least structurally correct. This contradicts well-known editing behavior, where users create several incorrect intermediate states of a document to reach the desired, correct state. Abandoning this editing behavior restricts the user in his familiar work flow. It requires not only him to learn the model manipulating tool, but also to learn and to switch to another editing paradigm. 
 
-This thesis started from the basic idea to leverage internal domain specific languages with domain specific notation and domain specific manipulation facilities interchangeable. This raises several questions:
+This thesis started from the basic idea to leverage internal domain specific languages with domain specific notation and domain specific manipulation facilities interchangeable. This requires to mix textual and graphical notations interchangeable and integrate the editor in the word as if it was part of it. So the data in place of the editor has to be part of a word. This word should be in language described by a context free grammar.
+
+
+\todo{integrate}
+``An attractive goal is to provide support for simultaneous editing of textual and graphical elements for any language.''\cite{EMP}
+\todo{current solutions replace view elements instead of change property}
+\todo{name it Impedance mismatch}
+
+\textbf{
+"Not only is no single representation best for all kinds of programs, no single representation is one representation even best for all tasks involving the same  program. " Moher, T.G., Mak, D.C., Blumenthal, B., Leventhal, L.M.: Comparing the Comprehensibility of Textual and Graphical Programs: The Case of Petri Nets. In: Empirical Studies of Programmers - Fifth Workshop (1993)}
+
+
+\section{Questions}
+This raises several questions:
 \begin{itemize}
 	\item how are different, interchangeable textual representations of the semantically same abstract language element in general possible?
 	\item how can graphical editors be integrated in text, so that the text is still a word of the language described by a context free grammar?
@@ -59,65 +71,27 @@ This thesis started from the basic idea to leverage internal domain specific lan
 \end{itemize}
 
 
-% check >>>>>>>>>>>>>>>>>>>>>>>
-
-\section{--- Integrate --}
-
-``An attractive goal is to provide support for simultaneous editing of textual and graphical elements for any language.''\cite{EMP}
-
-
-
-\textbf{Replace language parts instead of change view}
-
-\textbf{
-"Not only is no single representation best for all kinds of programs, no single representation is one representation even best for all tasks involving the same  program. " Moher, T.G., Mak, D.C., Blumenthal, B., Leventhal, L.M.: Comparing the Comprehensibility of Textual and Graphical Programs: The Case of Petri Nets. In: Empirical Studies of Programmers - Fifth Workshop (1993)}
-
-
-
-
-\section{Scope}
-\emph{Research Questions}
-How are multiple views on an AbstractSyntax possible
+\todo{Constaining thesis}
 \begin{itemize}
-	\item if described with BNF
-	\item textual views on AST (syntactic sugar)
-	\item multiple intermixed (/integrated) editors possible
-\end{itemize}
-Impedance mismatch
-\begin{itemize}
-	\item  Model <-> Text (Ecore BNF)
-	\begin{itemize}
-		\item not just mapping but also constraints.
-	\end{itemize}
-	\item Parser <-> Editors
-	\begin{itemize}
-		\item Bi-Directionality
-				
-		\item how is incomplete information?
-		\item editors on a text possible?
-		\item Is it, and if how is it possible to present textual views on a model which present a different structure than the underlying model (annotations).
-	\end{itemize}
-\end{itemize}
-Existing Frameworks:
-\begin{itemize}
-	\item  which concepts are they based on?
-	\item  (how) can they be extended to fit these requirements?
-	\item  How are updates handled?
-\end{itemize}
-
-\emph{Constraining thesis}
-\begin{itemize}
-	\item  AST ? TokenStream
+	\item  Model <-> TokenStream
 	\item  Error Case
 \end{itemize}
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Related Work}
-\todo{missing}
+\begin{itemize}
+	\item How are multiple views on an AbstractSyntax possible
+	\item textual views on AST (syntactic sugar)
+	\item BNF EMF not just mapping but also constraints.
+	\item how is incomplete information?
+	\item editors on a text possible?
+	\item Is it, and if how is it possible to present textual views on a model which present a different structure than the underlying model (annotations).
+		\item  How are updates handled?
+\end{itemize}
+% check >>>>>>>>>>>>>>>>>>>>>>>
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Outline}
+\section{Outline Work}
 Definitions contain formal definitions for wide spread concepts of computer science. Basics lay the common ground for further explanations. An available solutions of creating EMF models from text is used to present the current state. The concepts XText in regards to this thesis are explained and discussed to gain problem awareness and to expose room for improvement. \todo{Present Notation model, discuss resource impl. Etc.}
 \todo{all of them}
 

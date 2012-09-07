@@ -1,6 +1,6 @@
 \chapter{Eclipse Modeling Framework (EMF)}
-"EMF is a Java framework and code generation facility for building tools and other applications based on a structured (data) model"\cite{EMFDoc}
- It unifies three important technologies: a subset of Java, XML and a subset of UML. Models are definable by an XML Schema, annotated Java interfaces or by UML modeling tools. EMF bridges the gap between modelers and Java programmers by relating modeling concepts to a simple Java representation of these concepts.\cite{EMF2nd}\\
+"EMF is a Java framework and code generation facility for building tools and other applications based on a structured (data) model" \cite{EMFDoc}
+ It unifies three important technologies: a subset of Java, XML and a subset of UML. Models are definable by an XML Schema, annotated Java interfaces or by UML modeling tools. EMF bridges the gap between modelers and Java programmers by relating modeling concepts to a simple Java representation of these concepts. \cite{EMF2nd}\\
 
 EMFs runtime framework allows data to be validates, persisted and edited in a UI Editor. Change recording and notification as well as metadata by reflection is available. EMF is the foundation for fine-grained interoperability and data sharing among tools. For example 
 \todo{Mention base for transactions, graphical editors, DB persistence, M-trans}\\ \todo{Mention runtime instances?}\\
@@ -13,6 +13,7 @@ EMF uses a model to describe other EMF models. This model is called Ecore and is
 Ecore supports several high level concepts which are not directly available in Java, like bidirectional relationships, and a specialization of it, containment relationships.
 
 	\todo{Cycles in composition are not allowed; composition forms trees within models. The roots of these trees are model elements without container; the leafs are elements without components.}
+	
 
 
 The following describes a subset of Ecore, based on \cite{EMF2nd} \\
@@ -27,7 +28,7 @@ The following describes a subset of Ecore, based on \cite{EMF2nd} \\
 	\item EAttributes have a type and are identified by name. They model the components of an objects data.
 	\item EDataType represents a single type which must not impose structure. They are directly related to Java types.
 	\item EClass and EData types are both EClassifiers.
-	\item EReferences model one end of an association. They are identified by name and hold a type of the referable object. If the assocation is bidirectional, the eOpposite is assigned to its inverse reference. \cite{EMF2nd}
+	\item EReferences model one end of an association. They are identified by name and hold a type of the referable object. If the association is bidirectional, the eOpposite is assigned to its inverse reference. \cite{EMF2nd}
 	\item ECore classes hold and eAnnotation reference. Annotations store information which were not considered fundamental enough to explicitly support them in Ecores metamodel. For example documentation, OCL validation, XML serialization parameters. \cite{EMP}
 	\item In additional to structural features, Ecore can also model the interfaces of behavioral features.
 \end{itemize}

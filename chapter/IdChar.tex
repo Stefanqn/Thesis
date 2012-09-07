@@ -1,5 +1,5 @@
 \chapter{Structured Characters}
-This chapter presents a concept to embed structured data in an atomic character. It is used to enable data structures, like \code{EObjects} on the character input stream for the Lexer. The general idea is to use private characters as keys for a map. These special characters, which identify an object are called ``ID Characters'' in the following.
+This chapter presents a concept to embed structured data in an atomic character. It enables the use of structured data, like \code{EObjects} on the character input stream for the Lexer. The general idea is to use private characters as keys for a map. These special characters, which identify an object are called \emph{ID Characters} in the following.
 
 \section{General Requirements}
 The task of an ID Character is to uniquely identify an object in a serializable context. 
@@ -26,33 +26,45 @@ The private use characters are intended for software developers. They can be com
 	\item There are three code-blocks for private-use characters. Three range check for a code point is in sufficient to determine its private-use.
 	\item Private-use characters are, as the name states, explicitly designed for private use.
 \end{itemize}
-
-\todo{following}
-\begin{itemize}
-	\item UTF8 Tokens enclosing Masquerading
-	\item Lexer resolves Notation model type!
-\end{itemize}
-	
-
-
 The restriction of a limited number of available identifiers could be solved by implementing a non-standard character encoding, probably a variable-with encoding.
 
-\section{Use and implementation of the ID-Character}
-The possible use of an ID character is twofold:
-\begin{itemize}
-	\item adding an ID to a character
-	\item using the ID to refer an EObject
-\end{itemize}
-To extend the use of an ID character, it could be extended with an associativity: right, none or left.
-It is therefore mandatory to save this additional information in an associated resource. The above restriction to an EObject ensures XMI serializability. The resource should contain a map from ID character to a triple containing the associativity, the ID or UUID and an EObject). The associativity determines if it's a plain ID or as a reference character. Non associative characters are EObject references. The second place can't be shared in case the extrinsic UUID of the EObject should be preserved.
 
-ID characters could be implemented by wrapping the existent lexical analyzer. The wrapping Lexer loads the additional resource and resolves the ID if it is found on the input strea. If a non associative ID character is resolved and regular the next character of the normal Lexer is after the ID character, it is cached and the resolved ID character is returned. In case the current position on the character stream is not smaller than the position of the ID character, the character of the regular parser is returned. In case of plain ID characters with right associativity the ID is assigned to a property of the character return by the wrapped Lexer. Left associative characters require a lookahead of one regular character and should be avoided for this reason. Also, in the case the wrapping parser does not know about the ignored characters, this requires that it inspects the returned normal character to recognize errors where an ID character was contained in a regular character. The primary use of an ID character is likely to let the Lexer return an EObject to the parser as an atomic character.
+%% Impl of ID Chars >>>>>>>>
+\section{Use and implementation of ID-Characters}
+ 
+The ID character can be to
+\begin{itemize}
+	\item add an ID to another token.
+	\item use the ID to refer to an object.
+\end{itemize}
+In both cases, additional data must be preserved. Because the character stream used for serialization, the additional data should also be serialized in an adjacent file. Figure \ref{EMFLexer} sketches an EMF based Lexer extension. The adjacent file is named \code{EMF Document} on the right, whereas the token stream is read from the \code{Text Document} at the bottom. The wrapping Lexer is named \code{EMF Lexer} in figure \ref{EMFLexer}, whereas the wrapped Lexer is called \code{Original Lexer}.  
+
+% ID giving
+\paragraph{Adding an Identifier} To add an identifier to the following or previous token is useful in regard to enable stable references and enhance compare based updated approaches. This identifier providing use is \emph{not of interest for this thesis}. An associativity flag is required for right, none or left associativity.  Right associativity is easy to implement, because the wrapping Lexer can distinguish and filter the ID character, resolve the identifier and append it to the token value of the token returned by the wrapped Lexer. If left associativity may occur, this requires the wrapping Lexer to additionally cache one token of the wrapped Lexer and request another token from the wrapped Lexer. Aside easily distinguishable from the normal textual representation, ID characters clutter the output and should not be considered human readable without preprocessing. 
+ 
+\paragraph{Referring character} Using the ID character to refer to objects conceptually enables structured data on the character stream. This even exceeds the complexity of normal token values, which contain a sequence of characters in general. Restricting the referred objects to be serializable would be sufficient, but restricting the references to \code{EObject} eliminates impedance mismatch for an character to \code{EObject} mapping and also ensures a non binary XMI serialization. Figure \ref{EMFLexer} realizes this by a map from UTF8 character to a triple, $c \rightarrow (o,a,i)$, where $o$ is the referred object, $a$ is the associativity and $i$ is the extrinsic identifier. The associativity determines if it's a plain ID or as a reference character. \code{None} associative characters are EObject references. $o$ and $i$ can be a tree structures, because if $o$ contains other \code{EObject}s, multiple UUIDs adjacent to each \code{EObject} must be persisted in $i$. References between the serialized \code{EObject}s are by the use of UUIDs stable, but stability of references to textually described \code{EObject}s depend on the quality of the resource implementation and are problematic. The workflow of an \code{EMF Lexer} is so far:
+\begin{enumerate}
+	\item Load the adjacent document and make the keys available.
+	\item wait for a next token request.
+	\item forwards this request to the \code{Original Lexer} and pass the regular characters on the input stream through to him.
+	\item if the lexer produces a token, return it
+	\item if the UTF8 private use character occurs, let the \code{EMF Lexer} handle it:
+		\begin{itemize}
+			\item resolve the triple and the according \code{EObject}
+			\item save the UUID, either at the token by a value, or as a reference on the \code{EObject} or as an adapter attached to the \code{EObject} 
+		\end{itemize} 
+	\item Test if specialization \code{Typer Rules} exist, and if it does not assume the grammar explicitly defined this type and assign the classname of the \code{EObject} to the token name. Finally assign the resolved \code{EObject} to the tokens \code{value}.
+\end{enumerate}
+
+\paragraph{Referring Sentential Forms}
+
+
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.55]{gfx/ex/Lexer} 
+\includegraphics[scale=0.61]{gfx/ex/Lexer} 
 \caption{EMF Lexer extension}
-%\label{MM:GrammarUML}
+\label{EMFLexer}
 \end{figure}
 
 
