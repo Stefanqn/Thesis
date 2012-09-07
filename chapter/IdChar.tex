@@ -1,16 +1,16 @@
 \chapter{Structured Characters}
-This chapter presents a concept to embed structured data in an atomic character. It enables the use of structured data, like \code{EObjects} on the character input stream for the Lexer. The general idea is to use private characters as keys for a map. These special characters, which identify an object are called \emph{ID Characters} in the following.
+This chapter presents a concept to embed structured data in an atomic character. It enables the use of structured data, like \code{EObjects} on the character input stream for the Lexer. In combination with typing rules, serialized notation model elements resolve to sentential forms of a word. The general idea is to use private characters as keys for a map. These special characters, which identify an object are called \emph{ID Characters} in the following.
 
 \section{General Requirements}
 The task of an ID Character is to uniquely identify an object in a serializable context. 
 The ideal characteristics are:
 \begin{itemize}
-	\item bindable and existence dependent on another character or standalone
-	\item unlimited number of unique identifiers
+	\item bindable and existence dependent on another character or standalone.
+	\item unlimited number of unique identifiers.
 	\item atomic. The integrity should be preserved and not be unbreakable.
 	\item standardized. There should be a long term guarantee that their are available for use.
 	\item ubiquitous available. They should be available on every platform.
-	\item abstract characters. They should be fast distinguishable from non ID character
+	\item abstract characters. They should be fast distinguishable from non ID character.
 	\item private. They should not causes any conflicts or be missinterpretable in any way.
 \end{itemize}
 
@@ -42,7 +42,9 @@ In both cases, additional data must be preserved. Because the character stream u
 % ID giving
 \paragraph{Adding an Identifier} To add an identifier to the following or previous token is useful in regard to enable stable references and enhance compare based updated approaches. This identifier providing use is \emph{not of interest for this thesis}. An associativity flag is required for right, none or left associativity.  Right associativity is easy to implement, because the wrapping Lexer can distinguish and filter the ID character, resolve the identifier and append it to the token value of the token returned by the wrapped Lexer. If left associativity may occur, this requires the wrapping Lexer to additionally cache one token of the wrapped Lexer and request another token from the wrapped Lexer. Aside easily distinguishable from the normal textual representation, ID characters clutter the output and should not be considered human readable without preprocessing. 
  
-\paragraph{Referring character} Using the ID character to refer to objects conceptually enables structured data on the character stream. This even exceeds the complexity of normal token values, which contain a sequence of characters in general. Restricting the referred objects to be serializable would be sufficient, but restricting the references to \code{EObject} eliminates impedance mismatch for an character to \code{EObject} mapping and also ensures a non binary XMI serialization. Figure \ref{EMFLexer} realizes this by a map from UTF8 character to a triple, $c \rightarrow (o,a,i)$, where $o$ is the referred object, $a$ is the associativity and $i$ is the extrinsic identifier. The associativity determines if it's a plain ID or as a reference character. \code{None} associative characters are EObject references. $o$ and $i$ can be a tree structures, because if $o$ contains other \code{EObject}s, multiple UUIDs adjacent to each \code{EObject} must be persisted in $i$. References between the serialized \code{EObject}s are by the use of UUIDs stable, but stability of references to textually described \code{EObject}s depend on the quality of the resource implementation and are problematic. The workflow of an \code{EMF Lexer} is so far:
+% ref EObject 
+\paragraph{Referring character} \label{RefEObj} Using the ID character to refer to objects conceptually enables structured data on the character stream. This even exceeds the complexity of normal token values, which contain a sequence of characters in general. Restricting the referred objects to be serializable would be sufficient, but restricting the references to \code{EObject} eliminates impedance mismatch for an character to \code{EObject} mapping and also ensures a non binary XMI serialization. Figure \ref{EMFLexer} realizes this by a map from UTF8 character to a triple, $c \rightarrow (o,a,i)$, where $o$ is the referred object, $a$ is the associativity and $i$ is the extrinsic identifier. The associativity determines if it's a plain ID or as a reference character. \code{None} associative characters are EObject references. $o$ and $i$ can be a tree structures, because if $o$ contains other \code{EObject}s, multiple UUIDs adjacent to each \code{EObject} must be persisted in $i$. References between the serialized \code{EObject}s are by the use of UUIDs stable, but stability of references to textually described \code{EObject}s depend on the quality of the resource implementation and are problematic. \\
+The workflow of an \code{EMF Lexer} is so far:
 \begin{enumerate}
 	\item Load the adjacent document and make the keys available.
 	\item wait for a next token request.
@@ -57,8 +59,28 @@ In both cases, additional data must be preserved. Because the character stream u
 \end{enumerate}
 
 \paragraph{Referring Sentential Forms}
+The assignment of the tokens name is  static in \ref{RefEObj} ,the previous solution. To leverage the approach of letting the lexical analyzer return \code{EObject}s, the token name can be determined by rules. These rules can be added to, and interpreted by the \code{EObject Typer}. The \code{Typer Rules} process the input \code{EObject} and assign the token name based on runtime analysis of the input. Sentential forms are serialized using the notation model. To enable the reference to sentential forms, an \code{EObject Typer} rule is necessary which assigns the token name properly. \\
+The workflow of \ref{RefEObj} is extended by a \code{Typer Rule}, which performs:
+\begin{enumerate}
+	\item test the input \code{EObject} if it is an instance of \code{AlterableElement}. If it is not, the rule is not applied.
+	\item test if the input is an instance of \code{NotationModel:List}. 
+	If it is not a \code{List}:
+	\begin{enumerate}
+		\item resolve the grammar element by following the \code{notTerminal}, \code{sequence} or \code{terminal} reference. 
+		\item for \code{Symbol}s, resolve their more generic referred \code{TerminalType} or \code{Rule}.
+		\item determine their URI and assign it to the token name.
+		\item assign the referred language element \code{EObject} to the tokens value.
+		\item optionally validate if the language element structure comply to all constraints for the resolved grammar element.
+	\end{enumerate}
+	\item if the current \code{EObject} is a \code{List}, the \code{EMF Lexer} returns multiple tokens for a single character:
+	\begin{itemize}
+		\item remove the \code{AlterableElement} at the head of the list and resolve it like a stand alone element in the above steps.
+		\item keep the smaller \code{List} on the input stream or redirect the next \kode{nextToken()} from the Lexer directly the current \code{Typer Rule}.  
+	\end{itemize}
+\end{enumerate}
 
-
+The set of terminals is composed of: \\
+$Terminals = Terminals_{OriginalLexer} \bigcup Terminals_{EMFObjects} \bigcup Terminals_{Sentential} \label{TotalTerminals}$
 
 \begin{figure}
 \centering
@@ -66,21 +88,3 @@ In both cases, additional data must be preserved. Because the character stream u
 \caption{EMF Lexer extension}
 \label{EMFLexer}
 \end{figure}
-
-
-\section{Use cases}
-The definition of ID characters, unparser and notation model don't in the previous sections just indicated their amended use. This sections describes their integrated use and how the concepts leverage each other. \todo{review the need of ID character handling by the editor, play scenarios to gain pages?}
-
-\subsection{Incomplete information handling}
-The first, obvious benefit of ID characters is that the textual representation does not necessarily need to describe the whole model. It enables the use of EObject directly in the grammar and thus the grammar to properly handle parts of the language. The results in inability to modify the unhandled parts and the existence of an ID character, or a character placeholder at the unhandled location. This shifts the problem of handling this ID character to the text editor.
-
-\subsection{Different representations of semantic equivalent tokens}
-In case the unparser found more than one valid grammar rule for a notation element, the corresponding transient field is set. The text editor should offer the user the change the current representation value, which reassigns the grammar rule of the current notation element and, if necessary, also to its descendants. As soon as the reassignment is finished, a new token stream is produced reflecting the new textual representation.
-
-
-\subsection{Sentential  Tokens \& Graphical Editors}
-Because the notation model is the parse and consists of \code{EObject}s, it is possible to serialize notation nodes as single ID tokens. Sentential tokens are tokens which represent a sentential  production. The additional definition of sentential tokens circumvents the contradicting statement of nonterminal tokens on the input token stream. This concept is necessary for incremental parsers and can be leveraged for visual editing. This can be used to fold parts of the word into an ID token. This ID token is completely grammar conform. The main benefit is not folding of word parts but to allow a graphical editor to be presented at the ID tokens location editing the referred language object. It is important to mention, that the editor edits a language object, but is a substitute or semantic equivalent of a specific terminal or nonterminal, or a set, but never a sequence of them. This means that the editor may edit the language object and its descendants just as long as the unparser allows one of the editors semantic equivalents at the current position. If the graphical editor nests textual representation, it must create an own parser instance. This parser instance can be of the same type as the outer parser instance with a different start symbol, but does not has to be. It must be synchronized to the same language model. It might also reuse the notation model, which is guaranteed if a new instance of the outer parser is used.
-
-\todo{each notation model element as stateless edit part} \\
-\todo{annotation special} \\
-\todo {Sentential tokens as generated grammar productions} \\

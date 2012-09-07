@@ -1,18 +1,51 @@
 \chapter{Combined Use}
+This previous chapters \todo{Ref} demonstrated the Unparser, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on how their integrated use and synergy effects. 
+
+It is assumed that 
+\begin{itemize}
+	\item the language model stays stable if its textual representations is unchanged and that the nodes are reused to a large extend.
+	\item the textual representation is additional to the abstract representation, so that non containment references remain stable.
+\end{itemize}
+
+\paragraph{Incomplete information handling}
+The first, obvious benefit of the \code{EMF Lexer} is that the textual representation does not necessarily need to \emph{describe} the whole model, but just needs to \emph{declare} it. It enables the use of \code{EObject}s directly in the grammar and thus the grammar to properly handle parts of the language. The results in inability to modify the unhandled parts and the existence of an ID character, or a character placeholder at the unhandled location. This shifts the problem of handling this placeholder to the textual editor. Unaware editors represent UTF8 private use tokens, either as their canonical representation with a square filled with the value of the code point in hexadecimal representation or simply as a square \code{$\square$}.
+
+\paragraph{Different representations of semantic equivalent tokens}
+In case the unparser found more than one valid grammar rule for a notation element, the corresponding transient field is set. The text editor should offer the user the change the current representation, which reassigns the pointer to the grammar rule of the indirectly selected notation element and, if necessary, also to its descendants. As soon as the reassignment is finished, a new token stream is produced reflecting the new textual representation.
 
 
-\todo{Intro, mention stable ecore model as req., cross ref prob. for serialization}
+\paragraph{Sentential Tokens}
+A Sentential form is an intermediate form for creating words. Tokens which store a part of the parse tree are called \emph{Sentential Tokens} in this thesis. The name origins from the idea to store the tree structure of produced non terminal N in a token n$_S$ and let the parser use them interchangeable. In this thesis, this concept is broadened to \code{Terminal}s and \code{Sequence}s. The concept of sentential forms is necessary for incremental parsers and can be leveraged for visual editing.
+ 
+The \code{EMF Lexer} \todo{ref} section describes the possibility to serialize notation model elements and assign the token name according to the referred element of the grammar model, but lacks further parser integration. The suggested approach is not to add special functionality to the parser framework, but to post process the grammar before its use for the parser framework. If the parser framework uses a generative approach, either code or parse table generation, this post processing is transparent for the language designer and does not require additional effort to him. 
+Post processing of input grammar requires the following steps:
+\begin{enumerate}
+	\item collect all \code{Rule}s, \code{TerminalType}s and \code{Sequence}s of the grammar in a set $\mathbb{T}$.
+	\item for each $t \in \mathbb{T}$ create a new terminal $t_S \in Terminals_{Sentential}$.\\ $Terminals_{Sentential}$ are part of $Terminals$ created by the \code{EMF Lexer}, see \ref{TotalTerminals}, and are added to the \code{Terminal} list of the grammar.
+	\item collect all references to each \code{Rule} and to each \code{TerminalType} together with all \code{Sequence}s in $\mathbb{S}$.
+	\item replace every $s \in \mathbb{S}$ with $(s | t_S)$.
+\end{enumerate}
+  
+The above steps replace every occurrence of a \code{Sequence} or \code{Symbol} with an alternative with itself or its sentential terminal $t_S$. 
+For example\\
+A : a | B \\
+is transformed to  \\
+A : (a | a$_S$) | (B | B$_S$) \\
+
+This procedure allows the deserialization of sentential forms of the language from the character stream. The \code{visible} flag of the production part indicates if the notation element of a symbol should be serialized as an ID character or not. 
+
+
+\paragraph{Sentential Tokens and Graphical Editors}
+\todo{refine following ...}
+The main benefit is not folding of word parts but to allow a graphical editor to be presented at the ID tokens location editing the referred language object. It is important to mention, that the editor edits a language object, but is a substitute or semantic equivalent of a specific terminal or nonterminal, or a set, but never a sequence of them. This means that the editor may edit the language object and its descendants just as long as the unparser allows one of the editors semantic equivalents at the current position. If the graphical editor nests textual representation, it must create an own parser instance. This parser instance can be of the same type as the outer parser instance with a different start symbol, but does not has to be. It must be synchronized to the same language model. It might also reuse the notation model, which is guaranteed if a new instance of the outer parser is used.
+
+\todo{each notation model element as stateless edit part} \\
+
 
 \section{Sentential Forms}
 The EMF Lexer \todo{ref} allows serialization of arbitrary \code{EObject}s as atomic characters. Thus, it is possible to serialize symbols by serializing their corresponding nodes of the notation model. In order to enable the parser to handle these ``synthetic'' tokens, post processing the grammar definition before it is used for parse table generation is an option. \\
 The steps of the suggested solution are:
-\begin{enumerate}
-	\item rename the left hand side of every rule, so every non terminal \code{S} to \code{S$_O$}
-	\item create a terminal \code{S$_S$} for every symbol \code{S}. Configure the Lexer that it sets the token name to \code{S$_S$}, if the \code{EObject} resolved by the ID character on the character stream is of type \code{ProductionPart} and refers to the symbols type which was just replaced. 
-	\item replace every occurrence of \code{S} on the right hand side of every rule, so in every production, by \code{(S$_O$ | S$_S$)}
-\end{enumerate}
 
-This procedure allows the serialization of sentential forms of the language to the character stream. The \code{visible} flag of the production part indicates if the notation element of a symbol should be serialized as an ID character or not. 
 
 \section{Graphical Editing}
 The ID character hides the sentential form of a word in a tree structure. It is therefore possible to edit this structure in a graphical editor and use the ID character as the root for the graphical editor. Instead of displaying the ID character in the text and the graphical editor separately, the suggested solution is to display the graphical editor instead of the ID character at its position.
@@ -27,22 +60,3 @@ Another option is to let the graphical editor work on the AST and use a hint for
 
 
 
-\section{Critical View}
-drawbacks 
-dependencies (stable lang mod)
-ide dep - lock
-
-\section{Problems of current Model Text Bridges}
-\begin{itemize}
-	\item Rule := Controller?
-	\item Problem solutions of other frameworks are suggested.
-\item how are updates handled (equality vs. IDs) \\
-		- what's their scope (replace whole tree, substree) \\
-		-	reuse of nodes (incremental parser reuse nodes to save time, not to keep identity)
-\end{itemize}	
-
-
-\section{Conclusion}
-\begin{itemize}
-	\item Conclusion: Parser generator not the problem and well understood.
-\end{itemize}	
