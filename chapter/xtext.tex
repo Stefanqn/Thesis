@@ -103,10 +103,10 @@ In this thesis, only the parse tree constructor is discussed because:
 "The contract of serialization says that a model which is saved (serialized) to its textual representation and then loaded (parsed) again yields a new model that is equal to the original model."\cite{XTextMan}
 
 in short:\\
-I) load(save(model)) == model\\
-The inverse\\
-II) save(load(text)) != text\\
-does not always hold, but if the node model still exists, II) holds in most cases. 
+I) $load(save(model)) \rightarrow model$\\
+The inverse does not always hold, thus:\\
+II) $save(load(text)) \nrightarrow text$\\
+If the node model still exists, II) holds in most cases. 
 
 Given the XText example, that for the rule
 \begin{xtxt}
@@ -126,8 +126,8 @@ A returns Obj	: 	l=B r=C   ;
 X returns Obj	: 	l=Y r=Z   ;
 B returns N  	:  	"somekeyword" 	v="0";
 Y returns N  	: 	"otherkeyword" 	v="0";
-C 			:  	 "C" ;
-Z 			: 	 "Z" ;
+C 		:  	 "C" ;
+Z 		: 	 "Z" ;
 \end{xtxt}
 following AST will be constructed \todo{fix this} \\ 
       Obj			\\

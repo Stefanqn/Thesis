@@ -1,21 +1,44 @@
-\chapter{Conclusion}
-final words
+\chapter{Results}
 
-\section{Critical View}
-drawbacks 
-dependencies (stable lang mod)
-ide dep - lock
+%%%%%%%%%%%%%%%%%%%%%%%% Discussion%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}
 
-\section{Problems of current Model Text Bridges}
+%
+\paragraph{EMF Lexer} The presented \ref{lexer:RefEObj} Lexer extension allows the use of arbitrary serializable objects on the character stream as atomic UTF8 characters. The serializable objects are stored in an adjacent file as values of a map from UTF8 character keys. This file must be delivered and localized together with the original character stream. The Lexer extension allows the textual language to handle complex structured data without describing it, but still requires to declare their existence at a specific location. This makes it impossible for the user to change the declared data. The use of private use UTF8 characters clutters the output text file by the presence of squares, $\square$. The meaning of the squares is completely intransparent for the user, which makes them a high potential error source. If mandatory, their absence invalidates the document and makes it nearly impossible for the user using a normal text editor to return to a valid state. Creating them with a text editor is impossible, copying them from the adjacent document is unacceptable because the meaning of the value in the key value pair where it is copied from is not obvious at best. Private use characters offer a remarkable simple and to the current knowledge only solution to virtually enable deep structured atomic data on the character stream. The disadvantages are severe. Their use outside a particular adapted environment should be avoided.  
+
+\paragraph{Notation Model} The notation model is the key component for interchangeable representations of the same language element. This concept already proved to be valuable for graphical editors in GMF and a reduced layout oriented version is in use by XText. The drawbacks of the notation model is its consumption of resources and its dependency on the stability of the language model. The increased resource consumption of the notation model is on one hand due to increased memory consumption because of its existence. %magnitude saved old, per token, compressed
+% runtime all solutions
+
+
+
+\subsection{Achievements}
+The concepts described in this th
 \begin{itemize}
-	\item Rule := Controller?
-	\item Problem solutions of other frameworks are suggested.
-\item how are updates handled (equality vs. IDs) \\
-		- what's their scope (replace whole tree, substree) \\
-		-	reuse of nodes (incremental parser reuse nodes to save time, not to keep identity)
-\end{itemize}	
+	\item Multiple Txt rep
+	\item Sentential tokens
+	\item Editors on lang models
+	\item editors in place of symbols and seq. - editors integrate \& conform in CFG!
+	\item editors might be added after CFG created, no dep on CFG 2 editors
+	\item updating textual view if graphical editor changes something is not necessary in contrast to side by side editors.
+	\item sentential tokens might contain data if chars are no additional representation, but this shifts from synchronization to referential integrity problem.
+\end{itemize}
+
+\subsection{Drawbacks}
+\begin{itemize}
+	\item dependency of editors to CFG (at least declare to)
+	\item txt structure structural dependent on model. Just partially a problem, last vis. state can be often recovered.
+	\item substitute language seq, but not arbitrary seq
+	\item dependencies (stable lang mod)
+	\item IDE lock, IDE dependencies
+	\item Parse Table++
+	\item Mem ++ , Notation Model
+	\item Runtime++ O(c$^N$) backtracking 4 all
+	\item more, fine grained editors
+	\item editor can be lost if it edits the model in a way that the specialized textual representation is not valid any more.
+\end{itemize}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%% Conclusion %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 \begin{itemize}
 	\item Conclusion: Parser generator not the problem and well understood.

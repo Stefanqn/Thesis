@@ -2,20 +2,26 @@
 This previous chapters \todo{Ref} demonstrated the Unparser, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on how their integrated use and synergy effects. 
 
 It is assumed that 
-\begin{itemize}
+\begin{enumerate}
 	\item the language model stays stable if its textual representations is unchanged and that the nodes are reused to a large extend.
-	\item the textual representation is additional to the abstract representation, so that non containment references remain stable.
-\end{itemize}
+	\item the textual representation is additional to the abstract representation, so that 
+	\begin{itemize}
+		\item non containment references remain stable,
+		\item non \code{EObject} referring, but \code{EObject} depending sentential tokens remain valid.
+	\end{itemize}
+\end{enumerate}
 
+
+%%%%%%%%%%%%%%%% Incomplete information handling %%%%%%%%%%%%%%%%
 \paragraph{Incomplete information handling}
-The first, obvious benefit of the \code{EMF Lexer} is that the textual representation does not necessarily need to \emph{describe} the whole model, but just needs to \emph{declare} it. It enables the use of \code{EObject}s directly in the grammar and thus the grammar to properly handle parts of the language. The results in inability to modify the unhandled parts and the existence of an ID character, or a character placeholder at the unhandled location. This shifts the problem of handling this placeholder to the textual editor. Unaware editors represent UTF8 private use tokens, either as their canonical representation with a square filled with the value of the code point in hexadecimal representation or simply as a square \code{$\square$}.
+The first, obvious benefit of the \code{EMF Lexer} is that the textual representation does not necessarily need to \emph{describe} the whole model, but just needs to \emph{declare} it. It enables the use of \code{EObject}s directly in the grammar and thus the grammar to properly handle parts of the language. The results in inability to modify the unhandled parts and the existence of an ID character, or a character placeholder at the unhandled location. This shifts the problem of handling this placeholder to the textual editor. Unaware editors represent UTF8 private use characters, either as their canonical representation with a square filled with the value of the code point in hexadecimal representation or simply as a square \code{$\square$}.
 
 \paragraph{Different representations of semantic equivalent tokens}
 In case the unparser found more than one valid grammar rule for a notation element, the corresponding transient field is set. The text editor should offer the user the change the current representation, which reassigns the pointer to the grammar rule of the indirectly selected notation element and, if necessary, also to its descendants. As soon as the reassignment is finished, a new token stream is produced reflecting the new textual representation.
 
-
-\paragraph{Sentential Tokens}
-A Sentential form is an intermediate form for creating words. Tokens which store a part of the parse tree are called \emph{Sentential Tokens} in this thesis. The name origins from the idea to store the tree structure of produced non terminal N in a token n$_S$ and let the parser use them interchangeable. In this thesis, this concept is broadened to \code{Terminal}s and \code{Sequence}s. The concept of sentential forms is necessary for incremental parsers and can be leveraged for visual editing.
+%%%%%%%%%%%%%%%%%%%%%%% Sentential Tokens %%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Sentential Tokens} \label{SententialTokens}
+A Sentential form is an intermediate form for creating words. Tokens which store a part of the parse tree are called \emph{Sentential Tokens} in this thesis. The name origins from the idea to store the tree structure of produced non terminal $N$ in a token $n_S$ and let the parser use them interchangeable. In this thesis, this concept is broadened to \code{Terminal}s and \code{Sequence}s. The concept of sentential forms is necessary for incremental parsers and can be leveraged for visual editing.
  
 The \code{EMF Lexer} \todo{ref} section describes the possibility to serialize notation model elements and assign the token name according to the referred element of the grammar model, but lacks further parser integration. The suggested approach is not to add special functionality to the parser framework, but to post process the grammar before its use for the parser framework. If the parser framework uses a generative approach, either code or parse table generation, this post processing is transparent for the language designer and does not require additional effort to him. 
 Post processing of input grammar requires the following steps:
@@ -30,33 +36,28 @@ The above steps replace every occurrence of a \code{Sequence} or \code{Symbol} w
 For example\\
 A : a | B \\
 is transformed to  \\
-A : (a | a$_S$) | (B | B$_S$) \\
+A : (a | a$_S$) | (B | B$_S$)
 
-This procedure allows the deserialization of sentential forms of the language from the character stream. The \code{visible} flag of the production part indicates if the notation element of a symbol should be serialized as an ID character or not. 
+This procedure allows the deserialization of sentential forms of the language from the character stream. The \code{visible} flag of the production part indicates if the notation element of a symbol should be serialized as an ID character or not. It is not necessary to create the parse tree equivalent nodes contained by an invisible flagged ID character. The invisible flagged ID character guarantees that it is possible to create a valid production of the hinted unresolved production together with the referred language \code{EObject} and its directly and indirectly contained \code{EObject}s.
 
-
+%%%%%%%%%%%%%%%%%%%%%%% GUI Editors %%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Sentential Tokens and Graphical Editors}
-\todo{refine following ...}
-The main benefit is not folding of word parts but to allow a graphical editor to be presented at the ID tokens location editing the referred language object. It is important to mention, that the editor edits a language object, but is a substitute or semantic equivalent of a specific terminal or nonterminal, or a set, but never a sequence of them. This means that the editor may edit the language object and its descendants just as long as the unparser allows one of the editors semantic equivalents at the current position. If the graphical editor nests textual representation, it must create an own parser instance. This parser instance can be of the same type as the outer parser instance with a different start symbol, but does not has to be. It must be synchronized to the same language model. It might also reuse the notation model, which is guaranteed if a new instance of the outer parser is used.
+% Intro
+Sentential tokens are the foundation for mixing graphical editors into text. Sentential Tokens alone, as described in \ref{SententialTokens}, are without leverage just a way to fold text into a special character.  For graphical editors, they provide data access and serve as a place holders. Sentential token restricts the underlying model to conform to certain criteria. To provide alternative graphical editors as alternative to textual parts, an integration at the same place like alternative textual presentations is desirable.
 
-\todo{each notation model element as stateless edit part} \\
+% Grammar Token ?enable grammar char on the token stream?
+In order to enable graphical editors should to conform to a context free grammar, they have to be a specialization of an invisible instance of a grammar part. This enables the their integration to the notation model and allows generic handling regarding lexer, parser and parse tree. Graphical editors integration in the Notation metamodel \ref{MM:Not:Prod} is based on by specialization of one or multiple subclasses of \code{ProductionPart}. Multiple subclassing is for example useful if the editor is able to represent one or a \code{List} of a specific \code{NonTerminalNotation}. This subclass is denominated as the \emph{graphical class}, its serialized form as \emph{graphical character}. From the parsers perspective, this enables the use of the graphical character wherever the specialized \code{ProductionPart} is valid. This concludes that the graphical class is only a valid path for the parse tree constructor if the specialized \code{ProductionPart} is also valid. 
 
+%PTC
+The graphical editor has to specify which grammar element or set of grammar elements it able to represent. Because the graphical class is a specialization, it is perfectly valid to further constraint the extended element, for example to meet certain domain specific criteria. If the criteria are met, the graphical class should be added as an alternative to, not instead, the notation model. The designated place to evaluate these constraints is the parse tree constructor, after it has determined the extended grammar element as a valid path. 
 
-\section{Sentential Forms}
-The EMF Lexer \todo{ref} allows serialization of arbitrary \code{EObject}s as atomic characters. Thus, it is possible to serialize symbols by serializing their corresponding nodes of the notation model. In order to enable the parser to handle these ``synthetic'' tokens, post processing the grammar definition before it is used for parse table generation is an option. \\
-The steps of the suggested solution are:
+%Use in GUI
+The combined use of sentential characters and guided parse tree constructor enable the creation of graphical characters for the output character stream. The intended representation of graphical characters in the user interface is to substitute the graphical character with its adjacent graphical editor. The graphical editor at this position \emph{works on the language model} referred by the graphical character. Editing the language model instead of the verbose parse tree is only possible due to the guarantee of sentential tokens to be expandable to a valid parse tree. Handling graphical elements as characters is known even by end users. Office software, like for example Libre Office~\footnote{\raggedright \url{http://www.libreoffice.org/}}, offers to place the anchor of a picture in a document as a character.
 
+%Conclude
+The presented solution offers to create graphical editors as an alternative to parts of a textual representation. This allows the editors to be fine grained for specific parts of the model. There is no need to handle the model root or to query specific model parts. It allows multiple graphical editors from different sources to coexist without interference in a single textual document using an attributed context free grammar as the common denominator. Changing the representation is achieved without a change in the language model and by simply changing a reference in notation model. Representing text in the graphical editors can be achieved by spawning a new parser instance inside the graphical editor with an appropriate synchronized new root. Thus, interchangeable mixed representation of textual and graphical notation is possible.
 
-\section{Graphical Editing}
-The ID character hides the sentential form of a word in a tree structure. It is therefore possible to edit this structure in a graphical editor and use the ID character as the root for the graphical editor. Instead of displaying the ID character in the text and the graphical editor separately, the suggested solution is to display the graphical editor instead of the ID character at its position.
-
-The graphical editor could work on the parse tree of a specific symbol \code{S}.  As long as the underlying tree structure is a production for \code{S}, the edit is valid. The edit might still be valid, if it does not result in a production for \code{S}. In that case, the parse tree has to be pretty printed and the complete word has to be parsed again. This approach has the following drawbacks:
-\begin{itemize}
-	\item the editor works directly on the parse tree. This means that editor developer can not benefit from the gained abstraction of the AST.
-	\item a re-parse is necessary even if different productions or different non terminals are legitimate at the current position. 
-\end{itemize}
-
-Another option is to let the graphical editor work on the AST and use a hint for the sentential token. Even if the hint changes, the graphical editor could remain stable if it supports the new production. \todo{explicit, sounds like sh*t}
-
+%%%%%%%%%%%%%%%%%%%%%%% Controller %%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Notation model for controllers} A potential use of the notation model is the same as its conceptional origin in GMF: as the model for a controller in the model view controller pattern. Because textual representations are less interactive than graphical representations and due to the fact, that updates of the model are done by the parser and updates of the view are do a large extend handled by the parse tree constructor, a large extend of the controllers could be stateless. Stateless controllers can be reused for a set of model elements. Notation model based controllers could enable semantic edits, for example the movement of a selected element to the next valid location. 
 
 
