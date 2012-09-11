@@ -2,34 +2,32 @@
 "EMF is a Java framework and code generation facility for building tools and other applications based on a structured (data) model" \cite{EMFDoc}
  It unifies three important technologies: a subset of Java, XML and a subset of UML. Models are definable by an XML Schema, annotated Java interfaces or by UML modeling tools. EMF bridges the gap between modelers and Java programmers by relating modeling concepts to a simple Java representation of these concepts. \cite{EMF2nd}\\
 
-EMFs runtime framework allows data to be validates, persisted and edited in a UI Editor. Change recording and notification as well as metadata by reflection is available. EMF is the foundation for fine-grained interoperability and data sharing among tools. For example 
-\todo{Mention base for transactions, graphical editors, DB persistence, M-trans}\\ \todo{Mention runtime instances?}\\
+EMFs runtime framework\footnote{\raggedright The runtime framework distinguishes the part of EMFs framework from the one which is necessary for code generation.}  allows data to be validated, persisted and edited in an user interface editor. Change recording and notification as well as meta data by reflection is available. EMF is the foundation for fine-grained interoperability and data sharing among tools. For example Model Transaction \footnote{\raggedright \url{http://www.eclipse.org/modeling/emf/?project=transaction}}, graphical editors like the Graphical Modeling Framework GMF \footnote{\raggedright \url{http://www.eclipse.org/modeling/gmp/?project=gmf-runtime}}, database persistence \footnote{\raggedright \url{http://wiki.eclipse.org/Teneo}} , model transformation and so on.
 
-EMF supports saving models to and loading them from persistent resources. A default XMI, a specialized XML, serialization is available as a default serialization format. References can be persisted, they can be across multiple resources, with load on demand, proxy resolution, unloading support. References can be bidirectional in EMF with referential integrity maintained. \cite{EMF2nd}\\
+EMF supports saving models to and loading them from persistent resources. A specialized XML serialization format called XML Metadata Interchange (XMI) is available as a default serialization. References can be persisted, they can be across multiple resources, with load on demand, proxy resolution and unloading or proxy creation support. References can be bidirectional in EMF with referential integrity maintained. \cite{EMF2nd}\\
 
-\section{Ecore Meta Model}
-EMF uses a model to describe other EMF models. This model is called Ecore and is the center of the EMF world. Ecore is itself an EMF model and can be described by itself similar to the possibility of describing the syntax of EBNF in EBNF. This makes Ecore its own metamodel, thus Ecore is a meta-metamodel. The concepts of metamodels is simple: a model which describes a model is a metamodel. A model which describes a metamodel is a meta-metamodel. \cite{EMF2nd}  A metamodel describes the abstract syntax of a language \cite{EMP} and the added validation rules the static semantics of a language \cite{MDSD}
+\section{Ecore Meta Model} \label{ecore}
+EMF uses a model to describe other EMF models. This model is called Ecore and is the center of the EMF world. Ecore is itself an EMF model and can be described by itself similar to the possibility of describing the syntax of EBNF in EBNF. This makes Ecore its own metamodel, thus Ecore is a meta-metamodel. The concepts of metamodels are simple: a model which describes a model is a metamodel. A model which describes a metamodel is a meta-metamodel. \cite{EMF2nd}  A metamodel describes the abstract syntax of a language \cite{EMP} and the added validation rules the static semantics of a language \cite{MDSD}
 
-Ecore supports several high level concepts which are not directly available in Java, like bidirectional relationships, and a specialization of it, containment relationships.
+Ecore supports several high level concepts which are not directly available in Java, like multiple inheritance, bidirectional relationships and containment relationships as a specialization of bidirectional relationships. Cycles in containment relations are for bitten and an \code{EObject} might just be contained in exactly one other \code{EObject}. Containment relations forms trees within models. The roots of these trees are model elements without container \code{EObject}, likely with a container \code{Resource} and the leafs are \code{EObject} without outgoing containment relations. 
 
-	\todo{Cycles in composition are not allowed; composition forms trees within models. The roots of these trees are model elements without container; the leafs are elements without components.}
+\begin{figure}
+\centering
+\includegraphics[scale=0.9]{gfx/ex/Ecore} 
+\caption{Simplified Ecore Metamodel}
+\label{MM:Ecore}
+\end{figure}
 	
-
-
-The following describes a subset of Ecore, based on \cite{EMF2nd} \\
-
-\todo{BILD!}
-
-
+Figure \ref{MM:Ecore} shows a subset of Ecore. The central elements of Ecore are:\\
 \begin{itemize}
-	\item An EPackage is the root of an model and contains EClassifiers and sub packages.
-	\item EClasses models classes. A class refers a number of other classes as its super types. They are identified by name and contains a number of attributes and references which both are structural features.
-	\item EStructuralFeature is the super type of attributes and references aggregates attributes like multiplicity.
-	\item EAttributes have a type and are identified by name. They model the components of an objects data.
-	\item EDataType represents a single type which must not impose structure. They are directly related to Java types.
-	\item EClass and EData types are both EClassifiers.
-	\item EReferences model one end of an association. They are identified by name and hold a type of the referable object. If the association is bidirectional, the eOpposite is assigned to its inverse reference. \cite{EMF2nd}
-	\item ECore classes hold and eAnnotation reference. Annotations store information which were not considered fundamental enough to explicitly support them in Ecores metamodel. For example documentation, OCL validation, XML serialization parameters. \cite{EMP}
+	\item An \emph{EPackage} is the root of an model and contains EClassifiers and sub packages.
+	\item \emph{EClass} models classes. A class refers a number of other classes as its super types. They are identified by name and contains a number of attributes and references which both are structural features.
+	\item \emph{EStructuralFeature} is the super type of attributes and references aggregates attributes like multiplicity.
+	\item \emph{EAttributes} have a type and are identified by name. They model the components of an objects data.
+	\item \emph{EDataType} represents a single type which must not impose structure. They are directly related to Java types.
+	\item \emph{EClass} and \emph{EData} types are both \emph{EClassifiers}.
+	\item \emph{EReferences} model one end of an association. They are identified by name and hold a type of the referable object. If the association is bidirectional, the \emph{eOpposite} is assigned to its inverse reference. \cite{EMF2nd}
+	\item Ecore classes hold and \emph{eAnnotation} reference. \emph{Annotations} store information which were not considered fundamental enough to explicitly support them in Ecores metamodel. For example documentation, OCL validation, XML serialization parameters. \cite{EMP}
 	\item In additional to structural features, Ecore can also model the interfaces of behavioral features.
 \end{itemize}
 
@@ -49,16 +47,16 @@ Resource, and ResourceSet are fundamental interfaces of EMFs persistence framewo
 
 
 \subsubsection{Cross Resource References}
-To reference other persisted objects, EMF uses Proxies. A Proxy is an uninitialized instance of the target class, which is identified by an URI. " A Uniform Resource Identifier (URI) is a compact sequence of characters that identifies an abstract or physical resource."\cite{URI} A URI consists of five parts: scheme, authority, path, query and fragment whereby query is irrelevant for this thesis. The basic format is\\
+To reference other persisted objects, EMF uses Proxies. A Proxy is an uninitialized instance of the target class, which is identified by an URI. " A Uniform Resource Identifier (URI) is a compact sequence of characters that identifies an abstract or physical resource." \cite{URI} A URI consists of five parts: scheme, authority, path, query and fragment whereby query is irrelevant for this thesis. The basic format is\\
 \code{schema://authority/path\#fragment} \\
 The schema defines the interpretation of the following part. Common schemata for EMF are file, in an eclipse environment platform and http. Authority and path together identify an resource, the fragment identifies a part of an resource or in EMFs case an \code{EObject}.
 For example:\\
 \code{http://www.xtext.my/MiniJava\#//@class.1}\\
-which identifies the the second element stored in the containment reference class of http://www.xtext.my/MiniJava resource.
+which identifies the the second element stored in the containment reference class of \code{http://www.xtext.my/MiniJava} resource.
 
 
 \subsubsection{Resource}
-A resource is a basic unit of persistence. It is a container for one or more objects which are persisted together with their children. They can be unloaded in which case contained referred objects  are converted to proxies. An resource is identified by a URI with schema, authority and path. A resource is also responsible for creating valid URI fragments for EObjects contained in it. By default a resource returns hierarchy based XPath like fragments. Other options are intrinsic IDs and extrinsic IDs. Intrinsic IDs are IDs stored directly on the model object, whereas extrinsic IDs are stored external of the object. Extrinsic IDs are useful when the modeled objects state is not sufficient to constitute an ID for a given resource. XML resources manage extrinsic IDs and offer support for universally unique identifiers (UUIDs). It is possible to attach adapters to a resource, so it is for example possible to observe every change of an contained object and create a \code{ChangeModel} by using EMFs \code{ChangeRecorder}. This enables automatic undo support for commands. \cite{EMF2nd}
+A resource is a basic unit of persistence. It is a container for one or more objects which are persisted together with their children. They can be unloaded in which case contained referred objects  are converted to proxies. An resource is identified by a URI with schema, authority and path. A resource is also responsible for creating valid URI fragments for \code{EObject}s contained in it. By default a resource returns hierarchy based XPath like fragments. Other options are intrinsic IDs and extrinsic IDs. Intrinsic IDs are IDs stored directly on the model object, whereas extrinsic IDs are stored external of the object. Extrinsic IDs are useful when the modeled objects state is not sufficient to constitute an ID for a given resource. XML resources manage extrinsic IDs and offer support for universally unique identifiers (UUIDs). It is possible to attach adapters to a resource, so it is for example possible to observe every change of an contained object and create a \code{ChangeModel} by using EMFs \code{ChangeRecorder}. This enables automatic undo support for commands. \cite{EMF2nd}
 
 \subsubsection{ResourceSet}
 A ResourceSet acts as a container for Resources and its main responsibility is to support references between objects in different resources. 
@@ -82,10 +80,12 @@ GMFs notation model manages and persists the state of the diagram or view separa
 	\item has attributes like visibility and type
 \end{itemize}
 
-\begin{center}
-\includegraphics[scale=0.5]{gfx/NotationMM.png}
-\end{center}
-\todo{Mention EMP}
+\begin{figure}
+\centering
+\includegraphics[scale=0.8]{gfx/ex/GMF_Notation} 
+\caption{Simplified GMF Notation Metamodel}
+\label{MM:Ecore}
+\end{figure}
 
 Part of the design considerations for the notation meta model were \cite{GMFDoc}:
 \begin{itemize}

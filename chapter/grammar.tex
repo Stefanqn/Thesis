@@ -3,7 +3,7 @@
 \label{cha:grammar}
 
 
-\section{Relation of Metamodels and Context Free Grammars}
+\section{Relation of Metamodels and Context Free Grammars} \label{sec:MM:CFGs}
 To connect the textual languages, which are typically denoted by context free grammars and modeling languages, which are described by metamodels, a mapping between the concepts of BNF and Ecore has to be established. Because Ecore is more expressive than BNF, it is possible to map BNF to Ecore, but just a subset of Ecore to BNF.
 
 Algorithms for mapping a subset of MOF to BNF and BNF to MOF are described in \cite{MofCfg}. Note that \cite{MofCfg} uses a subset of MOF which is also a subset of Ecore and uses enumerations for fixed string literals (keywords), which is optional specialization of the presented attribute mapping. Also,  \cite{MofCfg} maintains an attribute order by generating lexical ordered structural feature names. Whereby an attribute order is crucial, this is not necessary regarding Ecore. EMF implements unordered multiple values as lists, which are ordered. This implementation characteristic is documented \cite{EMF2nd}.  \cite{MofCfg} mentions that it's possible to create "invalid" models of the grammar metamodel, which requires additional verification with the target context free grammar. This topic is discussed later in \todo{ Example?}
