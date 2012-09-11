@@ -16,11 +16,6 @@
 
 
 
-
-\chapter{Combining Stuff}
-\section{Notation MM as Sentential tokens}
-\section{Notation MM as graphical editor base}
-\section{Conclude graphical editor integrated in the grammar at Symbol, Seq, or Alt positions}
 \section{what misses? Text <-> Model sync}
 
 
@@ -64,6 +59,21 @@ Finally, a notation model element should contain a flag if it is currently textu
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{TODOS}
+\begin{itemize}
+	\item Others
+	\item Barista \- Unparse/Parse
+	\item incr. GLR
+	\item SGLR (nicht Bidirectional)
+	\item SDF
+	\item Parser Autocomplete (Overview 3, Artifical Tokens 13)
+	\item Spoofax restricts AST strucutre (last overview?)
+	\item TEF  - Parse / Unparse, Replcae, Indentity, Comparing Models
+	\item GLL zu EMF?
+	\item tupel im diagramm zu tuple
+\end{itemize}
+
 %\begin{figure}
 %\includegraphics[scale=0.7]{gfx/ex/grammarExample} 
 %\caption{Example Rule ``A := (w |x y)+ B? | z C''}
@@ -78,3 +88,37 @@ Finally, a notation model element should contain a flag if it is currently textu
 %  \caption{Schematic data flow for a web application}
 %  \label{fig:architecture:web_app_usage}
 %\end{figure}
+
+
+TODO
+\begin{itemize}
+	\item Distinguish text editor with model aware editor.
+	\item Suggest text representation for: 
+	\begin{itemize}
+		\item editing (with STokens)
+		\item serialization (with mixed XMI containments)
+		\item presentation (wo/ IDTokens)?
+	\end{itemize}
+	
+	\item Explain intermixed Txt, Graph, Txt
+	\item Mention existence of unassigned values in a choice but not in AST (``blla'' | ``blubb'' )and defaults
+	\item EMF Compare
+	\item Pretty print vs. unparse
+
+	\item embrace ambiguity
+	\item ambiguity vs non-determinism
+
+	
+
+Refs:
+	\item Widen meaning of Annotation?
+	\item solved incomplete information but can specialization types be handled if just supertypes are known? 
+	\item Mention that SAEBNF ? MM constrain each other
+	\item Lazy Obj creation means on first access
+	\end{itemize}
+
+
+\begin{itemize}
+	\item Is it, and if how is it possible to present textual views on a model which present a different structure than the underlying model (annotations).
+		\item  How are updates handled?
+\end{itemize}

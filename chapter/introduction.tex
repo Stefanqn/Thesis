@@ -1,42 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}
 \label{cha:introduction}
-Intro
-
-TODO
-\begin{itemize}
-	\item Distinguish text editor with model aware editor.
-	\item Suggest text representation for: 
-	\begin{itemize}
-		\item editing (with STokens)
-		\item serialization (with mixed XMI containments)
-		\item presentation (wo/ IDTokens)?
-	\end{itemize}
-	
-	\item Explain intermixed Txt, Graph, Txt
-	\item Mention existence of unassigned values in a choice but not in AST (``blla'' | ``blubb'' )and defaults
-	\item EMF Compare
-	\item Pretty print vs. unparse
-
-	\item embrace ambiguity
-	\item ambiguity vs non-determinism
-
-	
-
-Refs:
-	\item Widen meaning of Annotation?
-	\item solved incomplete information but can specialization types be handled if just supertypes are known? 
-	\item Mention that SAEBNF ? MM constrain each other
-	\item Lazy Obj creation means on first access
-	\end{itemize}
-
-Other Constraining thesis
-\begin{itemize}
-	\item AST <-> TokenStream
-	\item Error Case
-\end{itemize}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Intoduction}
 Software developers spend more time reading source code than writing. Lowering the cognitive burden to understand the presented program sources is a key factor to increase productivity. \\
 
 %DSLs 
@@ -53,25 +17,59 @@ Modeling tools for visual languages on the other hand are strongly based on the 
 Several tools \footnote{\raggedright XText, Textual Editing Framework, EMFText} already bridge the gap between the description of a language by a context free grammar and by models. They require a full textual representation of a model element and its content do not allow the user to select alternative textual presentations of semantic equivalent element. Projectional editors like Meta Programming Systems offer form based textual views on data structures, whose design approach is 	 predestined to show just parts of the model or to present certain model elements differently. Projectional editors enforce a special the user guidance, which is more restrictive to free textual editing. Additionally, they require continuous structural correctness while editing, which enforces the user to make edits in steps which are at least structurally correct. This contradicts well-known editing behavior, where users create several incorrect intermediate states of a document to reach the desired, correct state. Abandoning this editing behavior restricts the user in his familiar work flow. It requires not only him to learn the model manipulating tool, but also to learn and to switch to another editing paradigm. 
 
 This thesis started from the basic idea to leverage internal domain specific languages with domain specific notation and domain specific manipulation facilities interchangeable. This requires to mix textual and graphical notations interchangeable and integrate the editor in the word as if it was part of it. So the data in place of the editor has to be part of a word. This word should be in language described by a context free grammar.
+ 
+%%% TODOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 
 \todo{DSLs should integrate in IDE}
-
 
 \todo{integrate}
 ``An attractive goal is to provide support for simultaneous editing of textual and graphical elements for any language.''\cite{EMP}
 \todo{current solutions replace view elements instead of change property}
 \todo{name it Impedance mismatch}
 
+\todo{closed under composition}
+
 \textbf{
-"Not only is no single representation best for all kinds of programs, no single representation is one representation even best for all tasks involving the same  program. " Moher, T.G., Mak, D.C., Blumenthal, B., Leventhal, L.M.: Comparing the Comprehensibility of Textual and Graphical Programs: The Case of Petri Nets. In: Empirical Studies of Programmers - Fifth Workshop (1993)}
+"Not only is no single representation best for all kinds of programs, no single representation is one representation even best for all tasks involving the \emph{same}  program. " \cite{Petri} }
 
 
-\section{Questions}
-This raises several questions:
+
+\section{Research Objective}
+The central \emph{questions} of this thesis are:
 \begin{itemize}
-	\item how are different, interchangeable textual representations of the semantically same abstract language element are in general possible?
-	\item how can graphical editors be integrated in text, so that the text is still a word of the language described by a context free grammar?
-	\item which granularity of integration is possible if different editor are unknown at design time of the context free grammar?
+	\item How are different, interchangeable textual representations of the semantically same abstract language element are in general possible?
+	\item How can graphical editors be integrated in a text, so that the text is still a word of the language described by a context free grammar?
+	\item Which granularity of integration is possible if different editors are unknown at design time of the context free grammar?
 \end{itemize}
+
+This thesis uses an abstract notion of graphical editors in which the type of editor, its position in the character stream and a proper data source is sufficient to facilitate their deployment.
+
+\todo{Constraint thesis that errors are not specially considered?}
+
+% check >>>>>>>>>>>>>>>>>>>>>>>
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Outline}
+% Outline Solution
+The general idea of the presented solution combines three simple concepts:
+\begin{itemize}
+	\item The use of private characters as a unique key for a map. The value of the map is an object, thus a single character can be resolved to an arbitrary data structure.
+	\item The parse tree is a tree data structure. If a part of the tree produced by a token sequence is saved in a single token, that token is a valid substitute for that tree part.
+\end{itemize}
+These two already allow to operate on the parse tree part in the map.
+\begin{itemize}
+	\item A parse tree constructor, which constructs a parse tree from an abstract syntax tree and is extensible, to assign types to and to skip parse tree construction for invisible elements. This allows the graphical editor to use the abstract syntax tree as data source directly. 
+\end{itemize}
+
+Figure \ref{ConceptFigure} shows the conceptional overview. 
+
+% Outline thesis
+The results of the work were achieved by an argumentative deductive approach. 
+
+
+
+Definitions contain formal definitions for wide spread concepts of computer science. Basics lay the common ground for further explanations. An available solutions of creating EMF models from text is used to present the current state. The concepts XText in regards to this thesis are explained and discussed to gain problem awareness and to expose room for improvement. \todo{Present Notation model, discuss resource impl. Etc.}
+\todo{all of them}
 
 \begin{figure}
 \centering
@@ -79,35 +77,3 @@ This raises several questions:
 \caption{Conceptual Overview}
 \label{ConceptFigure}
 \end{figure}
-
-\todo{Constaining thesis}
-\begin{itemize}
-	\item  Model <-> TokenStream
-	\item  Error Case
-\end{itemize}
-
-
-\begin{itemize}
-	\item How are multiple views on an AbstractSyntax possible
-	\item textual views on AST (syntactic sugar)
-	\item BNF EMF not just mapping but also constraints.
-	\item how is incomplete information?
-	\item editors on a text possible?
-	\item Is it, and if how is it possible to present textual views on a model which present a different structure than the underlying model (annotations).
-		\item  How are updates handled?
-\end{itemize}
-% check >>>>>>>>>>>>>>>>>>>>>>>
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Outline Work}
-Definitions contain formal definitions for wide spread concepts of computer science. Basics lay the common ground for further explanations. An available solutions of creating EMF models from text is used to present the current state. The concepts XText in regards to this thesis are explained and discussed to gain problem awareness and to expose room for improvement. \todo{Present Notation model, discuss resource impl. Etc.}
-\todo{all of them}
-
-
-\begin{itemize} 
-	\item Present XText
-	\item describe problems
-	\item argue why resource impl is a fail (ref. Integrity breaks without extrinsic  UUID)
-	\item present GMF notation model
-\end{itemize}
