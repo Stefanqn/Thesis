@@ -1,0 +1,45 @@
+\chapter{Related Work}
+
+Proxima \footnote{\raggedright \url{http://www.cs.uu.nl/wiki/bin/view/Proxima/}}  \cite{proxima} is a hybrid structure editor.  
+
+bidirectional mappings between the document and the presentation
+is facilitated by a layered architecture.
+
+The computation of the presentation is broken up in several stages, and each intermediate value in this computation corresponds to a data level (or just level).
+
+
+
+Structure editor: An editor that has knowledge of the structure of the edited document.
+Usually assumed to be a generic editor as well.
+
+Syntax-directed editor: An editor that primarily supports document-oriented editing.
+Syntax-recognizing editor: An editor that primarily supports presentation-oriented editing.
+
+=======================
+
+\subsection{JetBrains Meta Programming System}
+JetBrains Meta Programming System \footnote{\raggedright \url{http://www.jetbrains.com/mps/}}  is an open source language workbench, which allows to define the abstract syntax of a language, an projectional editor and model transformation. In the Meta Programming System, the abstract syntax of a \emph{Language} is defined using \emph{Concepts}. Model nodes are defined by their concepts \cite{MPStut}. The terminology in the Meta Programming System abstract syntax is Language, Solution and Concept where Language is similar to a Metamodel, Solution to a Model and Concept to a Metaclass. It provides a projectional editor that directly edits the abstract language instance directly. The editor focuses on text presentation, but it is not free but form oriented text. At the time writing, tables are the only editable graphical notation. Also, a Concept is either presented textually \emph{or} as a table. A Solution can then be transformed by textual model to model transformations to one of  Meta Programming Systems several base languages, which provide the semantics of the language constructs. As base language, there is currently C, Java, XML, or plain text available. Because the textual notations in Meta Programming System are no free text, it requires the user to change his ``editing habits'' \cite{VolterMPS}. 
+
+\subsection{Spoofax}
+Spoofax \footnote{\raggedright \url{http://strategoxt.org/Spoofax}} is an Eclipse based framework to develop textual domain specific languages with IDE support \cite{Spoofax}. Spoofax uses the Syntax Definition Format \footnote{\raggedright \url{http://syntax-definition.org/}} (SDF2) to specify the syntax \cite{Spoofax}. It combines the specification of concrete and abstract syntax into a single grammar. SDF defines context free grammar like EBNF \cite{sdf}, but it is among other things modular and together with scannerless generalized parser like \cite{sglr} and declarative disambiguation rules, it is freely composeable.  \cite{bible} argues, that ``Declarative (abstract syntax) tree construction is most effective for grammars with a natural structure'', and that this natural, not massaged structure provided by SDF and scannerless GLR parser. Spoofax uses Stratego \footnote{\raggedright \url{http://strategoxt.org}} a term rewriting or transformation tool \cite{stratego} to process the abstract syntax trees. The abstract representation is in contrast to EMF based on trees.
+
+
+\subsection{Integrated Development Environments}
+Integrated Development Environments (IDEs) like Eclipse, IntelliJ IDEA, and Visual Studio parse the source code as it is typed, so called Background Parsing. They use the parsed abstract syntax tree to provide editor services like outlining, refactoring, error marking and content completion. These are syntax-recognizing editors. LavaPE \footnote{\raggedright \url{http://lavape.sourceforge.net/}} is an example of an IDE with a syntax directed editor.  
+
+
+\subsection{Proxima}
+Proxima \footnote{\raggedright \url{http://www.cs.uu.nl/wiki/bin/view/Proxima}}  is a generic structure editor written in Haskell for a range of structured documents. It allows free text editing as well as structure editing. Proxima maintains a bidirectional mapping between the document structure and its presentation, by a multiplicity of bidirectional mappings between the seven layers of Proximas architecture. Proxima does not use conventional parsing techniques, because the presentation in not restricted to text but also contains graphical elements. Graphical presentation can not be edited directly at the presentation level \cite{beyond_ascii}. Proxima uses \emph{structural tokens} that are no strings and treats them specially \cite{proxima} for presentation.
+
+
+--------------
+
+Interestingly, with the exception of the Meta-Environment
+and TEF, all tools that we described generate ANTLR
+parsers. TEF uses a the RunCC parser generator. ANTLR s
+LL(k) or LL(*) parsers cannot cope with left recursion in
+grammars. Likewise, RunCCs LR(k) parsers are limited to
+a subset of the context-free grammars. This means that they
+are not closed under composition, which means that adding
+extensions to a grammar or reusing grammars can introduce
+conflicts in the parser [32]. 

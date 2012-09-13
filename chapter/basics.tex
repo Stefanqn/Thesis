@@ -43,6 +43,14 @@ $G = (T, V, S, P)$
 \paragraph{Tokens \& Terminals}  
 A token consists of a name and an attribute value. The names are abstract symbols used by the parser for syntax analysis. These token names are often called terminals. The attribute value contains additional information. \cite{DragonBook}
 
+\paragraph{Language Workbench}
+A Language Workbench is a generic tool to build software around a set of domain specific languages. The key concept is that editing is not done on text files but on the \emph{abstract} representation of a program \cite{Fowler}. This enables following characteristics:
+\begin{itemize}
+	\item languages are closed under composition.
+	\item users edit this abstract structure using projectional editors.
+	\item a language has three main parts: abstract structure definition, editor(s) and optional generators or interpreters.
+\end{itemize}
+In practice, the term Language Workbench is often used for frameworks that support language creation to a greater extend than ``compiler compiler'' or parser generators. Especially the bidirectionality of abstract structure and concrete editor is often ``eased''. 
 
 \paragraph{Lexer}
 A Lexer, also denoted as lexical analyzer, allows a parser to treat multi character constructs like identifiers as units called tokens during syntax analysis. \cite{DragonBook}
@@ -94,8 +102,15 @@ The sequence consists of one or more nonterminals or terminals and may contain a
 \paragraph{Parse Forest} 
 A set of parse trees. If duplicated subtrees are combined, the resulting structure is called a parse graph. \cite{ParserBook}
 
+\paragraph{Syntax Recognizing Editor} A syntax-recognizing text editor is one in which the user provides text and the system infers the syntactic structure by analysis \cite{pan}. In general syntax-directed editors allow partial presentations of the document, and offer support for the interpretation extra state, for example as built-in tree views on the document structure. \cite{proxima}
+
+\paragraph{Syntax Directed Editor or Projectional Editor} A Projectional Editor allows the user to directly edit the AST representation of the code or the structure of the document \cite{MPS}. 
+
 \paragraph{Sentential Forms}   
 The intermediate form for creating sentences from a formal grammar are called sentential forms. \cite{ParserBook}
+
+\paragraph{Stable vs. Unstable Models}
+This thesis uses these terms to distinguish the stability of references to model elements. Stability is no intrinsic characteristic of the model, but a contract of all model manipulation parties. Models which elements are \emph{updated} if edited are called ``Stable Models''. If the model, or parts of it are \emph{replaced} by equal model elements, the model is \emph{unstable}. The worst case of unstable models is the creation of an completely new equal model if an editor commits an empty update.
 
 \paragraph{Parsing as Constraint Satisfaction Problem (CSP)} 
 Beside answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Constraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules. It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parser identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree. \cite{ParserBook}
