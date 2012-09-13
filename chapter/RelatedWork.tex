@@ -1,14 +1,1 @@
-\chapter{Related Work}
 
-
---------------
-
-Interestingly, with the exception of the Meta-Environment
-and TEF, all tools that we described generate ANTLR
-parsers. TEF uses a the RunCC parser generator. ANTLR s
-LL(k) or LL(*) parsers cannot cope with left recursion in
-grammars. Likewise, RunCCs LR(k) parsers are limited to
-a subset of the context-free grammars. This means that they
-are not closed under composition, which means that adding
-extensions to a grammar or reusing grammars can introduce
-conflicts in the parser [32]. 

@@ -1,0 +1,98 @@
+\chapter{Results}
+
+
+\section{Unparser}
+The unparser is responsible to find all valid parse trees for the current language model and select the best. The process of creating an parse tree from an AST is called ``unparsing'' in this thesis. The creation of a token or character stream from the parse tree is called pretty printing. The actual unparsing process is twofold:
+\begin{itemize}
+	\item find all combinations of production rule applications that uniquely distinguish valid words
+	\item create a parse tree according to the most promising combination. 
+\end{itemize}
+ 
+The suggested solution is close the one implemented in Xtext. Xtexts solution, which is described in \ref{xtxt:ptc}, stops after finding one combination. 
+To enable multiple representations, the alternatives need to be made available. This is done by the notation model, which is described in \ref{chp:NotMM}. The notation model is able to be equivalent to a parse tree, but also allows to refer to following productions, called hints. EMFs \code{ECrossReferenceAdapter} virtually creates bidirectional references from unidirectional. This allows the use or reuse of notation model elements which refer to AST nodes just by getting all referring \code{EObjects} and filtering a type.
+
+\todo{blueprints based on s-attributes. Tree struct based on SAttrs.}
+
+\subsection{Hints}
+A hint is a reference to a following production. So with hints, a node in the parse tree is not only labeled by its non terminal, but also by its production. Hints specify a single production without referring to a parse tree part, which is important, if multiple productions are possible. Thus, hints do not refer to actual content but define the structure of the content. Regarding the unparser, the AST is present, but it is ambiguous which structure to use to hold its contained data.  
+
+\subsection{Unparse Steps}
+The basic steps of the unparser are:
+\begin{enumerate}
+	\item compute all possible solutions. This results in a forest of parse tree blueprints.
+	\item determine the best tree. Which criteria compose the best tree are explained below.
+	\item produce a parse tree for the best tree. 
+	\item compress the forest. For each branch branching the best tree, set the first node on the branch as an alternative representation of the best trees node it branches from.
+\end{enumerate}
+
+Criteria that determine the result tree are ranked from most to least important:
+\begin{enumerate}
+	\item use notation model hints, if exits. Hints are likely set by the user and thus have top priority.
+	\item number of similar productions to the previous unparse or parse, which is saved in the notation model. xxx Keeps stable.
+	\item user preferences
+	\item language designer preferences.
+	\item number of default values used as negative criteria.
+	\item number of direct EObjects required as negative criteria.
+\end{enumerate}
+
+\todo{blueprints 2 parsetree}
+
+The suggested behavior is that the user does not specifies the whole alternative representation, but selects an alternative, let the unparse create and display the new representation and iteratively refines the presentation. 
+
+
+\section{Grammar}
+\subsection{Grammar Metamodel}
+%%%%%%%% GrammarMM	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering
+\includegraphics[scale=0.85]{gfx/ex/Grammar_CFG} 
+\caption{EBNF Grammar Metamodel}
+\label{MM:EBNF}
+\end{figure}
+
+Figure \ref{MM:EBNF} shows a metamodel for an EBNF grammar. The metamodel lacks the ability to define lexemes  \\
+Compared to the definition of a CFG, the non terminals are the set of \code{NonTerminalName}s of \code{Rule}, the terminals are the set of \code{name}s of \code{TerminalType}, the start symbol is the \code{Rule} referred by \code{Grammar} and the productions are implicit described by the directly and indirectly contained elements of the \code{Rule}s. The \code{NonTerminal} and \code{Terminal} elements in the grammar are just references to the real non terminals and terminals. This definition overlap is owed to the fact that the same terminal may appear multiple times in productions, which must be distinguishable . This denomination allows for example in following rule
+\\\begin{code}
+A : b$_1$ C b$_2$
+\end{code}\\
+to be \code{b$_1$} an instance of \code{Terminal}, \code{C} and instance of \code{NonTerminal} and \code{b$_2$} another instance of \code{Terminal}, but refering to the same \code{TerminalType}.
+
+The \code{Grammar} has at least one \code{Rule} and one \code{TerminalType}. The \code{Grammar} has exactly one \code{start rule}. The \code{Rule}s have a name and contain exactly one element as their \code{rightHandSide}. This element might be either a \code{NonTerminal}, a \code{Terminal}, a \code{Sequence} or an \code{Alternative}. \code{Sequence}s and \code{Alternative}s are containers for at least two \code{RHS-Element}s. \code{Sequence} are \code{a b c} or \code{(a b)+} for example. \code{Terminal} and \code{NonTerminal} hold references to their unique type they represent. \code{Symbol} just provides abstraction but does not add expressivity to the language itself. Every \code{RHS-Element} has a \code{Multiplicity}, so exactly one \code{1}, one or none \code{?}, zero or more \code{+} or any multiplicity \code{*} can be expressed. Subclasses of \code{TerminalType} are present to allow a more detailed specification of \code{TerminalType} in later models.
+
+
+%%%%%% GrammarMM()	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Grammar Instance
+\subsection{Grammar Example}
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{gfx/ex/grammarExample} 
+\caption{Example Rule ``A := (w |x y)+ B? | z C''}
+\label{MM:GrammarExample}
+\end{figure}
+Figure \ref{MM:GrammarExample} shows the model instance of the EBNF metamodel \ref{MM:EBNF} of the grammar  \code{A := (w |x y)+ B? | z C}. The grammar rules \code{B} and \code{C} are left out, as well as the start rule reference. The references to the symbols \code{w}, \code{x}, \code{y} and \code{z} are replaced with the name of the referenced symbol.
+
+\subsection{Attributed Grammar}
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{gfx/ex/Grammar_Attributed} 
+\caption{Attributed Grammar metamodel extension}
+\label{MM:AEBNF}
+\end{figure}
+
+The metamodel defined in \ref{MM:AEBNF} adds attribution and default values to the grammar. It uses metaclasses from the metamodel \ref{MM:EBNF} for CFGs. The packaging is for documentation purpose only, because the metaclasses of the CFG metamodel refer to the current metaclasses. \\
+Each \code{Rule} has a \code{RuleReturnType}, which might be an \code{EClass}, if it is a an \code{EObject} returning rule or an \code{EDataType}, if it is a Data Type Rule. The additionally distinction in \code{EObjectTypeRule} and \code{DataTypeRule} is for presentation purposes only, this makes it obvious in the diagram when an \code{EObjectTypeRule} is used. For a real implementation a reference from \code{Rule} to an \code{EClassifier} would be sufficient. \code{EClassifier} is the supertype of \code{EClass} and \code{EDataType}. \code{Symbol} now can contain a  \code{defaultValue}, which is a \code{String}.  \code{String}s are structureless, so the use of \code{DefaultValue}s is restricted to  \code{NonTerminal}s refering \code{DataTypeRule}s and  \code{Terminal}s only. The  \code{String} must not violate the  \code{Symbol}s constraints. Given the example \code{attribute+=TerminalSymbol}, an attribute assignment is realized by \code{TerminalSymbol} containing a  \code{FeatureOperation} with \code{kind} set to  \code{add} and a reference to the  \code{EStructuralFeature} named \code{attribute}. The \code{EStructuralFeature} must be contained in the  \code{EClass} of the returned \code{EObject}s type. In contrast to Xtext, it is possible to assign statically a structureless value to an attribute, for example 
+\begin{xtxt}
+Rule : {ruleAttribute="true"} "1"
+\end{xtxt}   
+which means that if the rule matches \code{ruleAttribute} is assigned to \code{"true"}. This can be done for an abitrary amount of \code{EStructuralFeatures}. \code{NotationPersistedElement} allows to persist a String in the notation model, this allows to share data between \code{Alternatives}. \\
+\code{Alternatives} also contain a \code{ValueAssignment}. This could be omitted if 
+\begin{xtxt}
+attribute= (a | B)
+\end{xtxt}
+would not be allowed and instead only the alternative 
+\begin{xtxt}
+(attribute = a | attribute = B)
+\end{xtxt}
+would be allowed.
+%% Grammar Instance()
