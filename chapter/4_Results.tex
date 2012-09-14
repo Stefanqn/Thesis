@@ -57,7 +57,7 @@ The EMF Lexer is introduced to:
 \subparagraph{Return Types}
 XText also offers to explicitly name the return type. e.g.
 \begin{xtxt}
-Z returns BorC	: "B";
+Z returns AnyType	: "B";
 \end{xtxt}
 The effect of this feature can't be overstated.  It decouples the EObject type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraint strongly limited it's useability. Return types raise the abstraction level, because an EObject of the abstract syntax can have a context dependent representation. It also allows multiple representations of the same EObject type.
 
@@ -75,7 +75,7 @@ creates an EClass 'Z' with the attributes 'v' of type EString and 'n' of type EI
 Z returns A : "A" v=ID;
 Y returns A : "B" v=ID;
 \end{xtxt}
-No isomorphism of the type 'A' to a grammar rule.
+No isomorphism of the type 'A' to a grammar rule, because both rules return an \code{EObject} of type \code{A}.
 
 \subparagraph{PTC}
 
@@ -105,30 +105,31 @@ It is possible that all grammar rules return the same type, so type information 
 
 \section{Review / Criticism}
 \subsection{XText Grammar}
-The XText grammar still leaves room for improvement. It is not possible do statically assign a value  to a structural feature. For example assigning 0 to an integer attribute 'v' of class MyBoolean in the "false" case and 1 in the "true" case requires to write a special value converter. 
+In the XText grammar, it is not possible do statically assign a value  to a structural feature. For example to assigning 0 to an integer attribute 'v' of class MyBoolean in the "false" case and 1 in the "true" case requires to write a special value converter. 
 \begin{xtxt}
 MyBoolean:  "true" | "false"
 \end{xtxt}
 
-A much greater impact on the grammar is it's inability to express left recursive grammars and the consequences. This is owed to the LL(*) parsing algorithm which is used by parser generator ANTLR used by XText to create the parser. This requires left factoring and grammar rewriting which forces XText to allow assigned actions, thus tree rewriting of the AST. If only parser and AST construction is regarded, this is more or less an inconvenience for the grammar designer, but it creates problems regarding unparsing and validation for XTexts current implementation. Considering that the current unparsing algorithm has $O(exp(n))$ it is arguable to use an GLR parsing algorithms with  $O(n^3)$ to avoid the need for grammar massaging and thus AST rewriting.
+A much greater impact on the grammar is it's inability to express left recursive grammars and the consequences. This is owed to the LL(*) parsing algorithm of ANTLR, the parser generator used by XText. This requires left factoring and grammar rewriting which lead to XText allowing tree rewriting of the AST by assigned actions. If only parser and AST construction is regarded, this is more or less an inconvenience for the grammar designer who needs to left-factorize, but it creates problems regarding parse tree construction and validation for XTexts current implementation. Considering that the current parse tree construction algorithm has a runtime of $O(c^N)$, it is arguable to use an GLR parsing algorithms with  $O(n^3)$ to avoid the need for grammar massaging and thus AST rewriting.
 
 \subsection{XText Resource}
-XText is, like EMFTex \cite{EMFTextMan}, only integrated in EMF as an EMF Resource. Because the responsibility of resources are to serialize and deserialize models., this is the origin of various problems: 
+XText is, like EMFText \cite{EMFTextMan}, integrated in EMF as an EMF Resource. The responsibility of resources is to serialize and deserialize models, this leads to various problems: 
 
 \begin{itemize}
-	\item The grammar must describe the whole model: the model must not contain non volatile information which is not regarded by the grammar and adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent the restriction that the whole model must be textually described, a possible solution would be to create additional EObjects in an extra Resource pointing at the to be extended EObject in a XTextResource with a CrossReferenceAdapter and requesting the inverse references of  the extended object. This technique to extend an EObject in a non invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
-	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the model. As a result, model elements are replaced instead of updated. Furthermore, EMFs ResourceSet which keeps referential integrity is bypassed. XTexts demands the programmer to handle referential integrity or to "return stable fragments for its contained elements ". For example the expression "int i=0" in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element an universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
-	\item Because the model contained in a resource is not modified in a ResourceSet and extrinsic, non grammar conform information like IDs can't be added or integrated persistently to model elements referential integrity can not be maintained. On the other hand to determine changes to update a model without unique IDs must inevitable  be based on heuristics, thus being inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict to store the model in textual form for e.g. viewing and versioning. 
+	\item The grammar must describe the whole model: the model must not contain non volatile information which is not regarded by the grammar. Adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent the restriction that the whole model must be textually described. A possible solution would be to create additional EObjects in an additional Resource, which points at the EObject in the XTextResource which should be enriched. With an ECrossReferenceAdapter the inverse references and thus the additional information of the extended object. This technique to extend an EObject in a non invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
+	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the model. In conjunction with a non incremental parser, model elements are replaced instead of updated. Furthermore, EMFs ResourceSet which keeps referential integrity is bypassed. XTexts demands the programmer to handle referential integrity or to "return stable fragments for its contained elements ". For example the expression "int i=0" in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element an universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
+	\item Because the model contained in a resource is not modified in a ResourceSet and extrinsic, non grammar conform information like IDs can not be added or integrated persistently to model elements referential integrity can not be maintained. On the other hand to determine changes to update a model without unique IDs are based on heuristics, thus potentially inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict to store the model in textual form for e.g. viewing and versioning. 
 \end{itemize}
 
 \subsection{Node Model}
 The potential use of the node model is strongly restricted in Xtext, for the following reasons:
 \begin{itemize}
 	\item the node model is not an EMF model. 
-	\item The node model is not explicitly available without running the XText parser, because it is created at runtime from the information available from the serialized language model implementation. 
-	\item The use of the runtime instances of the node model is strongly restricted by the API: ``clients should never keep a reference to a node as it may be invalidated at any time and the very same object could be reused in another subtree of the full parse tree.''\cite{XTextAPI}
-	\item The node model is not updated during unparsing, but an additional parse with its associated update behavior is necessary.
-	\item Even if the PTC would construct the node model, it takes the first valid solution. It is not possible to choose between different valid representations or prefer a valid one which are semantically equivalent, e.g.\begin{xtxt}
+	\item The node model is not explicitly available without running the XText parser, because it is created by the parser from information of the concrete serialized language model. 
+	\item The use of the runtime instances of the node model is restricted by the API: ``clients should never keep a reference to a node as it may be invalidated at any time and the very same object could be reused in another subtree of the full parse tree.''\cite{XTextAPI}
+	\item The node model is not updated during parse tree construction. If an update is required, an additional parse with its problematic replacing instead of updating behavior is necessary.
+	\item Even if the parse tree constructor would construct the node model, it takes the first valid solution. It is not possible to choose between different valid representations or prefer a valid one which are semantically equivalent, e.g.
+\begin{xtxt}
 Foreach 		: 	Map | For;
 Map returns FE  	:  	"map" 		v=ID;
 For returns FE  	: 	"foreach"	v=ID;
@@ -167,7 +168,7 @@ The basic steps of the unparser are:
 	\item compute all possible solutions. This results in a forest of parse tree blueprints.
 	\item determine the best tree. Which criteria compose the best tree are explained below.
 	\item produce a parse tree for the best tree. 
-	\item compress the forest. For each branch which branches the best tree, set the first node of the branch as an alternative representation of the best trees node it branches from.
+	\item compress the forest. For each branch which branches the best tree, set the first node of the branch as an alternative representation of the best trees node it branches from.\\
 \end{enumerate}
 
 Criteria that determine the result tree are ranked from most to least important:

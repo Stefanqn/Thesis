@@ -5,20 +5,20 @@ This chapter presents a concept to embed structured data in an atomic character.
 The task of an ID Character is to uniquely identify an object in a serializable context. 
 The ideal characteristics are:
 \begin{itemize}
-	\item bindable and existence dependent on another character or standalone.
-	\item unlimited number of unique identifiers.
-	\item atomic. The integrity of the identification should be preserved and not be breakable.
-	\item standardized. There should be a long term guarantee that their are available for use.
-	\item ubiquitous available. They should be available on every platform.
-	\item abstract characters. They should be fast distinguishable from non ID character.
-	\item private. They should not causes any conflicts or be missinterpretable in any way.
+	\item Bindable and existence dependent on another character or standalone.
+	\item Unlimited number of unique identifiers.
+	\item Atomic. The integrity of the identification should be preserved and not be breakable.
+	\item Standardized. There should be a long term guarantee that their are available for use.
+	\item Ubiquitous available. They should be available on every platform.
+	\item Abstract characters. They should be quickly distinguishable from non ID character.
+	\item Private. They should not cause any conflicts or be missinterpretable in any way.
 \end{itemize}
 
 \subsubsection{Unicode Private-Use Characters}
-A possible solution offers Unicode \cite{Unicode}. Unicode is a universal character encoding standard for consistent encoding and exchange of text data. It is the default encoding of HTML and XML and is implemented in all modern operating systems. It specifies a numeric value (code point) and name for each character. Unicode was developed in conjunction with the Universal Character Set and can be represented by widely available encodings like UTF-8. The Unicode Standard defines private-use characters, which interpretation is not specified and is determined by a private agreement among cooperative users. For example Apple uses a private character to present it's apple logo. A application specific changed interpretation of for example the character representing the apple logo is valid, as it specifies its intended behavior according to a private agreement.\\
-The private use characters are intended for software developers. They can be compared to the ideal characteristics:
+A possible solution offers Unicode \cite{Unicode}. Unicode is a universal character encoding standard for consistent encoding and exchange of text data. It is the default encoding of HTML and XML and is implemented in all modern operating systems. It specifies a numeric value (code point) and name for each character. Unicode was developed in conjunction with the Universal Character Set and can be represented by widely available encodings like UTF-8. The Unicode Standard defines private-use characters, which interpretation is not specified and is determined by a private agreement among cooperative users. For example Apple uses a private character to present it's apple logo. A application specific changed interpretation of, for example the character representing the apple logo is valid, as it specifies its intended behavior according to a private agreement.\\
+The private use characters are intended for software developers. Compared to the ideal characteristics:
 \begin{itemize}
-	\item they are stand alone characters and are not bindable per se.
+	\item They are stand alone characters and are not bindable per se.
 	\item The number of identifiers is limited to 137,468, in which 6,400 are in the private use area U+E000 to U+F8FF and 65,534 are in each supplementary private use Area-A and Area-B. 
 	\item They are single characters and thus atomic. 
 	\item Unicode is standardized and private-use characters are permanently designated for private use.
@@ -62,20 +62,20 @@ The workflow of an \code{EMF Lexer} is so far:
 The assignment of the tokens name is  static in \ref{lexer:RefEObj} ,the previous solution. To leverage the approach of letting the lexical analyzer return \code{EObject}s, the token name can be determined by rules. These rules can be added to, and interpreted by the \code{EObject Typer}. The \code{Typer Rules} process the input \code{EObject} and assign the token name based on runtime analysis of the input. Sentential forms are serialized using the notation model. To enable the reference to sentential forms, an \code{EObject Typer} rule is necessary which assigns the token name properly. \\
 The workflow of \ref{lexer:RefEObj} is extended by a \code{Typer Rule}, which performs:
 \begin{enumerate}
-	\item test the input \code{EObject} if it is an instance of \code{AlterableElement}. If it is not, the rule is not applied.
-	\item test if the input is an instance of \code{NotationModel:List}. 
+	\item Test the input \code{EObject} if it is an instance of \code{AlterableElement}. If it is not, the rule is not applied.
+	\item Test if the input is an instance of \code{NotationModel:List}. 
 	If it is not a \code{List}:
 	\begin{enumerate}
-		\item resolve the grammar element by following the \code{notTerminal}, \code{sequence} or \code{terminal} reference. 
-		\item for \code{Symbol}s, resolve their more generic referred \code{TerminalType} or \code{Rule}.
-		\item determine their URI and assign it to the token name.
-		\item assign the referred language element \code{EObject} to the tokens value.
-		\item optionally validate if the language element structure comply to all constraints for the resolved grammar element.
+		\item Resolve the grammar element by following the \code{notTerminal}, \code{sequence} or \code{terminal} reference. 
+		\item For \code{Symbol}s, resolve their more generic referred \code{TerminalType} or \code{Rule}.
+		\item Determine their URI and assign it to the token name.
+		\item Assign the referred language element \code{EObject} to the tokens value.
+		\item Optionally validate if the language element structure comply to all constraints for the resolved grammar element.
 	\end{enumerate}
-	\item if the current \code{EObject} is a \code{List}, the \code{EMF Lexer} returns multiple tokens for a single character:
+	\item If the current \code{EObject} is a \code{List}, the \code{EMF Lexer} returns multiple tokens for a single character:
 	\begin{itemize}
-		\item remove the \code{AlterableElement} at the head of the list and resolve it like a stand alone element in the above steps.
-		\item keep the smaller \code{List} on the input stream or redirect the next \kode{nextToken()} from the Lexer directly the current \code{Typer Rule}.  
+		\item Remove the \code{AlterableElement} at the head of the list and resolve it like a stand alone element in the above steps.
+		\item Keep the smaller \code{List} on the input stream or redirect the next \kode{nextToken()} from the Lexer directly the current \code{Typer Rule}.  \\
 	\end{itemize}
 \end{enumerate}
 
