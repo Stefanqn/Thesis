@@ -10,6 +10,15 @@ The main design considerations for development of the notation metamodel are:
 	\item to have one notation element container per \code{EObject}. This does not not only eases reasoning, but also allows stable paths if the corresponding notation element is a generic container. With the use of an \code{ECrossReferenceAdapter} for the referred language models resource, it is possible to obtain the corresponding notation element even if the structure of the notation model is lost. 
 \end{itemize}
 
+Requirements:
+\begin{itemize}
+	\item In contrast to Xtexts node model which is just updated during parsing and used to guide parse tree construction, the Notation metamodel must be equivalent to a valid token stream and therefore describe it unambiguously. 
+	\item It must contain or refer to all information to necessary to create a specific token stream together with a language model and a grammar model.   
+	\item it has to be a parse tree in order to create language elements if the corresponding tokens exist.
+	\item it should offer GMF stuff elements \todo{add what GMF has interesting}
+	explicit, separated from language model
+\end{itemize}
+
 A notation model will refer grammar elements, so before the notation metamodel can be developed, an EBNF grammar metamodel will be defined. \\
 
 As convention, transient model elements are modeled as private static elements with a leading \code{-} and underlined.
@@ -94,7 +103,7 @@ Diagram \ref{MM:Not:DataLink} shows the relation of notation elements to the tok
 
 \begin{figure}
 \centering
-\includegraphics[scale=0.7]{gfx/ex/Notation_DataLink} 
+\includegraphics[scale=0.68]{gfx/ex/Notation_DataLink} 
 \caption{Token value connection}
 \label{MM:Not:DataLink}
 \end{figure}

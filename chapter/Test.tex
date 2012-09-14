@@ -9,28 +9,8 @@
 		-	reuse of nodes (incremental parser reuse nodes to save time, not to keep identity)
 \end{itemize}	
 
-
-
 \section{what misses? Text <-> Model sync}
 
-
-
-
-
-\subsection{Introduction}
-Requirements:
-\begin{itemize}
-	\item In contrast to Xtexts node model which is just updated during parsing and used to guide unparsing, the Notation metamodel must be equivalent to a valid token stream and therefore describe it unambigiously. 
-	\item It must contain or refer to all information to nesessary to create a specific token stream together with a language model and a grammar model.   
-	\item it has to be a parsetree in order to create language elements if the correspoding tokens exist.
-	\item it should offer GMF stuff elements \todo{add what GMF has interesting}
-	explicit, seperated from language model
-\end{itemize}
-
-
-
-
-\section{old ==>}
 %	-------------- Latex testing --------------
 The Notation model is an EMF model to describe a tree. A node or leaf contains a reference to the describing language model element.The notation model bridges the token stream and the abstract syntax. It is the parse tree, and thus also describes a valid concrete syntax representation of the model.  It is a mandatory to updated or created it when generating a concrete representation of the model. If the notation model (element) was created to complement a language model (element), the notation model (element) serves as a disambiguis bulding plan to create the token stream for a valid concrete representation. In gereral, the notation model saves information which is not stored in the language model but relevant for presentation. It also keeps a generic, type save reference on the represented language object.\\
 Each notation element represents (part of) a language element and should be a stable container for different visual representations of that element with addionaly layout information.  Due to this, if an element has multiple semantically equivalent representations, it is possible to switch the representation without switching the notation element. A switch would invalidade the descendants of the current node. A notion element therefore contains a transient structural feature containing all possible valid concrete representation rules, the non-transient last representation rule and optional the last user selected representation rule. In case these representation rules are grammar rules, they must be complemented with addionional information in order to make the token production unambigious. For example a grammar rule like:
@@ -57,14 +37,7 @@ Finally, a notation model element should contain a flag if it is currently textu
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Extra TODO}
 \begin{itemize}
-	\item Others
-	\item Barista \- Unparse/Parse
-	\item incr. GLR
-	\item SGLR (nicht Bidirectional)
-	\item SDF
 	\item Parser Autocomplete (Overview 3, Artifical Tokens 13)
-	\item Spoofax restricts AST strucutre (last overview?)
-	\item TEF  - Parse / Unparse, Replcae, Indentity, Comparing Models
 	\item GLL zu EMF?
 	\item tupel im diagramm zu tuple
 \end{itemize}
@@ -85,12 +58,9 @@ Finally, a notation model element should contain a flag if it is currently textu
 %\end{figure}
 
 \section{Missing}
-Syntax Directed vs Syntax aware
-EMF
 
 TODO
 \begin{itemize}
-	\item Distinguish text editor with model aware editor.
 	\item Suggest text representation for: 
 	\begin{itemize}
 		\item editing (with STokens)
@@ -100,8 +70,6 @@ TODO
 	
 	\item Explain intermixed Txt, Graph, Txt
 	\item Mention existence of unassigned values in a choice but not in AST (``blla'' | ``blubb'' )and defaults
-	\item EMF Compare
-	\item Pretty print vs. unparse
 
 	\item embrace ambiguity
 	\item ambiguity vs non-determinism
@@ -115,6 +83,7 @@ Refs:
 	\item Lazy Obj creation means on first access
 	\end{itemize}
 
+synthetic constraints for grammar rules?
 
 \begin{itemize}
 	\item Is it, and if how is it possible to present textual views on a model which present a different structure than the underlying model (annotations).
