@@ -1,29 +1,23 @@
 \chapter{Related Work}
-\todo{Intro}
-\section{Definitions}
-\todo{Intro}
+This chapter starts with the Definitions \ref{sec:def}, where a common understanding of terms are determined and, if necessary specified. In the next chapter, general non-Metamodeling related approaches of language workbenches, language definition and editors are presented. In the final section \ref{sec:metaApproaches} of this chapter, Metamodel are explained and Metamodel related frameworks are presented.
 
-\paragraph{Lexeme}
-A lexeme is a sequence of characters on the character stream that matches a specific token pattern and is identified by the lexical analyzer as an instance of that token. \cite{DragonBook}
+\section{Definitions} \label{sec:def}
+This section contains definitions in alphabetical order.
+% A B 
+\paragraph{Abstract Syntax} Meta Model elements and their relation are the abstract syntax of a language. \cite{MDSD}
 
-\paragraph{Language} 
-A language is any countable set of words over some fixed alphabet. The set of all context-free languages is identical to the set of languages that is accepted by pushdown automaton. \cite{DragonBook}
+\paragraph{Abstract Syntax Tree (AST)}  
+The abstract syntax trees  represents the hierarchical syntactic structure of a language.  Abstract syntax trees resemble parse trees to an extent. In the parse tree interior nodes represent nonterminals including "helpers" of one sort of another. In the syntax tree, these helpers typically dropped. \cite{DragonBook}
 
 \paragraph{Alphabet}
 "An alphabet is any finite set of symbols." Examples of symbols are letters and digits. \cite{DragonBook}
 
-\paragraph{Word} 
-A word over an alphabet is a finite sequence of symbols drawn from that alphabet. In language theory, the terms \emph{sentence}, \emph{word} and \emph{string} are used as synonyms. \cite{DragonBook}
 
-\paragraph{Kleene Star} 
-The (Kleene) closure of a language $L$, denoted $L^*$, is the set of strings received by concatenating $L$ zero or more times. \cite{DragonBook}
+\paragraph{Ambiguity} 
+A grammar which can generate more than one parse tree for a given string of terminals is said to be ambiguous.\cite{DragonBook}
 
-
-\paragraph{Syntax \& Semantic}  
-The syntax of a language describes its proper form, while the semantics of the language defines what it means. \cite{DragonBook}
-
-
-\paragraph{Context Free Grammar (CFG)}
+% C D E F G
+\paragraph{CFG - Context Free Grammar }
 A context-free grammar is described by a quadruple, consisting of terminals, nonterminals, a start symbol and productions.\\
 $G = (T, V, S, P)$
 \begin{enumerate}
@@ -38,10 +32,30 @@ $G = (T, V, S, P)$
 	\end{enumerate}
 \end{enumerate}
  $P$ is a finite relation from $V \rightarrow (V  \bigcup  T)^*$, where $^*$ is the Kleene star. Members of $P$ are productions of the form $u \rightarrow v$. \cite{DragonBook}
+ 
+\paragraph{Concrete Syntax} In contrast to the Abstract Syntax, the Concrete Syntax defines the actual representation of the language. \cite{MDSD}
 
+\paragraph{CSP - Parsing as Constraint Satisfaction Problem} 
+Beside answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Constraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules. It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parser identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree. \cite{ParserBook}
 
-\paragraph{Tokens \& Terminals}  
-A token consists of a name and an attribute value. The names are abstract symbols used by the parser for syntax analysis. These token names are often called terminals. The attribute value contains additional information. \cite{DragonBook}
+\paragraph{Domain} A domain is a delimited area of knowledge or interest. \cite{MDSD}
+
+\paragraph{Domain Specific Language} A Domain Specific Language is a Programming Language for a domain. It consists of abstract and concrete syntax, static semantics as well as a clearly defined semantic of the language elements. \cite{MDSD}
+
+\paragraph{Extended Backus-Naur Form (EBNF)} 
+The Backus-Naur Form (BNF) is a notation to describe context-free grammars. It is based on \cite{BNF} and defines \code{:=} and \code{|} as metaliguistic connectives and characters enclosed by \code{<} and \code{>} as metalinguistic variables.
+\begin{xtxt}
+ <nonterminal> ::= sequence
+\end{xtxt}
+The sequence consists of one or more nonterminals or terminals and may contain a vertical bar to indicate a choice. The whole sequence replaces the symbol on the right. The extended Backus-Naur Form (EBNF) is a family of BNF dialects with the same power as BNF, but with improved readability. Common extensions are grouping, the Kleene star denoting a zero or more multiplicity, the Kleene cross denoting a multiplicity of one or more, and an option denoting a multiplicity of zero or one. \cite{ParserBook}
+ 
+% H I J K %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Kleene Star} 
+The (Kleene) closure of a language $L$, denoted $L^*$, is the set of strings received by concatenating $L$ zero or more times. \cite{DragonBook}
+
+% L	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Language} 
+A language is any countable set of words over some fixed alphabet. The set of all context-free languages is identical to the set of languages that is accepted by pushdown automaton. \cite{DragonBook}
 
 \paragraph{Language Workbench}
 A Language Workbench is a generic tool to build software around a set of domain specific languages. The key concept is that editing is not done on text files but on the \emph{abstract} representation of a program \cite{Fowler}. This enables following characteristics:
@@ -52,11 +66,29 @@ A Language Workbench is a generic tool to build software around a set of domain 
 \end{itemize}
 In practice, the term Language Workbench is often used for frameworks that support language creation to a greater extend than ``compiler compiler'' or parser generators. Especially the bidirectionality of abstract structure and concrete editor is often ``eased''. 
 
+\paragraph{Lexeme}
+A lexeme is a sequence of characters on the character stream that matches a specific token pattern and is identified by the lexical analyzer as an instance of that token. \cite{DragonBook}
+
+%  M N %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph{Meta Metamodel} A Meta Metamodel is a model that describes Meta Models. Meta Metamodels like Ecore and Meta Object Facility are self descriptive: their metaclasses can be used to describe them selfs, so they are their own Meta Model \cite{EMF2nd}.
+
+\paragraph{Meta Model} The structure of a language is captured in its metamodel. A metamodel is a model that provides the basis for constructing other, so called instance models \cite{EMP}. The Meta Model defines the Abstract Syntax and optionally the Static Semantics of a language. \cite{MDSD}
+
+\paragraph{Model} A Model or instance Model is an instance of a metamodel.
+
+
 \paragraph{Lexer}
 A Lexer, also denoted as lexical analyzer, allows a parser to treat multi character constructs like identifiers as units called tokens during syntax analysis. \cite{DragonBook}
 
+
+
+% O P Q R %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \paragraph{Parsing} 
 "Parsing is the process of structuring a linear representation in accordance with a given grammar." \cite{ParserBook}
+
+\paragraph{Parse Forest} 
+A set of parse trees. If duplicated subtrees are combined, the resulting structure is called a parse graph. \cite{ParserBook}
 
 \paragraph{Parse Tree}
 Given a context-free grammar, a parse tree according to the grammar is a tree with these properties \cite{DragonBook}:
@@ -66,81 +98,59 @@ Given a context-free grammar, a parse tree according to the grammar is a tree wi
 	\item Interior nodes are labeled by nonterminals.
 	\item If $A$ is a nonterminal, which labels an interior node and $X_1, X_2, . . . , X_n$ are the labels of the children of that node from left to right, then there must be a production $A  \rightarrow X_1X_2 ... X_n$. So $X_1, X_2, ... , X_n$ stand for a symbol each that is either a terminal or a nonterminal. If $A\rightarrow c$ is a production, then a node labeled A may have a single child labeled $\epsilon$ as a special case. 
 \end{enumerate}
-
-\paragraph{Meta Model} The structure of a language is captured in its metamodel. A metamodel is a model that provides the basis for constructing other, so called instance models \cite{EMP}. The Meta Model defines the Abstract Syntax and optionally the Static Semantics of a language. \cite{MDSD}
-
-\paragraph{Meta Metamodel} A Meta Metamodel is a model that describes Meta Models. Meta Metamodels like Ecore and Meta Object Facility are self descriptive: their metaclasses can be used to describe them selfs, so they are their own Meta Model \cite{EMF2nd}.
-
-\paragraph{Model} A Model or instance Model is an instance of a metamodel.
-
-\paragraph{Ambiguity} 
-A grammar which can generate more than one parse tree for a given string of terminals is said to be ambiguous.\cite{DragonBook}
-
-\paragraph{Abstract Syntax Tree (AST)}  
-The abstract syntax trees  represents the hierarchical syntactic structure of a language.  Abstract syntax trees resemble parse trees to an extent. In the parse tree interior nodes represent nonterminals including "helpers" of one sort of another. In the syntax tree, these helpers typically dropped. \cite{DragonBook}
-
+% S T U
 \paragraph{S-Attributed Grammar} 
 An Attributed Grammar formally defines a way to attach attributes to tree nodes created in regards to production rules of a formal grammar. If the evaluation rule of ab attribute value only depends on its children, it's called a synthesized attribute. An S-Attributed Grammar is an Attributed Grammar, which is only based on \emph{synthesized} attributes. The evaluation of S-attributed grammars can be incorporated in top-down, as well as in bottom-up parsing. \cite{ParserBook}
- 
-\paragraph{Domain} A domain is a delimited area of knowledge or interest. \cite{MDSD}
-
-\paragraph{Domain Specific Language} A Domain Specific Language is a Programming Language for a domain. It consists of abstract and concrete syntax, static semantics as well as a clearly defined semantic of the language elements. \cite{MDSD}
-
-\paragraph{Abstract Syntax} Meta Model elements and their relation are the abstract syntax of a language. \cite{MDSD}
-
-\paragraph{Concrete Syntax} In contrast to the Abstract Syntax, the Concrete Syntax defines the actual representation of the language. \cite{MDSD}
-
-\paragraph{Static Semantics} The Static Semantics defines well formedness constraints. \cite{MDSD}
- 
-\paragraph{Extended Backus-Naur Form (EBNF)} 
-The Backus-Naur Form (BNF) is a notation to describe context-free grammars. It is based on \cite{BNF} and defines \code{:=} and \code{|} as metaliguistic connectives and characters enclosed by \code{<} and \code{>} as metalinguistic variables.
-\begin{xtxt}
- <nonterminal> ::= sequence
-\end{xtxt}
-The sequence consists of one or more nonterminals or terminals and may contain a vertical bar to indicate a choice. The whole sequence replaces the symbol on the right. The extended Backus-Naur Form (EBNF) is a family of BNF dialects with the same power as BNF, but with improved readability. Common extensions are grouping, the Kleene star denoting a zero or more multiplicity, the Kleene cross denoting a multiplicity of one or more, and an option denoting a multiplicity of zero or one. \cite{ParserBook}
-
-\paragraph{Parse Forest} 
-A set of parse trees. If duplicated subtrees are combined, the resulting structure is called a parse graph. \cite{ParserBook}
-
-\paragraph{Syntax Recognizing Editor or Syntax Aware Editor} A syntax-recognizing text editor is one in which the user provides text and the system infers the syntactic structure by analysis \cite{pan}. 
-
-\paragraph{Syntax Directed Editor or Projectional Editor} A Projectional Editor allows the user to directly edit the AST representation of the code or the structure of the document \cite{MPS}. In general syntax-directed editors allow partial presentations of the document, and offer support for the interpretation extra state, for example as built-in tree views on the document structure \cite{proxima}.
 
 \paragraph{Sentential Forms}   
 The intermediate form for creating sentences from a formal grammar are called sentential forms. \cite{ParserBook}
 
-\paragraph{Stable vs. Unstable Models}
+\paragraph{Stable versus Unstable Models}
 This thesis uses these terms to distinguish the stability of references to model elements. Stability is no intrinsic characteristic of the model, but a contract of all model manipulation parties. Models which elements are \emph{updated} if edited are called ``Stable Models''. If the model, or parts of it are \emph{replaced} by equal model elements, the model is \emph{unstable}. The worst case of unstable models is the creation of an completely new equal model if an editor commits an empty update.
 
-\paragraph{Parsing as Constraint Satisfaction Problem (CSP)} 
-Beside answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Constraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules. It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parser identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree. \cite{ParserBook}
+\paragraph{Static Semantics} The Static Semantics defines well formedness constraints. \cite{MDSD}
+
+\paragraph{Syntax \& Semantic}  
+The syntax of a language describes its proper form, while the semantics of the language defines what it means. \cite{DragonBook}
+
+\paragraph{Syntax Directed Editor or Projectional Editor} A Projectional Editor allows the user to directly edit the AST representation of the code or the structure of the document \cite{MPS}. In general syntax-directed editors allow partial presentations of the document, and offer support for the interpretation extra state, for example as built-in tree views on the document structure \cite{proxima}.
+
+\paragraph{Syntax Recognizing Editor or Syntax Aware Editor} A syntax-recognizing text editor is one in which the user provides text and the system infers the syntactic structure by analysis \cite{pan}. 
+
+\paragraph{Tokens \& Terminals}  
+A token consists of a name and an attribute value. The names are abstract symbols used by the parser for syntax analysis. These token names are often called terminals. The attribute value contains additional information. \cite{DragonBook}
+
+% V W X Y Z 
+\paragraph{Word} 
+A word over an alphabet is a finite sequence of symbols drawn from that alphabet. In language theory, the terms \emph{sentence}, \emph{word} and \emph{string} are used as synonyms. \cite{DragonBook}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
-\section{General Approaches} 
-\todo{non-EMF}
+\section{General Approaches} \label{sec:generalApproaches}
+This section provides a selected overview of current language and editing approaches which are not Metamodel based. This includes Language Workbenches, tools to develop domain specific language, projectional and textual editors.
 
-
-\subsection{JetBrains Meta Programming System}
-JetBrains Meta Programming System \footnote{\raggedright \url{http://www.jetbrains.com/mps/}}  is an Java based open source language workbench, which allows to define the abstract syntax of a language, an projectional editor and model transformation. In the Meta Programming System, the abstract syntax of a \emph{Language} is defined using \emph{Concepts}. Model nodes are defined by their concepts \cite{MPStut}. The terminology in the Meta Programming System abstract syntax is Language, Solution and Concept where Language is similar to a Metamodel, Solution to a Model and Concept to a Metaclass. It provides a projectional editor that directly edits the abstract language instance directly. The editor focuses on text presentation, but it is not free but form oriented text. At the time writing, tables are the only editable graphical notation. Also, a Concept is either presented textually \emph{or} as a table. A Solution can then be transformed by textual model to model transformations to one of  Meta Programming Systems several base languages, which provide the semantics of the language constructs. As base language, there is currently C, Java, XML, or plain text available. Because the textual notations in Meta Programming System are no free text, it requires the user to change his ``editing habits'' \cite{VolterMPS}. 
-
-\subsection{Spoofax}
-Spoofax \footnote{\raggedright \url{http://strategoxt.org/Spoofax}} is an Eclipse based framework to develop textual domain specific languages with IDE support \cite{Spoofax}. Spoofax uses the Syntax Definition Format \footnote{\raggedright \url{http://syntax-definition.org/}} (SDF2) to specify the syntax \cite{Spoofax}. It combines the specification of concrete and abstract syntax into a single grammar. SDF defines context free grammar like EBNF \cite{sdf}, but it is among other things modular and together with scannerless generalized parser like \cite{sglr} and declarative disambiguation rules, it is freely composeable.  \cite{bible} argues, that ``Declarative (abstract syntax) tree construction is most effective for grammars with a natural structure'', and that this natural, not massaged structure provided by SDF and scannerless GLR parser. Spoofax uses Stratego \footnote{\raggedright \url{http://strategoxt.org}} a term rewriting or transformation tool \cite{stratego} to process the abstract syntax trees. The abstract representation is in contrast to EMF based on trees.
-
-
-\subsection{Integrated Development Environments}
-Integrated Development Environments (IDEs) like Eclipse, IntelliJ IDEA, Netbeans and Visual Studio parse the source code as it is typed, this is called Background Parsing. They use the parsed abstract syntax tree to provide editor services like outlining, refactoring, error marking and content completion. These are syntax-recognizing editors. LavaPE \footnote{\raggedright \url{http://lavape.sourceforge.net/}} is an example of an IDE with a syntax directed editor.  
-
-
-\subsection{Proxima} 
-Proxima \footnote{\raggedright \url{http://www.cs.uu.nl/wiki/bin/view/Proxima}}  is a generic structure editor written in Haskell for a range of structured documents. It allows free text editing as well as structure editing. Proxima maintains a bidirectional mapping between the document structure and its presentation, by a multiplicity of bidirectional mappings between the seven layers of Proximas architecture. Proxima does not use conventional parsing techniques, because the presentation in not restricted to text but also contains graphical elements. Graphical presentation can not be edited directly at the presentation level \cite{beyond_ascii}. Proxima uses \emph{structural tokens} for presentation that are no strings and treats them specially \cite{proxima}.
+\subsection{Barista}
+Barista \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/barista.html}} is an editor framework for user interfaces that offers alternative structured visual representations on an internal abstract syntax tree. It uses Citrus \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/citrus.html}} as a user interface toolkit \cite{citrus} and adds data structures and a textual interaction technique to it. It mimics the interaction technique of conventional text editors to overcome a central usability problem of previous structured code editors by fluidly changing between structured and unstructured text. It is based on the model view controller pattern \cite{patterns} and the presented editors structure depends on the models structure. The model in Barista consists of \emph{structures} and \emph{tokens}. Structures are tree nodes and Tokens the leafs. A Token is assigned to a property of a Structure and is contained in it. For each Structure a grammar is inferred or provided and for each Token, a regular expressions is specified that defines its legal strings and white space. The general idea of Baristas textual interaction technique is to unparse, retokenize and reparse a Token if its value is not part of the language described by the regular expression. Barista uses a variant of \cite{iglrPaper} incremental parsing Algorithm to reuse the abstract syntax trees structure \cite{Barista}. 
 
 \subsection{Harmonia}
 The Harmonia Research Project \footnote{\raggedright \url{http://harmonia.cs.berkeley.edu/harmonia/}} is a framework for constructing interactive
 language-based programming tools. It emerged from two earlier prototypes \emph{PAN} and \emph{ENSEMBLE}. Harmonias goal is to facilitate building interactive tools, so the provides services are \emph{incremental} and the internal program representation maintained by the framework is \emph{updated} as a program is manipulated. Harmonia provides syntactic and semantic analysis services \cite{harmonia} and can be used to augment text editors with language aware editing and navigation functionality. Harmonia adopts from ENSEMBLE the incremental Lexer algorithm \cite{ilex} and the incremental Parser algorithm \cite{iglrPaper}. Incremental parsing utilizes persistent parse trees and the parse input consists of both terminal and \emph{nonterminal} symbols \cite{iglrPaper}. Ensemble also has a graphical presentation formalism based on tree transformations \cite{ensemble}. This transformed graphical notation not editable.
 
-\subsection{Barista}
-Barista \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/barista.html}} is an editor framework for user interfaces that offers alternative structured visual representations on an internal abstract syntax tree. It uses Citrus \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/citrus.html}} as a user interface toolkit \cite{citrus} and adds data structures and a textual interaction technique to it. It mimics the interaction technique of conventional text editors to overcome a central usability problem of previous structured code editors by fluidly changing between structured and unstructured text. It is based on the model view controller pattern \cite{patterns} and the presented editors structure depends on the models structure. The model in Barista consists of \emph{structures} and \emph{tokens}. Structures are tree nodes and Tokens the leafs. A Token is assigned to a property of a Structure and is contained in it. For each Structure a grammar is inferred or provided and for each Token, a regular expressions is specified that defines its legal strings and white space. The general idea of Baristas textual interaction technique is to unparse, retokenize and reparse a Token if its value is not part of the language described by the regular expression. Barista uses a variant of \cite{iglrPaper} incremental parsing Algorithm to reuse the abstract syntax trees structure \cite{Barista}. 
+\subsection{Integrated Development Environments}
+Integrated Development Environments (IDEs) like Eclipse, IntelliJ IDEA, Netbeans and Visual Studio parse the source code as it is typed, this is called Background Parsing. They use the parsed abstract syntax tree to provide editor services like outlining, refactoring, error marking and content completion. These are syntax-recognizing editors. LavaPE \footnote{\raggedright \url{http://lavape.sourceforge.net/}} is an example of an IDE with a syntax directed editor.  
+
+\subsection{JetBrains Meta Programming System}
+JetBrains Meta Programming System \footnote{\raggedright \url{http://www.jetbrains.com/mps/}}  is an Java based open source language workbench, which allows to define the abstract syntax of a language, an projectional editor and model transformation. In the Meta Programming System, the abstract syntax of a \emph{Language} is defined using \emph{Concepts}. Model nodes are defined by their concepts \cite{MPStut}. The terminology in the Meta Programming System abstract syntax is Language, Solution and Concept where Language is similar to a Metamodel, Solution to a Model and Concept to a Metaclass. It provides a projectional editor that directly edits the abstract language instance directly. The editor focuses on text presentation, but it is not free but form oriented text. At the time writing, tables are the only editable graphical notation. Also, a Concept is either presented textually \emph{or} as a table. A Solution can then be transformed by textual model to model transformations to one of  Meta Programming Systems several base languages, which provide the semantics of the language constructs. As base language, there is currently C, Java, XML, or plain text available. Because the textual notations in Meta Programming System are no free text, it requires the user to change his ``editing habits'' \cite{VolterMPS}. 
+
+\subsection{Proxima} 
+Proxima \footnote{\raggedright \url{http://www.cs.uu.nl/wiki/bin/view/Proxima}}  is a generic structure editor written in Haskell for a range of structured documents. It allows free text editing as well as structure editing. Proxima maintains a bidirectional mapping between the document structure and its presentation, by a multiplicity of bidirectional mappings between the seven layers of Proximas architecture. Proxima does not use conventional parsing techniques, because the presentation in not restricted to text but also contains graphical elements. Graphical presentation can not be edited directly at the presentation level \cite{beyond_ascii}. Proxima uses \emph{structural tokens} for presentation that are no strings and treats them specially \cite{proxima}.
+
+\subsection{Spoofax}
+Spoofax \footnote{\raggedright \url{http://strategoxt.org/Spoofax}} is an Eclipse based framework to develop textual domain specific languages with IDE support \cite{Spoofax}. Spoofax uses the Syntax Definition Format \footnote{\raggedright \url{http://syntax-definition.org/}} (SDF2) to specify the syntax \cite{Spoofax}. It combines the specification of concrete and abstract syntax into a single grammar. SDF defines context free grammar like EBNF \cite{sdf}, but it is among other things modular and together with scannerless generalized parser like \cite{sglr} and declarative disambiguation rules, it is freely composeable.  \cite{bible} argues, that ``Declarative (abstract syntax) tree construction is most effective for grammars with a natural structure'', and that this natural, not massaged structure provided by SDF and scannerless GLR parser. Spoofax uses Stratego \footnote{\raggedright \url{http://strategoxt.org}} a term rewriting or transformation tool \cite{stratego} to process the abstract syntax trees. The abstract representation is in contrast to EMF based on trees.
+
+
+
+
 
 
