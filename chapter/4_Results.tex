@@ -1,54 +1,62 @@
 \chapter{Results}
 \todo{Overview}
 
-\section{Implement Methodology, Steps} 
-EMF because of tool reuse (editor, persistence, validation, transformation model to model etc.)
 
-Summarize Steps
-Research: GMF allows multiple visual representations by Notation model and determines initial type by Extensible Type Registry. <<< desirable
-Research: Textual Projectional Editor MPS \& Evaluation MPS: Text != Text. Text not free form but template structured. Usability issues. 1:1 relation view and abstract data structure.
-EMF Textual: Unstable, re-eval.
-Barista : not available. Projectional editor with parser based on \emph{incremental Parser} of Harmonia for \emph{stable structures}.
-Harmonia: \emph{Stable Structures} AND \emph{Sentential Forms}
-Proxima: \emph{structured token} for presentation, complex layered architecture, vis edit on other level. bi di m2m trans,
+\section{Proceeding} 
+This section describes the proceeding how the results were achieved.
 
-Evaluate XText: 
-Problems
+Following observations during research were made:
 \begin{itemize}
-	\item full model described, 
-	\item unstable, 
-	\item no alternative text rep
-	\item structure bound
-\end{itemize}
-Chances
-\begin{itemize}
-	\item PTC decides presentation
-	\item node model
+	\item Every non metamodel based tool uses its own, specific approach for abstract language data structure transformation, validation, persistence and editing.
+	\item In GMF, the \emph{Notation model} generically encapsulates the state of the visual representation. The \emph{Extensible Type Registry} determines a type or specialization type for which is used to guide Notation model element creation. Both 
+	\item After short evaluation of MPS, the restrict usability of \emph{projectional textual is undesirable} for the intention of this thesis. This editing concept is template or form based, not free textual.
+	\item The report \cite{Barista} about Barista shows the successful use of a variant of Harmonias incremental parsing algorithms in projectional editors to achieve \emph{stable abstract data structures}.
+	\item Harmonias incremental parsing algorithm for GLR parsing requires the Parser to handle \emph{sentential forms}.
+	\item Proxima uses a \emph{Structured Token for graphical presentation}, but does not allow it to be directly edited.  Its seven layer architecture with bidirectional model transformations between each allows high flexibility. Dependant layers especially regarding possible user interaction on different layers, with the complexity to maintain bidirectionality by two unidirectional transformations and updating instead of replacing model elements was considered undesirable. Several model transformation languages for EMF exist, so structural transformations are possible and separated if required. 
 \end{itemize}
 
-Idea:
-make textual presentations switchable by guiding the PTC.
-needed: distinguish productions. -> created notation model ... complex as parse tree!
-result: use notation model as parse tree.
-=> Notation Metamodel + gPTC = switchable textual notation.
+The Xtext framework was examined in respect of adding alternative representations and related problems. Following central perceptions were made:
+\begin{itemize}
+	\item Structure of textual representation is coupled to the structure of the model. This characteristic is condoned with reference to EMF model to model transformations.
+	\item Used parsing technology results in unstable models. This characteristic is factored out until its impact on the solution in the discussion.
+	\item The grammar must completely describe the model. 
+	\item No isomorphism from grammar production to \code{EObject} exists, which means multiple representations of the same \code{EObject} are possible.
+	\item The Parse Tree Constructor determines the production used for model to text transformation. Different textual representations already exist, but are not available. \\
+\end{itemize}
+ 
+ 
+The first improvement is to allow \emph{switchable textual representations}. This has been conceptually solved by extending the parse tree constructor and by providing a hint to guide the parse tree construction. A hint simply identifies the next production part.
+The parse tree constructor is conceptually extended to
+\begin{enumerate}
+	\item determine all valid solutions for a node and assign them to it and
+	\item to prefer certain hints while the resulting parse tree is constructed.
+\end{enumerate}
+For combined use with the parse tree constructor a Notation model was developed to
+\begin{itemize}
+	\item provide a proper place to assign alternative presentations and
+	\item to uniquely identify productions or parts of it as hints.
+\end{itemize}
+To uniquely distinguish a specific tree construction for hints, the structure resembled a parse tree structure. The notation model was extended to substitute the parse tree accordingly.\\
 
-Structured Tokens for parser -> fits EObject. How to char stream to integrate with Xtext ser? 
-ID -> Map. ID Char. UTF8 enc. private use char. emf lexer.
-=> EObj on char stream
 
-Sentential Forms => Combine Notation Model w. EMFLexer + post process grammar
+\emph{Structured Tokens} highlighted the usage of nested structured data, like \code{EObject}s as Tokens. To integrate Structured Tokens in a textual serialization, a Structured Character concept was developed. It is based on the basic idea to use a private, unique character as a key for a map entry of a data structured persisted in an adjacent resource, like a file. The designated solution are UTF8 private use characters and a wrapping Lexer which resolves and types the \code{EObject}s from the adjacent resource. This enables the use of \code{EObject}s as atomic characters on the character stream. \\
 
-Struc Token as Presentation => omit PTC for token. Hint from Not MM is enough.
+The possibility to use \code{EObject} on the character stream enables the use of Notation model elements on it. Notation model elements represent parts of the Parse Tree or \emph{Sentential Forms}. To allow their use as \emph{Sentential Token} two improvements are necessary:
+\begin{itemize}
+	\item The extended Lexer must assign the Token name of the Sentential Token properly. The name can not be determined by the generic Notation model elements type, but by a general Notation Metamodel specific rule, which resolves the grammar relation of the Notation element.
+	\item The input grammar for the used Parser generator must be post processed, so that each non terminal on the right hand side of a rule is replaced by an alternative. The alternative consists of the original non terminal or a terminal with the synthetic name of the grammar related element, which would be assigned by the Lexer.
+\end{itemize}
+Serialized Sentential Tokens are named \emph{Sentential Characters}. Sentential Characters alone simply hide the data structure of a production part in one character and perfectly integrate in the language described by the context free grammar grammar. \\
 
-Discuss impact unstable models.
+To improve the use \emph{Structured Characters} for Presentation, following enhancements are suggested:
+\begin{itemize}
+	\item Extensible Parse Tree Constructor, which optionally specializes the determined type based on additional constraints. This is similar to GMFs Extensible Type Registry.
+	\item To omit Parse Tree construction, if a specialized presentation type was found. A graphical editor could then safely operate on the Language model elements.
+\end{itemize}
+A user interface could create a graphical editor at the place of his specific specialized presentation character and operate on the Language model elements it hides.\\
 
 
-
-
-
-
-
-
+In discussion, the problem of unstable models and its impact on the suggested solution is resumed.
 
 
 \section{XText Analysis}
