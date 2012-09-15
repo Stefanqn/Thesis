@@ -1,22 +1,141 @@
 \chapter{Results}
+\todo{Overview}
 
-\section{XXXXX} 
-Into
-EMF because editor, persistence, validation, transformation model to model etc.
+\section{Implement Methodology, Steps} 
+EMF because of tool reuse (editor, persistence, validation, transformation model to model etc.)
 
+Summarize Steps
+Research: GMF allows multiple visual representations by Notation model and determines initial type by Extensible Type Registry. <<< desirable
+Research: Textual Projectional Editor MPS \& Evaluation MPS: Text != Text. Text not free form but template structured. Usability issues. 1:1 relation view and abstract data structure.
+EMF Textual: Unstable, re-eval.
+Barista : not available. Projectional editor with parser based on \emph{incremental Parser} of Harmonia for \emph{stable structures}.
+Harmonia: \emph{Stable Structures} AND \emph{Sentential Forms}
+Proxima: \emph{structured token} for presentation, complex layered architecture, vis edit on other level. bi di m2m trans,
+
+Evaluate XText: 
+Problems
 \begin{itemize}
-	\item GMF, Alternative Rep Notation Model, ExtType Reg, View Service
-	\item MPS  , templates no free text.  extra rep = new lang element
-	\item Barista , inc. Parsers stable model, not open, xxx more
-	\item Harmonia stable structure by inc parsers. Persisted Sentential forms
-	\item proxima, structured token for presentation pasers, complex layered architecture, vis edit on other level. bi di m2m trans, 
-	\item xtext analy
-	\item problems, full model described, unstable, no alternative text rep
-	\item combine ...
+	\item full model described, 
+	\item unstable, 
+	\item no alternative text rep
+	\item structure bound
+\end{itemize}
+Chances
+\begin{itemize}
+	\item PTC decides presentation
+	\item node model
 \end{itemize}
 
-\section{Outline Solution}
+Idea:
+make textual presentations switchable by guiding the PTC.
+needed: distinguish productions. -> created notation model ... complex as parse tree!
+result: use notation model as parse tree.
+=> Notation Metamodel + gPTC = switchable textual notation.
 
+Structured Tokens for parser -> fits EObject. How to char stream to integrate with Xtext ser? 
+ID -> Map. ID Char. UTF8 enc. private use char. emf lexer.
+=> EObj on char stream
+
+Sentential Forms => Combine Notation Model w. EMFLexer + post process grammar
+
+Struc Token as Presentation => omit PTC for token. Hint from Not MM is enough.
+
+Discuss impact unstable models.
+
+
+
+
+
+
+
+
+
+
+\section{XText Analysis}
+\subsection{Return Types}
+XText also offers to explicitly name the return type. e.g.
+\begin{xtxt}
+Z returns AnyType	: "B";
+\end{xtxt}
+The effect of this feature can't be overstated.  It decouples the EObject type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraint strongly limited it's useability. Return types raise the abstraction level, because an EObject of the abstract syntax can have a context dependent representation. It also allows multiple representations of the same EObject type.
+
+On the other hand, this changes the time complexity of unparsing from O(n) to O(exp(n)) of the current XText implementation. The following explanation of choice mappings hint the problem, but it's explained in detail at Unparsing \todo{really, should I do this here or just mention that isomorphism of a type to a grammar rule is lost}\todo{REF}.
+\begin{xtxt}
+Z 	:  "A" v=ID;
+\end{xtxt}
+this rule creates an EClass 'Z' with a EString attribute 'v'. Isomorphism is kept between the type 'Z' and the production rule.
+\begin{xtxt}
+Z 	:  "A" v=ID  
+	|  "B" n=INT;
+	\end{xtxt}
+creates an EClass 'Z' with the attributes 'v' of type EString and 'n' of type EInt.  Isomorphism of the type to production rules is lost, but might be regained by a constraint if 'v' or 'n' is assigned. Isomorphism to a grammar rule is kept.
+\begin{xtxt}
+Z returns A : "A" v=ID;
+Y returns A : "B" v=ID;
+\end{xtxt}
+No isomorphism of the type 'A' to a grammar rule, because both rules return an \code{EObject} of type \code{A}.
+
+\subsection{PTC}
+
+For example, if the following grammar parses \kode{somekeyword 0 C}:
+\begin{xtxt}
+S  	:  	v=A 
+	| 	v=X;
+
+A returns Obj	: 	l=B r=C   ;
+X returns Obj	: 	l=Y r=Z   ;
+B returns N  	:  	"somekeyword" 	v="0";
+Y returns N  	: 	"otherkeyword" 	v="0";
+C 		:  	 "C" ;
+Z 		: 	 "Z" ;
+\end{xtxt}
+following AST will be constructed \todo{fix this} \\ 
+      Obj			\\
+     /   \textbackslash		\\
+N(v='0')   C	\\
+To create this parse tree without a node model, the decision if the rule of the root EObject is 'A' or 'X' can just be decided after determining the type of it's right child 'C'. \\
+
+It is possible that all grammar rules return the same type, so type information would be useless to guide production rule resolution.\\
+
+
+
+
+
+\subsection{Review / Criticism}
+\subsubsection{XText Grammar}
+In the XText grammar, it is not possible do statically assign a value  to a structural feature. For example to assigning 0 to an integer attribute 'v' of class MyBoolean in the "false" case and 1 in the "true" case requires to write a special value converter. 
+\begin{xtxt}
+MyBoolean:  "true" | "false"
+\end{xtxt}
+
+A much greater impact on the grammar is it's inability to express left recursive grammars and the consequences. This is owed to the LL(*) parsing algorithm of ANTLR, the parser generator used by XText. This requires left factoring and grammar rewriting which lead to XText allowing tree rewriting of the AST by assigned actions. If only parser and AST construction is regarded, this is more or less an inconvenience for the grammar designer who needs to left-factorize, but it creates problems regarding parse tree construction and validation for XTexts current implementation. Considering that the current parse tree construction algorithm has a runtime of $O(c^N)$, it is arguable to use an GLR parsing algorithms with  $O(n^3)$ to avoid the need for grammar massaging and thus AST rewriting.
+
+\subsubsection{XText Resource}
+XText is, like EMFText \cite{EMFTextMan}, integrated in EMF as an EMF Resource. The responsibility of resources is to serialize and deserialize models, this leads to various problems: 
+
+\begin{itemize}
+	\item The grammar must describe the whole model: the model must not contain non volatile information which is not regarded by the grammar. Adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent the restriction that the whole model must be textually described. A possible solution would be to create additional EObjects in an additional Resource, which points at the EObject in the XTextResource which should be enriched. With an ECrossReferenceAdapter the inverse references and thus the additional information of the extended object. This technique to extend an EObject in a non invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
+	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the model. In conjunction with a non incremental parser, model elements are replaced instead of updated. Furthermore, EMFs ResourceSet which keeps referential integrity is bypassed. XTexts demands the programmer to handle referential integrity or to "return stable fragments for its contained elements ". For example the expression "int i=0" in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element an universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
+	\item Because the model contained in a resource is not modified in a ResourceSet and extrinsic, non grammar conform information like IDs can not be added or integrated persistently to model elements referential integrity can not be maintained. On the other hand to determine changes to update a model without unique IDs are based on heuristics, thus potentially inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict to store the model in textual form for e.g. viewing and versioning. 
+\end{itemize}
+
+\subsubsection{Node Model}
+The potential use of the node model is strongly restricted in Xtext, for the following reasons:
+\begin{itemize}
+	\item the node model is not an EMF model. 
+	\item The node model is not explicitly available without running the XText parser, because it is created by the parser from information of the concrete serialized language model. 
+	\item The use of the runtime instances of the node model is restricted by the API: ``clients should never keep a reference to a node as it may be invalidated at any time and the very same object could be reused in another subtree of the full parse tree.''\cite{XTextAPI}
+	\item The node model is not updated during parse tree construction. If an update is required, an additional parse with its problematic replacing instead of updating behavior is necessary.
+	\item Even if the parse tree constructor would construct the node model, it takes the first valid solution. It is not possible to choose between different valid representations or prefer a valid one which are semantically equivalent, e.g.
+\begin{xtxt}
+Foreach 		: 	Map | For;
+Map returns FE  	:  	"map" 		v=ID;
+For returns FE  	: 	"foreach"	v=ID;
+\end{xtxt}
+\end{itemize}
+
+
+\section{Outline Solution}
 % Outline Solution
 The general idea of the presented solution combines three simple concepts. The first two following points already allow to operate on the parse tree part in the map:
 \begin{itemize}
@@ -68,102 +187,13 @@ The EMF Lexer is introduced to:
 
 
 
-\section{XText Analysis}
-\subparagraph{Return Types}
-XText also offers to explicitly name the return type. e.g.
-\begin{xtxt}
-Z returns AnyType	: "B";
-\end{xtxt}
-The effect of this feature can't be overstated.  It decouples the EObject type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraint strongly limited it's useability. Return types raise the abstraction level, because an EObject of the abstract syntax can have a context dependent representation. It also allows multiple representations of the same EObject type.
-
-On the other hand, this changes the time complexity of unparsing from O(n) to O(exp(n)) of the current XText implementation. The following explanation of choice mappings hint the problem, but it's explained in detail at Unparsing \todo{really, should I do this here or just mention that isomorphism of a type to a grammar rule is lost}\todo{REF}.
-\begin{xtxt}
-Z 	:  "A" v=ID;
-\end{xtxt}
-this rule creates an EClass 'Z' with a EString attribute 'v'. Isomorphism is kept between the type 'Z' and the production rule.
-\begin{xtxt}
-Z 	:  "A" v=ID  
-	|  "B" n=INT;
-	\end{xtxt}
-creates an EClass 'Z' with the attributes 'v' of type EString and 'n' of type EInt.  Isomorphism of the type to production rules is lost, but might be regained by a constraint if 'v' or 'n' is assigned. Isomorphism to a grammar rule is kept.
-\begin{xtxt}
-Z returns A : "A" v=ID;
-Y returns A : "B" v=ID;
-\end{xtxt}
-No isomorphism of the type 'A' to a grammar rule, because both rules return an \code{EObject} of type \code{A}.
-
-\subparagraph{PTC}
-
-For example, if the following grammar parses \kode{somekeyword 0 C}:
-\begin{xtxt}
-S  	:  	v=A 
-	| 	v=X;
-
-A returns Obj	: 	l=B r=C   ;
-X returns Obj	: 	l=Y r=Z   ;
-B returns N  	:  	"somekeyword" 	v="0";
-Y returns N  	: 	"otherkeyword" 	v="0";
-C 		:  	 "C" ;
-Z 		: 	 "Z" ;
-\end{xtxt}
-following AST will be constructed \todo{fix this} \\ 
-      Obj			\\
-     /   \textbackslash		\\
-N(v='0')   C	\\
-To unparse the this parse tree without a node model, the decision if the rule of the root EObject is 'A' or 'X' can just be decided after determining the type of it's right child 'C'. \\
-
-It is possible that all grammar rules return the same type, so type information would be useless to guide production rule resolution.\\
 
 
 
 
 
-\section{Review / Criticism}
-\subsection{XText Grammar}
-In the XText grammar, it is not possible do statically assign a value  to a structural feature. For example to assigning 0 to an integer attribute 'v' of class MyBoolean in the "false" case and 1 in the "true" case requires to write a special value converter. 
-\begin{xtxt}
-MyBoolean:  "true" | "false"
-\end{xtxt}
-
-A much greater impact on the grammar is it's inability to express left recursive grammars and the consequences. This is owed to the LL(*) parsing algorithm of ANTLR, the parser generator used by XText. This requires left factoring and grammar rewriting which lead to XText allowing tree rewriting of the AST by assigned actions. If only parser and AST construction is regarded, this is more or less an inconvenience for the grammar designer who needs to left-factorize, but it creates problems regarding parse tree construction and validation for XTexts current implementation. Considering that the current parse tree construction algorithm has a runtime of $O(c^N)$, it is arguable to use an GLR parsing algorithms with  $O(n^3)$ to avoid the need for grammar massaging and thus AST rewriting.
-
-\subsection{XText Resource}
-XText is, like EMFText \cite{EMFTextMan}, integrated in EMF as an EMF Resource. The responsibility of resources is to serialize and deserialize models, this leads to various problems: 
-
-\begin{itemize}
-	\item The grammar must describe the whole model: the model must not contain non volatile information which is not regarded by the grammar. Adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent the restriction that the whole model must be textually described. A possible solution would be to create additional EObjects in an additional Resource, which points at the EObject in the XTextResource which should be enriched. With an ECrossReferenceAdapter the inverse references and thus the additional information of the extended object. This technique to extend an EObject in a non invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
-	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the model. In conjunction with a non incremental parser, model elements are replaced instead of updated. Furthermore, EMFs ResourceSet which keeps referential integrity is bypassed. XTexts demands the programmer to handle referential integrity or to "return stable fragments for its contained elements ". For example the expression "int i=0" in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element an universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
-	\item Because the model contained in a resource is not modified in a ResourceSet and extrinsic, non grammar conform information like IDs can not be added or integrated persistently to model elements referential integrity can not be maintained. On the other hand to determine changes to update a model without unique IDs are based on heuristics, thus potentially inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict to store the model in textual form for e.g. viewing and versioning. 
-\end{itemize}
-
-\subsection{Node Model}
-The potential use of the node model is strongly restricted in Xtext, for the following reasons:
-\begin{itemize}
-	\item the node model is not an EMF model. 
-	\item The node model is not explicitly available without running the XText parser, because it is created by the parser from information of the concrete serialized language model. 
-	\item The use of the runtime instances of the node model is restricted by the API: ``clients should never keep a reference to a node as it may be invalidated at any time and the very same object could be reused in another subtree of the full parse tree.''\cite{XTextAPI}
-	\item The node model is not updated during parse tree construction. If an update is required, an additional parse with its problematic replacing instead of updating behavior is necessary.
-	\item Even if the parse tree constructor would construct the node model, it takes the first valid solution. It is not possible to choose between different valid representations or prefer a valid one which are semantically equivalent, e.g.
-\begin{xtxt}
-Foreach 		: 	Map | For;
-Map returns FE  	:  	"map" 		v=ID;
-For returns FE  	: 	"foreach"	v=ID;
-\end{xtxt}
-\end{itemize}
-
-
-
-
-
-
-
-
-
-
-
-\section{Unparser}
-\todo{rename unparser to parse tree constructor}
-The unparser is responsible to find all valid parse trees for the current language model and select the best. The process of creating an parse tree from an AST is called ``unparsing'' in this thesis. The creation of a token or character stream from the parse tree is called pretty printing. The actual unparsing process is twofold:
+\section{Guided Parse Tree Constructor}
+The Guided Parse Tree Constructor is responsible to find all valid parse trees for the current language model and select the best. The actual Parse Tree construction process is twofold:
 \begin{itemize}
 	\item find all combinations of production rule applications that uniquely distinguish valid words and
 	\item create a parse tree according to the most promising combination. 
@@ -175,10 +205,10 @@ To enable multiple representations, the alternatives need to be made available. 
 \todo{blueprints based on s-attributes. Tree struct based on SAttrs.}
 
 \subsection{Hints}
-A hint is a reference to a following production. So with hints, a node in the parse tree is not only labeled by its non terminal, but also by its production. Hints specify a single production without referring to a parse tree part, which is important, if multiple productions are possible. Thus, hints do not refer to actual content but define the structure of the content. Regarding the unparser, the AST is present, but it is ambiguous which structure to use to hold its contained data.  
+A hint is a reference to a following production. So with hints, a node in the parse tree is not only labeled by its non terminal, but also by its production. Hints specify a single production without referring to a parse tree part, which is important, if multiple productions are possible. Thus, hints do not refer to actual content but define the structure of the content. Regarding the Parse Tree Constructor, the AST is present, but it is ambiguous which structure to use to hold its contained data.  
 
-\subsection{Unparse Steps}
-The basic steps of the unparser are:
+\subsection{Parse Tree Construction Steps}
+The basic steps of Parse Tree Construction are:
 \begin{enumerate}
 	\item compute all possible solutions. This results in a forest of parse tree blueprints.
 	\item determine the best tree. Which criteria compose the best tree are explained below.
@@ -189,7 +219,7 @@ The basic steps of the unparser are:
 Criteria that determine the result tree are ranked from most to least important:
 \begin{enumerate}
 	\item Use notation model hints, if exits. Hints are likely set by the user and thus have top priority.
-	\item Number of similar productions to the previous unparse or parse, which is saved in the notation model. \todo{xxx }Keeps stable.
+	\item Number of similar productions to the previous parse or parse tree construction state, which is saved in the notation model. \todo{xxx }Keeps stable.
 	\item User preferences.
 	\item Language designer preferences.
 	\item Number of default values used as negative criteria.
@@ -198,7 +228,7 @@ Criteria that determine the result tree are ranked from most to least important:
 
 \todo{blueprints 2 parsetree}
 
-The suggested behavior is, that the user does not specify the whole alternative representation, but selects an alternative, let the unparse create and display the new representation and iteratively refines the presentation. 
+The suggested behavior is, that the user does not specify the whole alternative representation, but selects an alternative, let the Parse Tree Constructor create and display the new representation and iteratively refines the presentation. 
 
 
 \section{Grammar}

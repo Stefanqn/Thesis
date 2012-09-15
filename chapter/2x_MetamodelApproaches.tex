@@ -125,6 +125,7 @@ The View Service is a factory for constructing new notation view elements also b
  
 
 \subsection{Textual Editing}
+This section describes how textual is integrated in EMF. At the beginning, the relationship between context free grammars and MOF based Metamodels is described. In the following Xtexts \cite{XTextMan} grammar and Xtexts architecture is described. EMFText \cite{EMFTextMan} is besides Xtext the other well documented, still active developed textual framework for EMF. In contrast to Xtext, it allows to automatically derive a textual notation from a Metamodel and layout information in grammar rules. From the abstract point of view of this thesis, the are similar except that EMFTexts documentation does not indicate how isomorphism from EClass to grammar rule can be circumvented. The relevance of this is discussed in \todo{link}. This section closes with the editing strategy of Textual Editing Framework (TEF).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -148,22 +149,10 @@ The mapping is straightforward, just the alternative to subclass mapping might s
 Mapping Metamodels to context free grammars adds the problem of representing cross-references for which there is no correspondence in BNF. They can however be represented as terminals identifying the referenced element.   
 
 This mapping defines the foundation to bridge between Metamodels and context free grammars. It describes how a model represents a Parse Tree. The Parse Tree is bound by the concrete textual syntax. In general however, Ecore models describe the abstract syntax of a language and not the Parse Tree of one textual representation. To gain more flexibility, the EBNF description is enriched by an synthesized attributed grammar which defines the AST. The mapping between S-attributed Grammar and Ecore will be described after a discussion of XTexts grammar.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsubsection{XText}
-\todo{intro}
 
-\paragraph{XText Phases during deserialization}
-The parsing process in XText is separated into following phases:
-\begin{enumerate}
-	\item Lexing and Parsing: The lexing phase transforms a sequence of characters into tokens. Tokens are a strongly typed part of the input sequence. Their represent an atomic symbol and their type is determined by a particular terminal rule or keyword. The parsing phase requests tokens and builds a ParseTree and an AST according to the grammar rules.
-	\item Linking resolves the textual identification of ``referrenced'' targets to Cross References after parsing is complete.
-	\item The Validation Phase is optional.
-\end{enumerate}
-
-\paragraph{Value Converters}
-Because Xtext translates between an abstract syntax tree and a stream of characters in both directions, the sequence of characters inevitably has to be converted to a proper data type and vice versa. This bidirectional transformation is the job of \code{ValueConverter}s and is done by two (inverse) unidirectional transformations. Converters are used by the Lexers Terminal Rules and Parser Rules.
-
-\paragraph{XText Grammar}
+\subsubsection{XText Grammar}
 XTexts grammar language is a domain-specific language to describe textual languages. The main idea is to describe the concrete syntax and its mapping to an in-memory representation - the ``semantic model''. Xtext supports grammar mixins, which is the reuse of existing grammars. It can infer Ecore models from a grammar, but it's also possible to import existing Ecore models instead. In the following, the XText grammar will be explained by example in conjuction with the optional Ecore inference. The metamodel created by inference helps understanding how Metamodel and synthesized attributed EBNF constrain each other. In case of the manually maintained metamodel, this metamodel must follow certain constraints. Based on the Liskovs substitution principle, the classes of the manual metamodel must be a substitute of the classes of the inferred metamodel which would have be created. In case of model inference the created structural features are normalized, meaning if all subclasses share a features with the same name, type and multiplicity they are merged together in the common superclass.
 
 XText uses an EBNF with the following notation extensions:
@@ -175,7 +164,7 @@ XText uses an EBNF with the following notation extensions:
 	\item Grouping is possible by enclosing brackets '(' and  ')', e.g.  ( A b C)
 \end{itemize}
 
-\subparagraph{Lexer Rules}
+\paragraph{Lexer Rules}
 In XText there are Lexer rules,  which extend the EBNF notation by:
 \begin{itemize}
 	\item Character Ranges, which are denoted by start character '..' stop character, e.g. '0'..'9' 
@@ -194,7 +183,7 @@ terminal SL_COMMENT returns ecore::EString : "//" !'\n'* '\n';
 \end{xtxt}
 The return type is optional and by default EString. The order of terminal rules is important, because they shadow each other. Terminal rule names are written in capital letters as a naming convention. Terminal rules are mapped to the data type following the returns keyword and are converted to it using the ValueConverters.
 
-\subparagraph{Parser Rules}
+\paragraph{Parser Rules}
 A parser rule produces a tree of terminal and non-terminal tokens and all parser rules together produce the Parse Tree, which is also referred as Node Model in Xtext. Additionally, parser rules are the building plan for the creation of EDataTypes or EObjects which form the AST. XText also calls the AST semantic model. EObjects are created lazy by default. Actions and assignments are used to derive types, to force their instance creation and to build the AST accordingly. The first parser rule in the grammar is the start production. It's possible to hide terminal tokens from the parser, like comments. Hidden tokens are ignored in the parser, but should be preserved during deserialization.
 
 \subparagraph{DataType Rules}
@@ -229,7 +218,7 @@ AbstractToken :	TokenA |	TokenB |	TokenC
 \end{xtxt}
 
 
-\paragraph{Linking}
+\subparagraph{Linking}
 Xtext allows the declaration of cross-references in the grammar as terminal tokens, but not the linking semantics because of its synthesized attributed context free nature. The actual resolving process is done programmatically and not of interest, for this thesis. The general idea is discussed in \ref{sec:xtextarch:Linking} \todo{name}
 e.g. 
 \begin{xtxt}
@@ -260,13 +249,20 @@ whereas \kode{And.left=current} is the tree rewrite action which assign the elem
 XText offers the possibility of syntactic predicates, which are necessary to solve ambiguity, like the dangling else problem and also help in cases where grammar rewriting would be necessary otherwise. Syntactic predicates are a specialization of semantic predicates regarding the underlying parser generator framework ANTLR. Syntactic predicates enable backtracking for a local scope and is enabled in XText by \code{=>}.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%% Grammar () %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{XText Architecture} \label{cha:xtextarch}
+
+\paragraph{Value Converters}
+Because Xtext translates between an abstract syntax tree and a stream of characters in both directions, the sequence of characters inevitably has to be converted to a proper data type and vice versa. This bidirectional transformation is the job of \code{ValueConverter}s and is done by two (inverse) unidirectional transformations. Converters are used by the Lexers Terminal Rules and Parser Rules.
 
 
+\paragraph{XText Phases during deserialization}
+The parsing process in XText is separated into following phases:
+\begin{enumerate}
+	\item Lexing and Parsing: The lexing phase transforms a sequence of characters into tokens. Tokens are a strongly typed part of the input sequence. Their represent an atomic symbol and their type is determined by a particular terminal rule or keyword. The parsing phase requests tokens and builds a ParseTree and an AST according to the grammar rules.
+	\item Linking resolves the textual identification of ``referrenced'' targets to Cross References after parsing is complete.
+	\item The Validation Phase is optional.
+\end{enumerate}
 
-
-\subsubsection{XText Architecture}
-\label{cha:xtextarch}
 This section describes how XText realizes the \todo{Np concepts} concepts described by the grammar. It focuses on Parsing, Unparsing, the gap between abstract syntax and parse tree, Referential Integrity. \todo{sounds like shit AND is now wrong}
 
 XText converts the input grammar to an EMF model, saves it and provides helper methods for runtime grammar access. XText integrates itself in EMF as a Resource named \code{XTextResource}, which is shown in figure \ref{XtextArch}.  The basic components of a XText resources are the Serializer, to convert EObjects to text, the Parser, to convert text to EObjects or to deserialize the EObjects and the Linker which manages Cross-References. 
@@ -283,10 +279,10 @@ The main drawbacks of this solution are:
 	\item The implementation to identify EObject in a resource has to return stable fragments.
 \end{itemize}
 
-\subsubsection{Parsing}
+\paragraph{Parsing}
 XText uses ANTLR \cite{ANTLR} for parser creation. It creates ANTLR grammar files with ANTLR Grammar Actions to create the AST and ParseTree. The rules return EObjects, 'init' and 'after' actions are used as guidance of the current stack position for the creation of nodes. The returned EObjects form the AST and related to them, a node model is created which is related to the AST. 
 
-\paragraph{Node Model}
+\subparagraph{Node Model}
 The node model is created during parsing. The term ``node model'' is defined by Xtext and does not conform to the model definition of this thesis, because no metamodel exists. The base interface of the node model is INode which  is described as "A node in the parse tree" \cite{XTextAPI}. Nodes are either composite nodes if they represent non terminals or leaf nodes, if they represent terminals. Nodes hold a reference to the grammar element they represent and leafs to the represented token additionally. Nodes are added to the EObjects as Adapters instead of referring to them by an EReference.
 
 The roles of the node model during serializations are:
@@ -299,8 +295,7 @@ The roles of the node model during serializations are:
 
 \paragraph{Linking}
 \label{sec:xtextarch:Linking}
-\todo{was wird hier gelinked?}
-Linking in XText can be separated into two parts:
+Linking of Cross-References by means of textual identifiers can be separated into two parts:
 \begin{itemize}
 	\item how XText copes with the mismatch between cross references and text in general. In this case, just inner resource references are considered. 
 	\item how does XText resources cope with integration in EMF as an EMF resource.
@@ -381,9 +376,6 @@ PluralRule: "contents:" count=INT Plural;
 terminal Plural: "item" | "items";
 \end{xtxt}
 it is unclear during parse tree construction if 'item' or 'items' should be used. This case is named unassigned text in XText.
-
-
-
 
 
 

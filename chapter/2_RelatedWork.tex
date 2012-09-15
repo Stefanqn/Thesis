@@ -2,7 +2,7 @@
 This chapter starts with the Definitions \ref{sec:def}, where a common understanding of terms are determined and, if necessary specified. In the next chapter, general non-Metamodeling related approaches of language workbenches, language definition and editors are presented. In the final section \ref{sec:metaApproaches} of this chapter, Metamodel are explained and Metamodel related frameworks are presented.
 
 \section{Definitions} \label{sec:def}
-This section contains definitions in alphabetical order.
+This section contains definitions in alphabetical order. 
 % A B 
 \paragraph{Abstract Syntax} Meta Model elements and their relation are the abstract syntax of a language. \cite{MDSD}
 
@@ -17,7 +17,13 @@ The abstract syntax trees  represents the hierarchical syntactic structure of a 
 A grammar which can generate more than one parse tree for a given string of terminals is said to be ambiguous.\cite{DragonBook}
 
 % C D E F G
-\paragraph{CFG - Context Free Grammar }
+ 
+\paragraph{Concrete Syntax} In contrast to the Abstract Syntax, the Concrete Syntax defines the actual representation of the language. \cite{MDSD}
+
+\paragraph{Constraint Satisfaction Problem (CSP) in regard to Parsing} 
+Beside answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Constraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules. It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parser identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree. \cite{ParserBook}
+
+\paragraph{Context Free Grammar (CFG)}
 A context-free grammar is described by a quadruple, consisting of terminals, nonterminals, a start symbol and productions.\\
 $G = (T, V, S, P)$
 \begin{enumerate}
@@ -32,11 +38,6 @@ $G = (T, V, S, P)$
 	\end{enumerate}
 \end{enumerate}
  $P$ is a finite relation from $V \rightarrow (V  \bigcup  T)^*$, where $^*$ is the Kleene star. Members of $P$ are productions of the form $u \rightarrow v$. \cite{DragonBook}
- 
-\paragraph{Concrete Syntax} In contrast to the Abstract Syntax, the Concrete Syntax defines the actual representation of the language. \cite{MDSD}
-
-\paragraph{CSP - Parsing as Constraint Satisfaction Problem} 
-Beside answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Constraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules. It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parser identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree. \cite{ParserBook}
 
 \paragraph{Domain} A domain is a delimited area of knowledge or interest. \cite{MDSD}
 
