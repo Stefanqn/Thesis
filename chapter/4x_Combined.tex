@@ -1,24 +1,20 @@
 \section{Combined Use OR Integrated Use}
 
-This previous chapters \todo{Ref} demonstrated the Guided Parse Tree Constructor, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on how their integrated use and synergy effects. 
+The previous chapters \todo{Ref} demonstrated the Guided Parse Tree Constructor, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on their integrated use and their synergy effects. \todo{overview}
 
-It is assumed that 
+It is assumed that:
 \begin{enumerate}
 	\item the language model stays stable if its textual representations is unchanged and that the nodes are reused to a large extend.
-	\item the textual representation is additional to the abstract representation, so that 
-	\begin{itemize}
-		\item non containment references remain stable,
-		\item non \code{EObject} referring, but \code{EObject} depending sentential tokens remain valid.
-	\end{itemize}
+	\item the textual representation is additional to the abstract representation, so that non containment references remain stable and non \code{EObject} referring, but \code{EObject} depending sentential tokens remain valid.
 \end{enumerate}
 
 
 %%%%%%%%%%%%%%%% Incomplete information handling %%%%%%%%%%%%%%%%
 \paragraph{Incomplete information handling}
-The first, obvious benefit of the \code{EMF Lexer} is that the textual representation does not necessarily need to \emph{describe} the whole model, but just needs to \emph{declare} it. It enables the use of \code{EObject}s directly in the grammar and thus the grammar to properly handle parts of the language. The results in inability to modify the unhandled parts and the existence of an ID character, or a character placeholder at the unhandled location. This shifts the problem of handling this placeholder to the textual editor. Unaware editors represent UTF8 private use characters, either as their canonical representation with a square filled with the value of the code point in hexadecimal representation or simply as a square \code{$\square$}.
+The first, obvious benefit of the \code{EMF Lexer} is that the textual representation does not necessarily need to \emph{describe} the whole model, but just needs to \emph{declare} it. It enables the use of \code{EObject}s directly in the grammar and thus the grammar to properly handle parts of the language. This results in the inability to modify the unhandled parts and the existence of an ID character, or a character placeholder at the unhandled location. This defers the problem of handling this placeholder to the textual editor. Unaware editors represent UTF8 private use characters, either as their canonical representation with a square filled with the value of the code point in hexadecimal representation or simply as a square \code{$\square$}.
 
 \paragraph{Different representations of semantic equivalent tokens}
-In case the unparser found more than one valid grammar rule for a notation element, the corresponding transient field is set. The text editor should offer the user the change the current representation, which reassigns the pointer to the grammar rule of the indirectly selected notation element and, if necessary, also to its descendants. As soon as the reassignment is finished, a new token stream is produced reflecting the new textual representation.
+In case the Parse Tree Constructor found more than one valid grammar rule for a notation element, the corresponding transient field is set. The text editor should offer the user to change the current representation, which reassigns the pointer to the grammar rule of the indirectly selected notation element and, if necessary, also to its descendants. As soon as the reassignment is finished, a new token stream is produced reflecting the new textual representation.
 
 %%%%%%%%%%%%%%%%%%%%%%% Sentential Tokens %%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{Sentential Tokens} \label{SententialTokens}
@@ -34,7 +30,7 @@ Post processing of input grammar requires the following steps:
 \end{enumerate}
   
 The above steps replace every occurrence of a \code{Sequence} or \code{Symbol} with an alternative with itself or its sentential terminal $t_S$. 
-For example\\
+For example:\\
 A : a | B \\
 is transformed to  \\
 A : (a | a$_S$) | (B | B$_S$)
@@ -47,23 +43,23 @@ This procedure allows the deserialization of sentential forms of the language fr
 Sentential tokens are the foundation for mixing graphical editors into text. Sentential Tokens alone, as described in \ref{SententialTokens}, are without leverage just a way to fold text into a special character.  For graphical editors, they provide data access and serve as a place holders. Sentential token restricts the underlying model to conform to certain criteria. To provide alternative graphical editors as alternative to textual parts, an integration at the same place like alternative textual presentations is desirable.
 
 % Grammar Token ?enable grammar char on the token stream?
-In order to enable graphical editors should to conform to a context free grammar, they have to be a specialization of an invisible instance of a grammar part. This enables the their integration to the notation model and allows generic handling regarding Lexer, parser and parse tree. Graphical editors integration in the Notation metamodel \ref{MM:Not:Prod} is based on by specialization of one or multiple subclasses of \code{ProductionPart}. Multiple subclassing is for example useful if the editor is able to represent one or a \code{List} of a specific \code{NonTerminalNotation}. This subclass is denominated as the \emph{graphical class}, its serialized form as \emph{graphical character}. From the parsers perspective, this enables the use of the graphical character wherever the specialized \code{ProductionPart} is valid. This concludes that the graphical class is only a valid path for the parse tree constructor if the specialized \code{ProductionPart} is also valid. 
+In order to enable graphical editors that conform to a context free grammar, they have to be a specialization of an invisible instance of a grammar part. This enables the their integration to the notation model and allows generic handling regarding Lexer, parser and parse tree. Graphical editors integration in the Notation metamodel \ref{MM:Not:Prod} is based on by specialization of one or multiple subclasses of \code{ProductionPart}. Multiple subclassing is for example useful if the editor is able to represent one or a \code{List} of a specific \code{NonTerminalNotation}. This subclass is denominated as the \emph{graphical class}, its serialized form as \emph{graphical character}. From the parsers perspective, this enables the use of the graphical character wherever the specialized \code{ProductionPart} is valid. This concludes that the graphical class is only a valid path for the parse tree constructor if the specialized \code{ProductionPart} is also valid. 
 
 %PTC
-The graphical editor has to specify which grammar element or set of grammar elements it able to represent. Because the graphical class is a specialization, it is perfectly valid to further constraint the extended element, for example to meet certain domain specific criteria. If the criteria are met, the graphical class should be added as an alternative to, not instead, the notation model. The designated place to evaluate these constraints is the parse tree constructor, after it has determined the extended grammar element as a valid path. 
+The graphical editor has to specify which grammar element or set of grammar elements it is able to represent. Because the graphical class is a specialization, it is perfectly valid to further constraint the extended element, for example to meet certain domain specific criteria. If the criteria are met, the graphical class should be added as an alternative to, not instead of, the notation model. The designated place to evaluate these constraints is the parse tree constructor, after it has determined the extended grammar element as a valid path. 
 
 %Use in GUI
-The combined use of sentential characters and guided parse tree constructor enable the creation of graphical characters for the output character stream. The intended representation of graphical characters in the user interface is to substitute the graphical character with its adjacent graphical editor. The graphical editor at this position \emph{works on the language model} referred by the graphical character. Editing the language model instead of the verbose parse tree is only possible due to the guarantee of sentential tokens to be expandable to a valid parse tree. Handling graphical elements as characters is known even by end users. Office software, like for example Libre Office~\footnote{\raggedright \url{http://www.libreoffice.org/}}, offers to place the anchor of a picture in a document as a character.
+The combined use of Sentential Characters and the Guided Parse Tree Constructor enable the creation of graphical characters for the output character stream. The intended representation of graphical characters in the user interface is to substitute the graphical character with its adjacent graphical editor. The graphical editor at this position \emph{works on the language model} referred by the graphical character. Editing the language model instead of the verbose parse tree is only possible due to the guarantee of sentential tokens to be expandable to a valid parse tree. Handling graphical elements as characters is known even by end users. Office software, like for example Libre Office~\footnote{\raggedright \url{http://www.libreoffice.org/}}, offers to place the anchor of a picture in a document as a character.
 
 %Conclude
 The presented solution offers to create graphical editors as an alternative to parts of a textual representation. This allows the editors to be fine grained for specific parts of the model. There is no need to handle the model root or to query specific model parts. It allows multiple graphical editors from different sources to coexist without interference in a single textual document using an attributed context free grammar as the common denominator. Changing the representation is achieved without a change in the language model and by simply changing a reference in notation model. Representing text in the graphical editors can be achieved by spawning a new parser instance inside the graphical editor with an appropriate synchronized new root. Thus, interchangeable mixed representation of textual and graphical notation is possible.
 
 %%%%%%%%%%%%%%%%%%%%%%% Controller %%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Notation model for controllers} A potential use of the notation model is the same as its conceptional origin in GMF: as the model for a controller in the model view controller pattern. Because textual representations are less interactive than graphical representations and due to the fact, that updates of the model are done by the parser and updates of the view are do a large extend handled by the parse tree constructor, a large extend of the controllers could be stateless. Stateless controllers can be reused for a set of model elements. Notation model based controllers could enable semantic edits, for example the movement of a selected element to the next valid location. 
+\paragraph{Notation model for controllers} A potential use of the notation model is the same as its conceptional origin in GMF: as the model for a controller in the model view controller pattern. Because textual representations are less interactive than graphical representations and due to the fact, that updates of the model are done by the parser and updates of the view are to a large extend handled by the parse tree constructor, a large extend of the controllers could be stateless. Stateless controllers can be reused for a set of model elements. Notation model based controllers could enable semantic edits, for example the movement of a selected element to the next valid location. 
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
+\todo{summary}
 %%%%%%%%%%%%%%%%%%%%%%%% Discussion%%%%%%%%%%%%%%%%%%%%%%%%

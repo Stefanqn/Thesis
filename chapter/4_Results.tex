@@ -5,17 +5,17 @@
 \section{Proceeding} 
 This section describes the proceeding how the results were achieved.
 
-Following observations during research were made:
+The following observations during research were made:
 \begin{itemize}
 	\item Every non metamodel based tool uses its own, specific approach for abstract language data structure transformation, validation, persistence and editing.
-	\item In the Graphical Modeling Framework (GMF), the \emph{Notation model} generically encapsulates the state of the visual representation. The \emph{Extensible Type Registry} determines a type or specialization type for which is used to guide Notation model element creation. 
-	\item After short evaluation of Meta Programming System (MPS), the restricted usability of \emph{projectional textual editing is undesirable} for the target of this thesis. The text editing concept of MPS is template or form based, not free textual.
+	\item In the Graphical Modeling Framework (GMF), the \emph{Notation model} generically encapsulates the state of the visual representation. The \emph{Extensible Type Registry} determines a type or specialization type which is used to guide Notation model element creation. 
+	\item After a short evaluation of Meta Programming System (MPS), the restricted usability of \emph{projectional textual editing is undesirable} for the target of this thesis. The text editing concept of MPS is template or form based, not free textual.
 	\item The report \cite{Barista} about Barista shows the successful use of a variant of Harmonias incremental parsing algorithms in projectional editors to achieve \emph{stable abstract data structures}.
 	\item Harmonias incremental parsing algorithm for GLR parsing requires the Parser to handle \emph{sentential forms}.
 	\item Proxima uses a \emph{Structured Token for graphical presentation}, but does not allow it to be directly edited.  Its seven layer architecture with bidirectional model transformations between each allows high flexibility. Dependant layers were considered undesirable, especially regarding possible user interaction on different layers, with the complexity to maintain bidirectionality by two unidirectional transformations and updating instead of replacing model elements. Several model transformation languages for EMF exist, so structural transformations are possible and separated if required. 
 \end{itemize}
 
-The Xtext framework was examined in respect of adding alternative representations and related problems. Following central perceptions were made:
+The Xtext framework was examined afterwards in respect of adding alternative representations and related problems. The following central perceptions were made:
 \begin{itemize}
 	\item Structure of textual representation is coupled to the structure of the model. This characteristic is condoned with regard to the availability of EMF model to model transformations.
 	\item The used, non incremental parsing technology results in unstable models. This characteristic is not considered until its impact on the solution in \ref{cha:discussion} discussion.
@@ -39,7 +39,7 @@ For combined use with the parse tree constructor a Notation model was developed 
 To uniquely distinguish a specific tree construction for hints, the structure resembled a parse tree structure. The notation model was extended to substitute the parse tree accordingly.\\
 
 
-\emph{Structured Tokens} highlighted the usage of nested structured data, like \code{EObject}s as Tokens. To integrate Structured Tokens in a textual serialization, a Structured Character concept was developed. It is based on the basic idea to use a private, unique character as a key for a map entry of a data structured persisted in an adjacent resource, like a file. The designated solution are UTF8 private use characters and a wrapping Lexer which resolves and types the \code{EObject}s from the adjacent resource. This enables the use of \code{EObject}s as atomic characters on the character stream. \\
+\emph{Structured Tokens} highlighted the usage of nested structured data, like \code{EObject}s as Tokens, which triggered the second conceptional improvement. To integrate Structured Tokens in a textual serialization, a Structured Character concept was developed. It is based on the basic idea to use a private, unique character as a key for a map entry of a data structured persisted in an adjacent resource, like a file. The designated solution are UTF8 private use characters and a wrapping Lexer which resolves and types the \code{EObject}s from the adjacent resource. This enables the use of \code{EObject}s as atomic characters on the character stream. \\
 
 The possibility to use \code{EObject} on the character stream enables the use of Notation model elements on it. Notation model elements represent parts of the Parse Tree or \emph{Sentential Forms}. To allow their use as \emph{Sentential Token} two improvements are necessary:
 \begin{itemize}
@@ -56,7 +56,7 @@ To improve the usability of \emph{Structured Characters} for Presentation, follo
 A user interface could create a graphical editor at the place of his specific specialized presentation character and operate on the Language model elements it hides.\\
 
 
-In discussion, the problem of unstable models and its impact on the suggested solution is resumed.
+Finally, the problem of unstable models and its impact on the suggested solution is resumed as part of the discussion.
 
 
 \section{XText Analysis}
