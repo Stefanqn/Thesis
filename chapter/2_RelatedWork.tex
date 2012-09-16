@@ -1,5 +1,5 @@
 \chapter{Related Work}
-This chapter starts with the Definitions \ref{sec:def}, where a common understanding of terms are determined and, if necessary, specified. In the next chapter, general non-Metamodeling related approaches of language workbenches, language definition and editors are presented. In the final section \ref{sec:metaApproaches} of this chapter, Metamodels are explained and Metamodel related frameworks are presented.
+This chapter starts with the \ref{sec:def} Definitions, where a common understanding of terms are determined and, if necessary, specified. In the next chapter, general non-Metamodeling related approaches of Language Workbenches, language definition and editors are presented. In the final section \ref{sec:metaApproaches} of this chapter, Metamodels are explained and Metamodel related frameworks are presented.
 
 \section{Definitions} \label{sec:def}
 This section contains definitions in alphabetical order. 
@@ -133,7 +133,10 @@ A word over an alphabet is a finite sequence of symbols drawn from that alphabet
 
 
 \section{General Approaches} \label{sec:generalApproaches}
-This section provides a selected overview of current language and editing approaches which are not Metamodel based. This includes Language Workbenches, tools to develop domain specific language, projectional and textual editors.
+This section provides a selected overview of current language and editing approaches which are not Metamodel based. This includes Language Workbenches, tools to develop Domain Specific Languages, projectional and textual editors.
+
+\subsection{ANTLR}
+ANTLR \footnote{\raggedright \url{http://www.antlr.org/}}, ``ANother Tool for Language Recognition'', is an open source parser generator framework for LL(*) parsers with selective backtracking. It allows the creation of Java parsers and lexers from a grammar file. The grammar file contains among other things an EBNF grammar with actions \cite{ANTLR}.
 
 \subsection{Barista}
 Barista \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/barista.html}} is an editor framework for user interfaces that offers alternative structured visual representations on an internal abstract syntax tree. It uses Citrus \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/citrus.html}} as a user interface toolkit \cite{citrus} and adds data structures and a textual interaction technique to it. It mimics the interaction technique of conventional text editors to overcome a central usability problem of previously structured code editors by fluidly changing between structured and unstructured text. It is based on the model view controller pattern \cite{patterns} and the presented editors structure depends on the models structure. The model in Barista consists of \emph{Structures} and \emph{Tokens}. Structures are tree nodes and Tokens the leafs. A Token is assigned to a property of a Structure and is contained in it. For each Structure, a grammar is inferred or provided and for each Token, a regular expression is specified that defines its legal strings and white space. The general idea of Barista's textual interaction technique is to unparse, retokenize and reparse a Token if its value is not part of the language described by the regular expression. Barista uses a variant of \cite{iglrPaper} incremental parsing Algorithm to reuse the abstract syntax tree's structure \cite{Barista}. 
