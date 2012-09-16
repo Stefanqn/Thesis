@@ -7,13 +7,8 @@ By conceptually extending the existing Parse Tree Constructor of Xtext, differen
 \paragraph{Structured Characters}
 The use of the invented EMF Lexers Structured Characters to enable \code{EObject}s on the character stream \emph{as Terminals} releases the grammar from the burden to \emph{describe} all model elements, but still requires to \emph{declare} their occurrence. This hinders the user to textually change or create those \code{EObject} Terminals, so if the model should be ever be editable outside a specially adapter editor, their use should be avoided. Unhandled Structured Characters cause severe usability issues, because from the users perspective, they present themselves as $\square$, a squared ``black'' box.
 
-\paragraph{Sentential Token based Editors}
-after decl
-Incremental visual DSL development from ``internal'' textual DSL
-Micro Editors granularity 
-Awesome CFG integration
-UI framework lock, platform dependent MM. MM after text if platform dependant.
-Editors depend on token, can reder themselves invalid
+\paragraph{Sentential Character based Graphical Editors}
+Sentential forms of the Parse Tree can be persisted and used instead of the original input, \ref{iSW}. Post processing of the grammar together with Structured Characters allows the use of sentential forms on the character stream, but results in larger Parse Tables. Because a sentential node, which is the root of the persisted subtree, contains information which production part in the grammar it represents, the Parse Tree Constructor could produce a valid sentential form in conjunction with the corresponding language model elements at any time, which is rendering actual parse subtree construction for sentential characters unnecessary. The Sentential Character is valid, if the corresponding language model elements conform to the constraints of its production part. While presenting the character stream, a graphical editor can substitute the Sentential Character and operate on the model elements it holds, as long as commits keep the model elements in a state which conforms to the production part constraints. This procedure allows to integrate graphical editors into texts which still \emph{conform to a context free grammar}. During grammar design time, it is not required to regard graphical editors. Graphical editors can substitute \emph{any} symbol, as well as \code{Sequence}s, which enables fine grained editors with potential overlapping functionality. To determine a specific graphical editor for a sentential character, the referred \code{EObject} is specialized by the Parse Tree Constructor. In order for this specialization to work, the graphical editor has to register itself at the Parse Tree Constructor with its specialization type, the grammar part, for example for which \code{Symbol} it provides an alternative representation to and optionally which further constraints the corresponding language model elements must match. Thus, incremental visual domain specific language development from an internal textual domain specific language is possible. The graphical editor extensions of the language are probably locked to the editor framework. Because language extensions in general are also locked to the language metamodel, a common metamodel for a textual language should be shared across the editor framework.
 
 
 \paragraph{Effect of Unstable Models}
@@ -36,9 +31,6 @@ xtext
 symptmatic
 tef
 parsing 
-	\item x updating textual view if graphical editor changes something is not necessary in contrast to side by side editors.
-	\item
-\end{itemize}
 
 \section{Drawbacks}
 \begin{itemize}
