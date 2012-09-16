@@ -1,38 +1,43 @@
 %%%%%%%%%%%%%%%%%%%%%%%% Conclusion %%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Conclusion}
+% diff txt rep
+\paragraph{Alternative Textual Representations}
+By conceptually extending the existing Parse Tree Constructor of Xtext, different textual representations are possible. The possible ambiguous mapping from model to Parse Tree is leveraged to allow different, context free grammar conform representations. For a user, a high degree of ``valid'' ambiguity is desirable, because it provides him with a higher variety of semantically equivalent representations. The extension of the Parse Tree Constructor requires it to calculate all instead of one possible valid solutions for a part of the word. Considering that the current Parse Tree Constructor uses Backtracking, a high degree of ambiguity is unfavorable for Parse Tree Constructor's runtime. Plain backtracking will not scale in calculating all solutions, especially regarding the combinatorial explosion of alternative combined list elements, so for practical use an improved algorithm is desirable. The alternative textual representations are alternative Parse Trees, thus the representations are not limited to different token values, but allow a different \emph{structural}. This can be leveraged at grammar design time to avoid manual model transformations. 
 
+\paragraph{Structured Characters}
+The use of the invented EMF Lexers Structured Characters to enable \code{EObject}s on the character stream \emph{as Terminals} releases the grammar from the burden to \emph{describe} all model elements, but still requires to \emph{declare} their occurrence. This hinders the user to textually change or create those \code{EObject} Terminals, so if the model should be ever be editable outside a specially adapter editor, their use should be avoided. Unhandled Structured Characters cause severe usability issues, because from the users perspective, they present themselves as $\square$, a squared ``black'' box.
+
+\paragraph{Sentential Token based Editors}
+after decl
 Incremental visual DSL development from ``internal'' textual DSL
-
+Micro Editors granularity 
 Awesome CFG integration
+UI framework lock, platform dependent MM. MM after text if platform dependant.
+Editors depend on token, can reder themselves invalid
+
+
+\paragraph{Effect of Unstable Models}
 Stable models main problem
-other results,
-emf lexer
-different txt representations
-utf8 char as id giving
+of struc char refs
+ sentential tokens might contain data if chars are no additional representation, but this shifts from synchronization to referential integrity problem. My AWESOME notation model.
+
+
+%% O(n3) vs backtracking. lack priority disam
 
 
 
 
 
-
-todo{aweeeeeeeeeeeesooooooooooooooommmmmmmmmmmmmmmmmmmmmmmmmmmmmmeeeeeeeeeeeeeeeeeeeeeeeeeee}
-
-\begin{itemize}
-	\item Conclusion: Parser generator not the problem and well understood.
-\end{itemize}	
-
-
-
-\section{Achievements}
-The concepts described in this th
-\begin{itemize}
-	\item x Multiple Txt rep
-	\item x Sentential tokens
-	\item x Editors on lang models
-	\item x editors in place of symbols and seq. - editors integrate \& conform in CFG!
-	\item x editors might be added after CFG created, no dep on CFG 2 editors
+\paragraph{Current EMF based Solutions}
+Conclusion: Parser generator not the problem and well understood.
+Rant about fcking non incremental parsing.
+sokutions
+xtext
+symptmatic
+tef
+parsing 
 	\item x updating textual view if graphical editor changes something is not necessary in contrast to side by side editors.
-	\item sentential tokens might contain data if chars are no additional representation, but this shifts from synchronization to referential integrity problem.
+	\item
 \end{itemize}
 
 \section{Drawbacks}
