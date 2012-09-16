@@ -8,41 +8,18 @@ By conceptually extending the existing Parse Tree Constructor of Xtext, differen
 The use of the invented EMF Lexers Structured Characters to enable \code{EObject}s on the character stream \emph{as Terminals} releases the grammar from the burden to \emph{describe} all model elements, but still requires to \emph{declare} their occurrence. This hinders the user to textually change or create those \code{EObject} Terminals, so if the model should be ever be editable outside a specially adapter editor, their use should be avoided. Unhandled Structured Characters cause severe usability issues, because from the users perspective, they present themselves as $\square$, a squared ``black'' box.
 
 \paragraph{Sentential Character based Graphical Editors}
-Sentential forms of the Parse Tree can be persisted and used instead of the original input, \ref{iSW}. Post processing of the grammar together with Structured Characters allows the use of sentential forms on the character stream, but results in larger Parse Tables. Because a sentential node, which is the root of the persisted subtree, contains information which production part in the grammar it represents, the Parse Tree Constructor could produce a valid sentential form in conjunction with the corresponding language model elements at any time, which is rendering actual parse subtree construction for sentential characters unnecessary. The Sentential Character is valid, if the corresponding language model elements conform to the constraints of its production part. While presenting the character stream, a graphical editor can substitute the Sentential Character and operate on the model elements it holds, as long as commits keep the model elements in a state which conforms to the production part constraints. This procedure allows to integrate graphical editors into texts which still \emph{conform to a context free grammar}. During grammar design time, it is not required to regard graphical editors. Graphical editors can substitute \emph{any} symbol, as well as \code{Sequence}s, which enables fine grained editors with potential overlapping functionality. To determine a specific graphical editor for a sentential character, the referred \code{EObject} is specialized by the Parse Tree Constructor. In order for this specialization to work, the graphical editor has to register itself at the Parse Tree Constructor with its specialization type, the grammar part, for example for which \code{Symbol} it provides an alternative representation to and optionally which further constraints the corresponding language model elements must match. Thus, incremental visual domain specific language development from an internal textual domain specific language is possible. The graphical editor extensions of the language are probably locked to the editor framework. Because language extensions in general are also locked to the language metamodel, a common metamodel for a textual language should be shared across the editor framework.
+Sentential forms of the Parse Tree can be persisted and used instead of the original input, \cite{iSW}. Post processing of the grammar together with Structured Characters allows the use of sentential forms on the character stream, but results in larger Parse Tables. Because a sentential node, which is the root of the persisted subtree, contains information which production part in the grammar it represents, the Parse Tree Constructor could produce a valid sentential form in conjunction with the corresponding language model elements at any time, which is rendering actual parse subtree construction for sentential characters unnecessary. The Sentential Character is valid, if the corresponding language model elements conform to the constraints of its production part. While presenting the character stream, a graphical editor can substitute the Sentential Character and operate on the model elements it holds, as long as commits keep the model elements in a state which conforms to the production part constraints. This procedure allows to integrate graphical editors into texts which still \emph{conform to a context free grammar}. During grammar design time, it is not required to regard graphical editors. Graphical editors can substitute \emph{any} symbol, as well as \code{Sequence}s, which enables fine grained editors with potential overlapping functionality. To determine a specific graphical editor for a sentential character, the referred \code{EObject} is specialized by the Parse Tree Constructor. In order for this specialization to work, the graphical editor has to register itself at the Parse Tree Constructor with its specialization type, the grammar part, for example for which \code{Symbol} it provides an alternative representation to and optionally which further constraints the corresponding language model elements must match. Thus, incremental visual domain specific language development from an internal textual domain specific language is possible. The graphical editor extensions of the language are probably locked to the editor framework. Because language extensions in general are also locked to the language metamodel, a common metamodel for a textual language should be shared across the editor framework.
 
 
 \paragraph{Effect of Unstable Models}
-Stable models main problem
-of struc char refs
- sentential tokens might contain data if chars are no additional representation, but this shifts from synchronization to referential integrity problem. My AWESOME notation model.
-
-
-%% O(n3) vs backtracking. lack priority disam
-
-
-
-
-
-\paragraph{Current EMF based Solutions}
-Conclusion: Parser generator not the problem and well understood.
-Rant about fcking non incremental parsing.
-sokutions
-xtext
-symptmatic
-tef
-parsing 
-
-\section{Drawbacks}
+The characteristic that language model elements are replaced instead of updated for textual changes is called \emph{unstable}, because of its unstable effect for references or URI based references, so called proxies. Because every parsing technique used by the identified EMF related textual editing tools, EMFText, Xtext and Textual Editing Framework results in unstable models, the effect of unstable models to the presented solutions is of interest for practical purposes. 
 \begin{itemize}
-	\item x permutations
-	\item x dependency of editors to CFG (at least declare to)
-	\item x txt structure structural dependent on model. Just partially a problem, last vis. state can be often recovered.
-	\item x substitute language seq, but not arbitrary seq
-	\item x dependencies (stable lang mod)
-	\item o IDE lock, IDE dependencies
-	\item o Parse Table++
-	\item x Mem ++ , Notation Model
-	\item x Runtime++ O(c$^N$) backtracking 4 all
-	\item o more, fine grained editors
-	\item x editor can be lost if it edits the model in a way that the specialized textual representation is not valid any more.
+	\item First, the language model decorating, thus referencing Notation model has to be rebuild on every textual update. Thus, every information which can not be derived from the textual representation is lost.
+	\item  Second, references of the \code{EObject}s in the Structured Characters that refer to \code{EObject}s that might get updated due to textual changes are unstable. This can be circumvented by erasing the reference and use a textual identification stored in an \code{Annotation} to resolve the reference like any inner textual reference: programmatically. Changes to the identification of the defining occurrence, the referred target, must be taken over to the referring occurrence, the textual identification in the \code{Annotation}, by the editor.
+	\item Third, Sentential Characters reference to the language model must be handled, where Parse Tree construction was omitted due to the existence of the Parse Tree Constructor and the referred \code{EObject}. To circumvent the merging of an old and new version of the language model by the use of the Notation model, a containment reference instead of a cross reference from the \code{EObjectProduction} to the referred language \code{EObject} is suggested. Contained Notation model elements depend on data of the first directly or indirectly containing \code{EObjectProduction}, if they are not one itself. Thus, the use of Sentential Characters is restricted to \code{EObjectProduction}, or to parts of the attributed grammar which produce or refer to an \code{EObject} itself. 
 \end{itemize}
+
+\paragraph{EMF based Textual Frameworks}
+At the current state of existing EMF based textual frameworks, only unstable models are produced. Thus manually set cross-references, for example by a graphical editor, must be \emph{manually maintained each time the textual representation is changed}. This work is repetitive, cumbersome, error prone and not maintainable for large, frequently changed models. This basically makes manual set cross references, so all cross references set by an graphical editor, unusable in the general case, where no intrinsic identification of language elements exist in the language. The integration of existing textual frameworks in EMF is \emph{heavily limited in regard to cross references}. Cross references are one of the key advantages of languages defined by Metamodels over context free grammars. This problem is introduced by the use of certain existing Parser generators, ANTLR for Xtext and EMFText and RunCC \footnote{\raggedright \url{http://runcc.sourceforge.net/}} for TEF, by the EMF based textual frameworks. These Parser generators are designed support the creation of a language based on a context free grammar. With the absence of cross references, two equal Parse Trees could be handled as interchangeable or identical. The created references in practice, like symbol tables, are automatically derived by from the textual representation which solely describes the abstract syntax, so this problem does not raise for the purpose the parser generators were designed for. On the other hand parser technologies were developed, which optimally reuse existing parse trees, for the purpose to skip potentially CPU intensive post processing. The Parse Tree reuse of incremental parsers would allow manually set cross-references. The choice of existing EMF based textual frameworks to use non incremental parsers for EMF integration is questionable.
+
+$\square$
