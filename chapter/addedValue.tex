@@ -1,19 +1,3 @@
-\chapter{Unsorted}
-
-\section{Related Work}
-Interestingly, with the exception of the Meta-Environment
-and TEF, all tools that we described generate ANTLR
-parsers. TEF uses a the RunCC parser generator. ANTLR s
-LL(k) or LL(*) parsers cannot cope with left recursion in
-grammars. Likewise, RunCCs LR(k) parsers are limited to
-a subset of the context-free grammars. This means that they
-are not closed under composition, which means that adding
-extensions to a grammar or reusing grammars can introduce
-conflicts in the parser [32]. 
-
-\section{Text Editor}
-as reasoned in \todo{REF XTEXT Conclusion} it is just possible to view the non augmented textual serialized representations of language without potential loss of referential integrity. As a result the modeled data must be described entirely by the word. To seamlessly integrate textual languages in EMF, referential integrity must be kept. To maintain referential integrity, extrinsic IDs could be added  to the token stream. The text editor must be able to handle IDs or the user editing the serialized representation must comply to a contract. A simple example is that an ID is kept unique. Allowing exactly this case might be beneficial because the double occurrence  of an ID indicates the semantics of a change: that one element was copied. A special integration layer between the token stream leaving the text editor and the token stream entering the model parser could handle this case. This is not always true, for example if the original element was referred and the clone can not be distinguished from the original. \\
-The textual model editor must be able to handle IDs in general, not just the ones attached to lexemes. 
 
 
 
