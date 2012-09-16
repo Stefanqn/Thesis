@@ -1,3 +1,39 @@
+\chapter{non}
+
+\section{Overivew}
+
+The first conceptional improvement of this thesis allows \emph{switchable textual representations}. This has been solved by extending the parse tree constructor and by providing a hint to guide the parse tree construction. A hint identifies the next production part.
+The parse tree constructor is conceptually extended to
+\begin{enumerate}
+	\item determine all valid solutions for a node and assign them to it and
+	\item to prefer certain hints while the resulting parse tree is constructed.
+\end{enumerate}
+For combined use with the parse tree constructor a Notation model was developed to
+\begin{itemize}
+	\item provide a proper place to assign alternative presentations and
+	\item to uniquely identify productions or parts of it as hints.
+\end{itemize}
+To uniquely distinguish a specific tree construction for hints, the structure resembled a parse tree structure. The notation model was extended to substitute the parse tree accordingly.\\
+
+
+\emph{Structured Tokens} highlighted the usage of nested structured data, like \code{EObject}s as Tokens, which triggered the second conceptional improvement. To integrate Structured Tokens in a textual serialization, a Structured Character concept was developed. It is based on the basic idea to use a private, unique character as a key for a map entry of a data structured persisted in an adjacent resource, like a file. The designated solution are UTF8 private use characters and a wrapping Lexer which resolves and types the \code{EObject}s from the adjacent resource. This enables the use of \code{EObject}s as atomic characters on the character stream. \\
+
+The possibility to use \code{EObject} on the character stream enables the use of Notation model elements on it. Notation model elements represent parts of the Parse Tree or \emph{Sentential Forms}. To allow their use as \emph{Sentential Token} two improvements are necessary:
+\begin{itemize}
+	\item The extended Lexer must assign the Token name of the Sentential Token properly. The name can not be determined by the generic Notation model elements type, but by a general Notation Metamodel specific rule, which resolves the grammar relation of the Notation element.
+	\item The input grammar for the used Parser generator must be post processed, so that each non terminal on the right hand side of a rule is replaced by a new alternative. The new alternative consists of the original non terminal $\overline{or}$\footnote{\raggedright Metalinguistic or. See \cite{BNF}} a terminal with the synthetic name of the grammar related element, which would be assigned by the Lexer.
+\end{itemize}
+Serialized Sentential Tokens are named \emph{Sentential Characters}. Sentential Characters alone simply hide the data structure of a production part in one character and perfectly integrate in the language described by the context free grammar grammar. \\
+
+To improve the usability of \emph{Structured Characters} for Presentation, following enhancements are suggested:
+\begin{itemize}
+	\item Extensible Parse Tree Constructor, which optionally specializes the determined type based on additional constraints. This is similar to GMFs Extensible Type Registry.
+	\item To omit Parse Tree construction if a specialized presentation type was found. A graphical editor could then safely operate on the Language model elements.
+\end{itemize}
+A user interface could create a graphical editor at the place of his specific specialized presentation character and operate on the Language model elements it hides.\\
+
+
+Finally, the problem of unstable models and its impact on the suggested solution is resumed as part of the discussion.
 
 
 \section{Problems of current Model Text Bridges}
