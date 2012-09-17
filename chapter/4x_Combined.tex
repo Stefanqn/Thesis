@@ -1,6 +1,5 @@
-\section{Combined Use}
-
-The previous chapters demonstrated the Guided Parse Tree Constructor, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on their integrated use and their synergy effects.
+\section{Integrated Use}
+The previous chapters demonstrated the Guided Parse Tree Constructor, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on their integrated use and their synergy effects. It start with the use of the EMF Lexer to allow the declaration instead of the description of the whole language model, continues with combined use of Parse Tree Constructor and Notation Model to allow different semantically equivalent representations. The implementation of Sentential Tokens is then addressed which leads to Sentential Tokens and Graphical Editors. 
 
 It is assumed that:
 \begin{enumerate}
@@ -53,9 +52,6 @@ The combined use of Sentential Characters and the Guided Parse Tree Constructor 
 
 %Conclude
 The presented solution offers to create graphical editors as an alternative to parts of a textual representation. This allows the editors to be fine grained for specific parts of the model. There is no need to handle the model root or to query specific model parts. It allows multiple graphical editors from different sources to coexist without interference in a single textual document using an attributed context free grammar as the common denominator. Changing the representation is achieved without a change in the language model and by simply changing a reference in Notation Model. Representing text in the graphical editors can be achieved by spawning a new parser instance inside the graphical editor with an appropriate synchronized new root. Thus, interchangeable mixed representation of textual and graphical notation is possible.
-
-%%%%%%%%%%%%%%%%%%%%%%% Controller %%%%%%%%%%%%%%%%%%%%%%%
-\paragraph{Notation Model for controllers} A potential use of the Notation Model is the same as its conceptional origin in GMF: as the model for a controller in the model view controller pattern. Because textual representations are less interactive than graphical representations and due to the fact that updates of the model are done by the parser and updates of the view are to a large extent handled by the Parse Tree constructor, a large extent of the controllers could be stateless. Stateless controllers can be reused for a set of model elements. Notation Model based controllers could enable semantic edits, for example, the movement of a selected element to the next valid location. 
 
 
 

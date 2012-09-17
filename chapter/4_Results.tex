@@ -24,7 +24,9 @@ Y returns A : "B" v=ID;
 No isomorphism of the type \code{A} to a grammar rule, because both rules return an \code{EObject} of type \code{A}.
 
 \subsection{Parse Tree Constructor} \label{sub:Xtxt:PTC}
+This Xtext Parse Tree Constructor section continues the Parse Tree Constructor paragraph \ref{xtxt:ptc} of related work by two descriptive examples.
 
+\paragraph{First Example}
 For example, if the following grammar parses \kode{somekeyword 0 C}, the AST in figure \ref{AST:CSP} will be constructed.
 \begin{xtxt}
 S  	:  	v=A 
@@ -48,8 +50,23 @@ Z 		: 	 {Z} "Z" ;
 
 
 To create this Parse Tree without a Node Model, the decision if the rule of the root \code{Obj} is \code{A} or \code{X} can just be decided after the type of it's right child \code{C} is determined. \\
-
 It is possible that all grammar rules return the same type, so type information would be useless to guide production rule resolution.\\
+
+\paragraph{Second Example}
+In the second example the nondeterministic finite automaton for the following rule is presented in figure \ref{PTCEx}. The Parse Tree Constructor determines all non default values of \code{EObject} of \code{AClass}. It then tries to find a valid path from the top to the \code{stop} node. A path is valid if a matching non default value is consumed at a constraining node and if no non default value is left when the \code{stop} node is reached. It is obvious that if \code{j} would have left out, two paths would have equal constraining nodes. In a valid scenario this consuming process is subsequently done for every model element from the models root downwards until a tree of valid paths is found which successfully visited all \code{EObject}s. Xtext skips Parse Tree construction and directly prints all nodes, including production nodes, on each path to the character stream. This assumes a certain associativity.   
+
+\begin{xtxt}
+A returns AClass:  	"option1" v=INT "post"
+				| 	"option2" v=INT j=ID
+				|	"ID"	 i+=ID+;
+\end{xtxt}
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.9]{gfx/pdf/A_AClass} 
+\caption{Second Parse Tree Constructor Example}
+\label{PTCEx}
+\end{figure}
 
 
 \subsection{Grammar}
