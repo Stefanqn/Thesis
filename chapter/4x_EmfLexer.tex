@@ -15,7 +15,7 @@ The ideal characteristics are:
 \end{itemize}
 
 \subsubsection{Unicode Private-Use Characters}
-Unicode \cite{Unicode} offers a possible solution. Unicode is a universal character encoding standard for consistent encoding and exchange of text data. It is the default encoding of HTML and XML and is implemented in all modern operating systems. It specifies a numeric value (code point) and name for each character. Unicode was developed in conjunction with the Universal Character Set and can be represented by widely available encodings like UTF-8. The Unicode Standard defines private-use characters, in which interpretation is not specified and is determined by a private agreement among cooperative users. For example, Apple uses a private character to present its apple logo. An application specific changed interpretation of, for example the character representing the apple logo is valid, as it specifies its intended behavior according to a private agreement.\\ \todo{<< fragment sentence}
+Unicode \cite{Unicode} offers a possible solution. Unicode is a universal character encoding standard for consistent encoding and exchange of text data. It is the default encoding of HTML and XML and is implemented in all modern operating systems. It specifies a numeric value (code point) and name for each character. Unicode was developed in conjunction with the Universal Character Set and can be represented by widely available encodings like UTF-8. The Unicode Standard defines private-use characters, in which interpretation is not specified and is determined by a private agreement among cooperative users. For example, Apple uses a private character to present its apple logo. An application specific changed interpretation of, for example the character representing the apple logo is valid, because it specifies its intended behavior according to a private agreement.
 The private use characters are intended for software developers. Compared to the ideal characteristics:
 \begin{itemize}
 	\item They are stand alone characters and are not bindable per se.
@@ -59,8 +59,8 @@ The workflow of an \code{EMF Lexer} is thus far:
 \end{enumerate}
 
 \paragraph{Referring Sentential Forms}
-The assignment of the token's name is  static in \ref{lexer:RefEObj}, the previous solution. To leverage the approach of letting the lexical analyzer return \code{EObject}s, the token name can be determined by rules. These rules can be added to, and interpreted by the \code{EObject Typer}. The \code{Typer Rules} process the input \code{EObject} and assign the token name based on runtime analysis of the input. Sentential forms are serialized using the notation model. To enable the reference to sentential forms, an \code{EObject Typer} rule is necessary which assigns the token name properly. \\
-The workflow of \ref{lexer:RefEObj} is extended by a \code{Typer Rule}, which:
+The assignment of the token's name is  static in the previous paragraph. To leverage the approach of letting the lexical analyzer return \code{EObject}s, the token name can be determined by rules. These rules can be added to, and interpreted by the \code{EObject Typer}. The \code{Typer Rules} process the input \code{EObject} and assign the token name based on runtime analysis of the input. Sentential forms are serialized using the notation model. To enable the reference to sentential forms, an \code{EObject Typer} rule is necessary which assigns the token name properly. \\
+The workflow of the previous paragraph \ref{lexer:RefEObj} is extended by a \code{Typer Rule}, which:
 \begin{enumerate}
 	\item Tests the input \code{EObject} if it is an instance of \code{AlterableElement}. If it is not, the rule is not applied.
 	\item Tests if the input is an instance of \code{NotationModel:List}. 

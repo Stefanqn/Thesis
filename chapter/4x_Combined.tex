@@ -1,6 +1,6 @@
 \section{Combined Use}
 
-The previous chapters \todo{Ref} demonstrated the Guided Parse Tree Constructor, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on their integrated use and their synergy effects. \todo{overview}
+The previous chapters demonstrated the Guided Parse Tree Constructor, the Notation Metamodel and the EMF Lexer as separated as possible. This chapter focuses on their integrated use and their synergy effects.
 
 It is assumed that:
 \begin{enumerate}
@@ -20,7 +20,7 @@ In case the Parse Tree Constructor found more than one valid grammar rule for a 
 \paragraph{Sentential Tokens} \label{SententialTokens}
 A Sentential form is an intermediate form for creating words. Tokens which store a part of the parse tree are called \emph{Sentential Tokens} in this thesis. The name originates from the idea to store the tree structure of produced non-terminal $N$ in a token $n_S$ and let the parser use them interchangeably. In this thesis, this concept is broadened to \code{Terminal}s and \code{Sequence}s. The concept of sentential forms is necessary for incremental parsers and can be leveraged for visual editing.
  
-The \code{EMF Lexer} \todo{ref} section describes the possibility to serialize notation model elements and assign the token name according to the referred element of the grammar model, but lacks further parser integration. The suggested approach is not to add special functionality to the parser framework, but to post process the grammar before it's used for the parser framework. If the parser framework uses a generative approach, either code or parse table generation, this post processing is transparent for the language designer and does not require additional effort to them. 
+The EMF Lexer section \ref{sec:EMFLexer} describes the possibility to serialize notation model elements and assign the token name according to the referred element of the grammar model, but lacks further parser integration. The suggested approach is not to add special functionality to the parser framework, but to post process the grammar before it's used for the parser framework. If the parser framework uses a generative approach, either code or parse table generation, this post processing is transparent for the language designer and does not require additional effort to them. 
 Post processing of input grammar requires the following steps:
 \begin{enumerate}
 	\item collect all \code{Rule}s, \code{TerminalType}s and \code{Sequence}s of the grammar in a set $\mathbb{T}$.
@@ -61,5 +61,4 @@ The presented solution offers to create graphical editors as an alternative to p
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Discussion %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\todo{summary}
 %%%%%%%%%%%%%%%%%%%%%%%% Discussion%%%%%%%%%%%%%%%%%%%%%%%%

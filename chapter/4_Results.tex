@@ -25,7 +25,7 @@ No isomorphism of the type \code{A} to a grammar rule, because both rules return
 
 \subsection{Parse Tree Constructor} \label{sub:Xtxt:PTC}
 
-For example, if the following grammar parses \kode{somekeyword 0 C}:
+For example, if the following grammar parses \kode{somekeyword 0 C}, the AST in figure \ref{AST:CSP} will be constructed.
 \begin{xtxt}
 S  	:  	v=A 
 	| 	v=X;
@@ -34,14 +34,20 @@ A returns Obj	: 	l=B r=C   ;
 X returns Obj	: 	l=Y r=Z   ;
 B returns N  	:  	"somekeyword" 	v="0";
 Y returns N  	: 	"otherkeyword" 	v="0";
-C 		:  	 "C" ;
-Z 		: 	 "Z" ;
+C 		:  	 {C} "C" ;
+Z 		: 	 {Z} "Z" ;
 \end{xtxt}
-the following AST will be constructed \todo{fix this} \\ 
-      Obj			\\
-     /   \textbackslash		\\
-N(v='0')   C	\\
-To create this parse tree without a node model, the decision if the rule of the root EObject is 'A' or 'X' can just be decided after determining the type of it's right child 'C'. \todo{clumsy} \\
+
+
+\begin{figure}
+\centering
+\includegraphics[scale=1.3]{gfx/ex/CSP} 
+\caption{AST for ``somekeyword 0 C''}
+\label{AST:CSP}
+\end{figure}
+
+
+To create this parse tree without a node model, the decision if the rule of the root \code{Obj} is \code{A} or \code{X} can just be decided after the type of it's right child \code{C} is determined. \\
 
 It is possible that all grammar rules return the same type, so type information would be useless to guide production rule resolution.\\
 
@@ -58,9 +64,9 @@ A much greater impact on the grammar is it's inability to express left recursive
 XText is, like EMFText \cite{EMFTextMan}, integrated in EMF as an EMF Resource. The responsibility of resources is to serialize and deserialize models, which leads to various problems: 
 
 \begin{itemize}
-	\item The grammar must describe the whole model: the model must inform what is not regarded by the grammar, except for volatile information. Adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent that restriction, the whole model must be textually described. A possible solution would be to create additional EObjects in an additional Resource, which points at the EObject in the XTextResource which should be enriched. With an ECrossReferenceAdapter the inverse references and thus the additional information of the extended object \todo{<< fragment sentence}. This technique to extend an EObject in a non-invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
-	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the actual model. In conjunction with a non-incremental parser, model elements are replaced instead of updated. Furthermore, EMF's ResourceSet, which keeps referential integrity, is bypassed. XText demands the programmer to handle referential integrity or to "return stable fragments for its contained elements ". For example, the expression "int i=0" in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element a universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
-	\item Because the model contained in a resource is \todo{wrong!} not modified in a ResourceSet and extrinsic, non-grammar conform information like IDs can not be added or integrated persistently to model elements, referential integrity can not be maintained. On the other hand, the determination of changes needed to update a model without unique IDs is based on heuristics, thus potentially inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict the ability to store the model in textual form for, e.g., viewing and versioning. 
+	\item The grammar must describe the whole model: the model must inform what is not regarded by the grammar, except for volatile information. Adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent that restriction, the whole model must be textually described. A possible solution would be to create additional EObjects in an additional Resource, which points at the EObject in the XTextResource which should be enriched. With an ECrossReferenceAdapter the inverse references and thus the additional information of the extended object can be obtained. This technique to extend an EObject in a non-invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
+	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the actual model in the memory. In conjunction with a non-incremental parser, model elements are replaced instead of updated. Furthermore, EMF's ResourceSet, which keeps referential integrity, is bypassed. XText demands the programmer to handle referential integrity or to "return stable fragments for its contained elements ". For example, the expression \code{int i=0} in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element a universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
+	\item Because the model contained in a resource is not modified in memory and extrinsic, non-grammar conform information like IDs can not be added or integrated persistently to model elements, referential integrity can not be maintained. On the other hand, the determination of changes needed to update a model without unique IDs is based on heuristics, thus potentially inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict the ability to store the model in a textual form for, e.g., viewing and versioning. 
 \end{itemize}
 
 \subsection{Node Model}
@@ -88,23 +94,21 @@ The general idea of the presented solution combines three simple concepts. The f
 	\item A parse tree constructor, which is extensible in regard to assign types to and to skip parse tree construction for invisible elements. This allows the graphical editor to use the abstract syntax tree directly as a data source. 
 \end{itemize}
 
-Figure \ref{ConceptFigure} shows the conceptional overview. \todo{IntegratE}
-
+Figure \ref{ConceptFigure} shows the conceptional overview.
 \begin{figure}
 \centering
 \includegraphics[scale=0.75]{gfx/ex/Concept} 
 \caption{Conceptual Overview}
 \label{ConceptFigure}
 \end{figure}
-
-On the right side of the diagram are the classical parser related elements, from below upwards:
+On the right side of the figure are the classical parser related elements, from below upwards:
 \begin{itemize}
 	\item a character stream
 	\item a lexical analyzer or ``Lexer'', which reads the characters and groups them into Tokens.
 	\item the token stream, which is produced by a Lexer and used by a Parser to create the ``Parse Tree''
 \end{itemize}
 
-On the left side is a ``Language Model'', which is deduced from the Parse Tree by the attribution of the grammar. In parser literature, \emph{this Language Model is called an Abstract Syntax Tree}. The use of a modeling term instead of parsing term emphasizes where models are integrated and that language descriptions in modeling concepts are abstract. In contrast to context free grammars, a language in modeling terms lacks a concrete notation. It is not mandatory that the language model is equal to the abstract syntax tree. Until both data structured are combined in \ref{sec:MM:CFGs} \todo{check ref}, both terms are used. \\
+On the left side is a ``Language Model'', which is deduced from the Parse Tree by the attribution of the grammar. In parser literature, \emph{this Language Model is called an Abstract Syntax Tree}. The use of a modeling term instead of parsing term emphasizes where models are integrated and that language descriptions in modeling concepts are abstract. In contrast to context free grammars, a language in modeling terms lacks a concrete notation. \\
 The inverse transformation, from Language Model to Parse Tree is done by the Parse Tree Constructor. This transformation is ambiguous, because for one Language Model more than one valid Parse Tree can be constructed. \\
 The described architecture is implemented in XText. This thesis conceptually extends the architecture by extending the Parse Tree Constructor, by the introduction of a \emph{Notation Model} and an \emph{EMF Lexer}.\\
 The Parse Tree Constructor is extended by:
@@ -135,10 +139,8 @@ The Guided Parse Tree Constructor is responsible to find all valid parse trees f
 	\item create a parse tree according to the best tree, with the most promising combination.
 \end{itemize}
  
-The suggested solution is close to the one implemented in Xtext. Xtext's solution, which is described in \ref{xtxt:ptc}, stops after finding one combination. 
-To enable multiple representations, the alternatives need to be made available. This is done by the notation model, which is described in \ref{chp:NotMM}. The notation model is able to be equivalent to a parse tree, but also allows the user to refer to following production parts, called hints. EMFs \code{ECrossReferenceAdapter} allow navigation of unidirectional references in both directions. This allows the use or reuse of notation model elements which refer to AST nodes just by getting all referring \code{EObject}s and filtering a type.
-
-\todo{blueprints based on s-attributes. Tree struct based on SAttrs.}
+The suggested solution is close to the one implemented in Xtext. Xtext's solution, which is described in section \ref{xtxt:ptc}, stops after finding one combination. 
+To enable multiple representations, the alternatives need to be made available. This is done by the notation model, which is described in section \ref{chp:NotMM}. The notation model is able to be equivalent to a parse tree, but also allows the user to refer to following production parts, called hints. EMFs \code{ECrossReferenceAdapter} allow navigation of unidirectional references in both directions. This allows the use or reuse of notation model elements which refer to AST nodes just by getting all referring \code{EObject}s and filtering a type.
 
 \paragraph{Hints}
 A hint is a reference to a following production. So with hints, a node in the parse tree is not only labeled by its non-terminal, but also by its production. Hints specify a single production without referring to a parse tree part, which is important, if multiple productions are possible. Thus, hints do not refer to actual content but define the structure of the content. Regarding the Parse Tree Constructor, the AST is present, but it is ambiguous as to which structure to use to hold its contained data.  
