@@ -7,21 +7,21 @@ This section contains definitions in alphabetical order.
 \paragraph{Abstract Syntax} Meta Model elements and their relation are the abstract syntax of a language. \cite{MDSD}
 
 \paragraph{Abstract Syntax Tree (AST)}  
-The abstract syntax tree represents the hierarchical syntactic structure of a language.  Abstract syntax trees resemble parse trees to an extent. In the parse tree, interior nodes represent nonterminals including ``helpers'' of one sort of another. In the syntax tree, these helpers are typically dropped \cite{DragonBook}.
+The abstract syntax tree represents the hierarchical syntactic structure of a language.  Abstract syntax trees resemble Parse Trees to an extent. In the Parse Tree, interior nodes represent nonterminals including ``helpers'' of one sort of another. In the syntax tree, these helpers are typically dropped \cite{DragonBook}.
 
 \paragraph{Alphabet}
 ``An alphabet is any finite set of symbols.'' Examples of symbols are letters and digits \cite{DragonBook}.
 
 
 \paragraph{Ambiguity} 
-A grammar which can generate more than one parse tree for a given string of terminals is said to be ambiguous \cite{DragonBook}.
+A grammar which can generate more than one Parse Tree for a given string of terminals is said to be ambiguous \cite{DragonBook}.
 
 % C D E F G
  
 \paragraph{Concrete Syntax} In contrast to the Abstract Syntax, the Concrete Syntax defines the actual representation of the language \cite{MDSD}.
 
 \paragraph{Constraint Satisfaction Problem (CSP) in regard to Parsing} 
-Besides answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Constraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules. It is possible to build the parse tree by the path taken, or the sequence of rule applications by the parser.  Top-down parsers identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree \cite{ParserBook}.
+Besides answering the question if a word is part of a language, a practical reason for parsing is to obtain the structure of a word to help processing or translating it further. To parse a word according to a grammar means to reconstruct the production tree that indicates how the given word can be produced from the given grammar. This is a specific Constraint Satisfaction Problem (CSP): To consume all tokens on the input stream constrained by the grammar rules. It is possible to build the Parse Tree by the path taken, or the sequence of rule applications by the parser.  Top-down parsers identify the production rules in post-order, bottom-up parsers tend to identify them in postfix order. This is called Linearization of the Parse Tree \cite{ParserBook}.
 
 \paragraph{Context Free Grammar (CFG)}
 A context-free grammar is described by a quadruple, consisting of terminals, nonterminals, a start symbol and productions.\\
@@ -93,10 +93,10 @@ A Lexer, also denoted as lexical analyzer, allows a parser to treat multi-charac
 ``Parsing is the process of structuring a linear representation in accordance with a given grammar.'' \cite{ParserBook}.
 
 \paragraph{Parse Forest} 
-A set of parse trees. If duplicated subtrees are combined, the resulting structure is called a parse graph. \cite{ParserBook}
+A set of Parse Trees. If duplicated subtrees are combined, the resulting structure is called a parse graph. \cite{ParserBook}
 
 \paragraph{Parse Tree}
-Given a context-free grammar, a parse tree, according to the grammar, is a tree with these properties \cite{DragonBook}:
+Given a context-free grammar, a Parse Tree, according to the grammar, is a tree with these properties \cite{DragonBook}:
 \begin{enumerate}
 	\item the start symbol is the roots label.
 	\item The leafs are labeled by a terminal or by $\epsilon$.
@@ -141,11 +141,11 @@ This section provides a selected overview of current language and editing approa
 ANTLR \footnote{\raggedright \url{http://www.antlr.org/}}, ``ANother Tool for Language Recognition'', is an open source parser generator framework for LL(*) parsers with selective backtracking. It allows the creation of Java parsers and lexers from a grammar file. The grammar file contains among other things an EBNF grammar with actions \cite{ANTLR}.
 
 \subsection{Barista}
-Barista \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/barista.html}} is an editor framework for user interfaces that offers alternative structured visual representations on an internal abstract syntax tree. It uses Citrus \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/citrus.html}} as a user interface toolkit \cite{citrus} and adds data structures and a textual interaction technique to it. It mimics the interaction technique of conventional text editors to overcome a central usability problem of previously structured code editors by fluidly changing between structured and unstructured text. It is based on the model view controller pattern \cite{patterns} and the presented editors structure depends on the models structure. The model in Barista consists of \emph{Structures} and \emph{Tokens}. Structures are tree nodes and Tokens the leafs. A Token is assigned to a property of a Structure and is contained in it. For each Structure, a grammar is inferred or provided and for each Token, a regular expression is specified that defines its legal strings and white space. The general idea of Barista's textual interaction technique is to unparse, retokenize and reparse a Token if its value is not part of the language described by the regular expression. Barista uses a variant of \cite{iglrPaper} incremental parsing Algorithm to reuse the abstract syntax tree's structure \cite{Barista}. 
+Barista \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/barista.html}} is an editor framework for user interfaces that offers alternative structured visual representations on an internal abstract syntax tree. It uses Citrus \footnote{\raggedright \url{http://www.cs.cmu.edu/~NatProg/citrus.html}} as a user interface toolkit \cite{citrus} and adds data structures and a textual interaction technique to it. It mimics the interaction technique of conventional text editors to overcome a central usability problem of previously structured code editors by fluidly changing between structured and unstructured text. It is based on the model view controller pattern \cite{patterns} and the presented editors structure depends on the models structure. The model in Barista consists of \emph{Structures} and \emph{Tokens}. Structures are tree nodes and tokens the leafs. A token is assigned to a property of a Structure and is contained in it. For each Structure, a grammar is inferred or provided and for each token, a regular expression is specified that defines its legal strings and white space. The general idea of Barista's textual interaction technique is to unparse, retokenize and reparse a token if its value is not part of the language described by the regular expression. Barista uses a variant of \cite{iglrPaper} incremental parsing Algorithm to reuse the abstract syntax tree's structure \cite{Barista}. 
 
 \subsection{Harmonia}
 The Harmonia Research Project \footnote{\raggedright \url{http://harmonia.cs.berkeley.edu/harmonia/}} is a framework for constructing interactive
-language-based programming tools. It emerged from two earlier prototypes: \emph{PAN} and \emph{ENSEMBLE}. Harmonia's goal is to facilitate building interactive tools, so the provided services are \emph{incremental} and the internal program representation maintained by the framework is \emph{updated} as a program is manipulated. Harmonia provides syntactic and semantic analysis services \cite{harmonia} and can be used to augment text editors with language aware editing and navigation functionality. Harmonia adopts from ENSEMBLE the incremental Lexer algorithm \cite{ilex} and the incremental Parser algorithm \cite{iglrPaper}. Incremental parsing utilizes persistent parse trees and the parse input consists of both terminal and \emph{nonterminal} symbols \cite{iglrPaper}. Ensemble also has a graphical presentation formalism based on tree transformations \cite{ensemble}. This transformed graphical notation is not editable.
+language-based programming tools. It emerged from two earlier prototypes: \emph{PAN} and \emph{ENSEMBLE}. Harmonia's goal is to facilitate building interactive tools, so the provided services are \emph{incremental} and the internal program representation maintained by the framework is \emph{updated} as a program is manipulated. Harmonia provides syntactic and semantic analysis services \cite{harmonia} and can be used to augment text editors with language aware editing and navigation functionality. Harmonia adopts from ENSEMBLE the incremental Lexer algorithm \cite{ilex} and the incremental Parser algorithm \cite{iglrPaper}. Incremental parsing utilizes persistent Parse Trees and the parse input consists of both terminal and \emph{nonterminal} symbols \cite{iglrPaper}. Ensemble also has a graphical presentation formalism based on tree transformations \cite{ensemble}. This transformed graphical notation is not editable.
 
 \subsection{Integrated Development Environments}
 Integrated Development Environments (IDEs) like Eclipse, IntelliJ IDEA, Netbeans and Visual Studio parse the source code as it is typed; this is called Background Parsing. They use the parsed abstract syntax tree to provide editor services like outlining, refactoring, error marking and content completion. These are syntax-recognizing editors. LavaPE \footnote{\raggedright \url{http://lavape.sourceforge.net/}} is an example of an IDE with a syntax directed editor.  
