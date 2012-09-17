@@ -3,6 +3,13 @@ This chapter begins with an analysis of Xtext to identify possible starting poin
 
 \section{Xtext Analysis}
 This section analyses Xtext beyond the scope of Xtext's manual \cite{XTextMan}. At the beginning, isomorphism relations of Metamodel and grammar is discussed. Insights about isomorphism explain the variety of valid Parse Trees for a model. This leads to further insights in the Parse Tree Constructor. Subsequent peculiarities of Xtext's grammar are mentioned, followed by deficits of XtextResource and Xtext's Node Model for the desired solution.
+The following central perceptions are made:
+\begin{itemize}
+	\item There is no isomorphism from grammar production to EObject, which means multiple representations of the same \code{EObject} are theoretically possible.
+	\item The Parse Tree Constructor selects the representation, but alternative representations are not accessible to the user or language designer.
+	\item The used, non incremental parsing technology results in unstable models.
+	\item The grammar must completely describe the model.
+\end{itemize}
 
 \subsection{Model Grammar Isomorphism} \label{sec:isomorph}
 The explicit return types decouple the \code{EObject} type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraints strongly limits its useability. Return types raise the abstraction level, because an \code{EObject} of the abstract syntax can have a context dependent representation. It also allows multiple representations of the same \code{EObject} type, so this has a special significance for the Parse Tree Constructor.
