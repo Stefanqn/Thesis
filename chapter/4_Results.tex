@@ -5,7 +5,7 @@ This chapter begins with an analysis of Xtext to identify possible starting poin
 This section analyses Xtext beyond the scope of Xtext's manual \cite{XTextMan}. At the beginning, isomorphism relations of Metamodel and grammar is discussed. Insights about isomorphism explain the variety of valid Parse Trees for a model. This leads to further insights in the Parse Tree Constructor. Subsequent peculiarities of Xtext's grammar are mentioned, followed by deficits of XtextResource and Xtext's Node Model for the desired solution.
 
 \subsection{Model Grammar Isomorphism} \label{sec:isomorph}
-The explicit return types decouple the EObject type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraints strongly limits its useability. Return types raise the abstraction level, because an \code{EObject} of the abstract syntax can have a context dependent representation. It also allows multiple representations of the same EObject type, so this has a special significance for the Parse Tree Constructor.
+The explicit return types decouple the \code{EObject} type from the grammar rules in a well defined manner. Simple actions already made this possible, but the subtype of return type constraints strongly limits its useability. Return types raise the abstraction level, because an \code{EObject} of the abstract syntax can have a context dependent representation. It also allows multiple representations of the same \code{EObject} type, so this has a special significance for the Parse Tree Constructor.
 
 On the other hand, this changes the time complexity of Parse Tree construction from $O(N)$ to $O(c^N)$ of the current XText implementation. The following explanation of choice mappings hint the problem, but it is explained in further detail in the Parse Tree Constructor at \ref{sub:Xtxt:PTC}: 
 \begin{xtxt}
@@ -53,7 +53,7 @@ It is possible that all grammar rules return the same type, so type information 
 
 
 \subsection{Grammar}
-In the XText grammar, it is not possible to statically assign a value to a structural feature. For example, to assign \code{0} to an integer attribute \code{v} of class MyBoolean in the "false" case and \code{1} in the "true" case requires writing a special value converter. 
+In the XText grammar, it is not possible to statically assign a value to a structural feature. For example, to assign \code{0} to an integer attribute \code{v} of class \code{MyBoolean} in the \code{"false"} case and \code{1} in the \code{"true"} case requires writing a special \code{ValueConverter}. 
 \begin{xtxt}
 MyBoolean:  "true" | "false"
 \end{xtxt}
@@ -61,22 +61,22 @@ MyBoolean:  "true" | "false"
 A much greater impact on the grammar is it's inability to express left recursive grammars and the consequences. This is owed to the LL(*) parsing algorithm of ANTLR, the parser generator used by XText. This requires left factoring and grammar rewriting which lead to XText allowing tree rewriting of the AST by assigned actions. If only parser and AST construction is regarded, this is more or less an inconvenience for the grammar designer who needs to left-factorize, but it creates problems regarding parse tree construction and validation for XText's current implementation. Considering that the current parse tree construction algorithm has a runtime of $O(c^N)$, it is arguable to use a GLR parsing algorithm with $O(n^3)$ to avoid the need for grammar massaging and thus AST rewriting.
 
 \subsection{XtextResource}
-XText is, like EMFText \cite{EMFTextMan}, integrated in EMF as an EMF Resource. The responsibility of resources is to serialize and deserialize models, which leads to various problems: 
+XText is, like EMFText \cite{EMFTextMan}, integrated in EMF as an \code{Resource}. The responsibility of resources is to serialize and deserialize models, which leads to various problems: 
 
 \begin{itemize}
-	\item The grammar must describe the whole model: the model must inform what is not regarded by the grammar, except for volatile information. Adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent that restriction, the whole model must be textually described. A possible solution would be to create additional EObjects in an additional Resource, which points at the EObject in the XTextResource which should be enriched. With an ECrossReferenceAdapter the inverse references and thus the additional information of the extended object can be obtained. This technique to extend an EObject in a non-invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
-	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the actual model in the memory. In conjunction with a non-incremental parser, model elements are replaced instead of updated. Furthermore, EMF's ResourceSet, which keeps referential integrity, is bypassed. XText demands the programmer to handle referential integrity or to "return stable fragments for its contained elements ". For example, the expression \code{int i=0} in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element a universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
-	\item Because the model contained in a resource is not modified in memory and extrinsic, non-grammar conform information like IDs can not be added or integrated persistently to model elements, referential integrity can not be maintained. On the other hand, the determination of changes needed to update a model without unique IDs is based on heuristics, thus potentially inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict the ability to store the model in a textual form for, e.g., viewing and versioning. 
+	\item The grammar must describe the whole model: the model must inform what is not regarded by the grammar, except for \code{volatile} information. Adding additional information, like an ID, is impossible without incorporating it in the grammar. To circumvent that restriction, the whole model must be textually described. A possible solution would be to create additional \code{EObject}s in an additional \code{Resource}, which points at the \code{EObject} in the \code{XTextResource} which should be enriched. With an \code{ECrossReferenceAdapter} the inverse references and thus the additional information of the extended object can be obtained. This technique to extend an \code{EObject} in a non-invasive manner is used to implement UML2 stereotypes in eclipse UML. This concept depends on references and their integrity.
+	\item The XText editor edits the text file, meaning it edits the serialized form of the model, not the actual model in the memory. In conjunction with a non-incremental parser, model elements are replaced instead of updated. Furthermore, EMF's \code{ResourceSet}, which keeps referential integrity, is bypassed. XText demands the programmer to handle referential integrity or to ``return stable fragments for its contained elements'' \cite{XTextMan}. For example, the expression \code{int i=0} in a programming language does not contain an intrinsic identifier, so this is impossible for an arbitrary language. UML2 solves the problem of referential integrity by assigning every model element a universal unique identifier (UUID). These UUIDs are handled by the resource and are  externally attached to the model objects. To keep referential integrity, either modifications must be done in a ResourceSet or extrinsic UUIDs must be used. 
+	\item Because the model contained in a \code{Resource} is not modified in memory and extrinsic, non-grammar conform information like IDs can not be added or integrated persistently to model elements, referential integrity can not be maintained. On the other hand, the determination of changes needed to update a model without unique IDs is based on heuristics, thus potentially inaccurate.  To enable proper updates and keep referential integrity, editing must not be done on the textual serialized form of a model. This does not contradict the ability to store the model in a textual form for, e.g., viewing and versioning. 
 \end{itemize}
 
 \subsection{Node Model}
 The potential use of the node model is strongly restricted in Xtext, for the following reasons:
 \begin{itemize}
-	\item The node model is not an EMF model. 
-	\item The node model is not explicitly available without running the XText parser, because it is created by the parser from information of the concrete serialized language model. 
+	\item The Node Model is not an EMF model. 
+	\item The Node Model is not explicitly available without running the XText parser, because it is created by the parser from information of the concrete serialized language model. 
 	\item The use of the runtime instances of the node model is restricted by the API: ``clients should never keep a reference to a node as it may be invalidated at any time and the very same object could be reused in another subtree of the full parse tree.''\cite{XTextAPI}
-	\item The node model is not updated during parse tree construction. If an update is required, an additional parse with its problematic replacing instead of updating behavior is necessary.
-	\item Even if the parse tree constructor would construct the node model, it takes the first valid solution. It is not possible to choose between different valid representations or prefer a valid one which are semantically equivalent, e.g.,
+	\item The Node Model is not updated during Parse Tree construction. If an update is required, an additional parse with its problematic replacing instead of updating behavior is necessary.
+	\item Even if the Parse Tree Constructor would construct the Node Model, it takes the first valid solution. It is not possible to choose between different valid representations or prefer a valid one which are semantically equivalent, e.g.,
 \begin{xtxt}
 Foreach 		: 	Map | For;
 Map returns FE  	:  	"map" 		v=ID;
@@ -104,12 +104,12 @@ Figure \ref{ConceptFigure} shows the conceptional overview.
 On the right side of the figure are the classical parser related elements, from below upwards:
 \begin{itemize}
 	\item a character stream
-	\item a lexical analyzer or ``Lexer'', which reads the characters and groups them into Tokens.
+	\item a lexical analyzer or lexer, which reads the characters and groups them into tokens.
 	\item the token stream, which is produced by a Lexer and used by a Parser to create the ``Parse Tree''
 \end{itemize}
 
-On the left side is a ``Language Model'', which is deduced from the Parse Tree by the attribution of the grammar. In parser literature, \emph{this Language Model is called an Abstract Syntax Tree}. The use of a modeling term instead of parsing term emphasizes where models are integrated and that language descriptions in modeling concepts are abstract. In contrast to context free grammars, a language in modeling terms lacks a concrete notation. \\
-The inverse transformation, from Language Model to Parse Tree is done by the Parse Tree Constructor. This transformation is ambiguous, because for one Language Model more than one valid Parse Tree can be constructed. \\
+On the left side is a language model, which is deduced from the Parse Tree by the attribution of the grammar. In parser literature, \emph{this Language Model is called an Abstract Syntax Tree}. The use of a modeling term instead of parsing term emphasizes where models are integrated and that language descriptions in modeling concepts are abstract. In contrast to context free grammars, a language in modeling terms lacks a concrete notation. \\
+The inverse transformation, from Language Model to Parse Tree is done by the Parse Tree Constructor. This transformation is ambiguous, because for one language model more than one valid Parse Tree can be constructed. \\
 The described architecture is implemented in XText. This thesis conceptually extends the architecture by extending the Parse Tree Constructor, by the introduction of a \emph{Notation Model} and an \emph{EMF Lexer}.\\
 The Parse Tree Constructor is extended by:
 \begin{itemize}
@@ -125,7 +125,7 @@ The Notation Model is introduced to:
 \end{itemize} 
 The EMF Lexer is introduced to:
 \begin{itemize}
-	\item separate private use characters from the character stream used for the original Lexer.
+	\item separate private use characters from the character stream used for the original lexer.
 	\item resolve the data structure identified by a private use character.
 	\item determine a token name by properties of the \code{EObject}s in that data structure. This assignment process can be customized by additional rules that traverse the resolved data structure.
 \end{itemize}
@@ -161,14 +161,14 @@ The basic steps of Parse Tree Construction are:
 	\item User preferences to prefer certain alternatives.
 	\item Language designer preferences.
 	\item Number of default values used as negative criteria.
-	\item Number of direct EObjects required as negative criteria, thus prefer description of declaration.
+	\item Number of direct \code{EObject}s required as negative criteria, thus prefer description of declaration.
 \end{enumerate}
 
 The suggested behavior is, that the user does not specify the whole alternative representation, but selects an alternative. Let the Parse Tree Constructor create and display the new representation and iteratively refine the presentation. 
 
 
 \section{Grammar}
-In this section, a metamodel for a synthesized attributed grammar is developed to formally describe the required grammar relation of the Notation Metamodel. The described grammar is simpler than Xtext's grammar, especially in regard to Actions. First a Metamodel for a normal, non-attributed, grammar is defined, then an example instance of it is presented, finally the grammar metamodel is completed by an attribution extension.
+In this section, a Metamodel for a synthesized attributed grammar is developed to formally describe the required grammar relation of the Notation Metamodel. The described grammar is simpler than Xtext's grammar, especially in regard to Actions. First a Metamodel for a normal, non-attributed, grammar is defined, then an example instance of it is presented, finally the grammar Metamodel is completed by an attribution extension.
 
 \subsection{Grammar Metamodel}
 %%%%%%%% GrammarMM	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -179,7 +179,7 @@ In this section, a metamodel for a synthesized attributed grammar is developed t
 \label{MM:EBNF}
 \end{figure}
 
-Figure \ref{MM:EBNF} shows a metamodel for an EBNF grammar. The metamodel lacks the ability to define lexemes.  \\
+Figure \ref{MM:EBNF} shows a Metamodel for an EBNF grammar. The Metamodel lacks the ability to define lexemes.  \\
 Compared to the definition of a context free grammar, the non-terminals are the set of \code{NonTerminalName}s of \code{Rule}, the terminals are the set of \code{name}s of \code{TerminalType}, the start symbol is the \code{Rule} referred by \code{Grammar} and the productions are implicitly described by the directly and indirectly contained elements of the \code{Rule}s. The \code{NonTerminal} and \code{Terminal} elements in the grammar are just references to the real non-terminals and terminals. This definition overlap is owed to the fact that the same terminal may appear multiple times in productions, which must be distinguishable. The denomination distinguishes between declaring and referring existence. For example, in the following rule, \code{b$_1$} to be an instance of \code{Terminal}, \code{C} an instance of \code{NonTerminal} and \code{b$_2$} another instance of \code{Terminal}, but referring to the same \code{TerminalType}:
 \\\begin{code}
 A : b$_1$ C b$_2$
@@ -198,17 +198,17 @@ The \code{Grammar} has at least one \code{Rule} and one \code{TerminalType}. The
 \caption{Example Rule ``A := (w |x y)+ B? | z C''}
 \label{MM:GrammarExample}
 \end{figure}
-Figure \ref{MM:GrammarExample} shows the model instance of the EBNF metamodel \ref{MM:EBNF} of the grammar  \code{A := (w |x y)+ B? | z C}. The grammar rules \code{B} and \code{C} are left out, as well as the start rule reference. The references to the symbols \code{w}, \code{x}, \code{y} and \code{z} are replaced with the name of the referenced symbol.
+Figure \ref{MM:GrammarExample} shows the model instance of the EBNF Metamodel \ref{MM:EBNF} of the grammar  \code{A := (w |x y)+ B? | z C}. The grammar rules \code{B} and \code{C} are left out, as well as the start rule reference. The references to the symbols \code{w}, \code{x}, \code{y} and \code{z} are replaced with the name of the referenced symbol.
 
 \subsection{Attributed Grammar}
 \begin{figure}
 \centering
 \includegraphics[scale=0.7]{gfx/ex/Grammar_Attributed} 
-\caption{Attributed Grammar metamodel extension}
+\caption{Attributed Grammar Metamodel extension}
 \label{MM:AEBNF}
 \end{figure}
 
-The metamodel defined in figure \ref{MM:AEBNF} adds attribution and default values to the grammar. It uses metaclasses from the metamodel figure \ref{MM:EBNF} for context free grammars. This separation is for documentation purposes only, because the metaclasses of the context free grammar metamodel refer to the current metaclasses. \\
+The Metamodel defined in figure \ref{MM:AEBNF} adds attribution and default values to the grammar. It uses metaclasses from the Metamodel figure \ref{MM:EBNF} for context free grammars. This separation is for documentation purposes only, because the metaclasses of the context free grammar Metamodel refer to the current metaclasses. \\
 Each \code{Rule} has a \code{RuleReturnType}, which might be an \code{EClass}, if it is an \code{EObject} returning rule or an \code{EDataType}, if it is a Data Type Rule. The additional distinction in \code{EObjectTypeRule} and \code{DataTypeRule} is for presentation purposes only, this makes it obvious in the diagram when an \code{EObjectTypeRule} is used. For a real implementation, a reference from \code{Rule} to an \code{EClassifier} would be sufficient. \code{EClassifier} is the supertype of \code{EClass} and \code{EDataType}. \code{Symbol} now can contain a  \code{defaultValue}, which is a \code{String}.  \code{String}s are structureless, so the use of \code{DefaultValue}s is restricted to  \code{NonTerminal}s referring to \code{DataTypeRule}s and  \code{Terminal}s only. The \code{String} must not violate the \code{Symbol}'s constraints. Given the example \code{attribute+=TerminalSymbol}, an attribute assignment is realized by \code{TerminalSymbol} containing a  \code{FeatureOperation} with \code{kind} set to  \code{add} and a reference to the  \code{EStructuralFeature} named \code{attribute}. The \code{EStructuralFeature} must be contained in the  \code{EClass} of the returned \code{EObject}s type. In contrast to Xtext, it is possible to assign statically a structureless value to an attribute, for example, 
 \begin{xtxt}
 Rule : {ruleAttribute="true"} "1"

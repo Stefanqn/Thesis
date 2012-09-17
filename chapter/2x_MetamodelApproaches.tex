@@ -1,26 +1,26 @@
 \section{Metamodel Related Approaches} \label{sec:metaApproaches}
 Metamodel related approaches describe the abstract language structure with a model for \emph{the language}, which conforms to a Metamodel \emph{for languages}. When the language model is used, an instance model of it is created. For example, the Unified Modeling Language \footnote{\raggedright \url{http://www.uml.org/}}  2 (UML2) from the Object Management Group \footnote{\raggedright \url{http://www.omg.org/}} formally defines, besides the notation, the structure of UML2 models in their Superstructure \cite{Uml23s}. The Superstructure's structure is described using UML2 Infrastructure \cite{Uml23i}, which is also called Meta-Object Facility (MOF). The relationship of MOF to UML2 is similar to the relationship of BNF to a programming language's grammar.\\
-One advantage of metamodeling is that formal models or languages are created and that tools for supporting metamodels can be built, which integrate if they use a common meta Metamodel.\\
+One advantage of Metamodeling is that formal models or languages are created and that tools for supporting Metamodels can be built, which integrate if they use a common meta Metamodel.\\
 
 This section first explains the relation of MOF with Ecore, the Metamodel of Eclipse Modeling Framework (EMF), and their interchange. Afterwards, EMF is explained in general, followed by a description of projectional editors based on EMF and finally, EMF related textual editing is addressed.
 
 \paragraph{MOF versus Ecore}
-Meta-Object Facility (MOF) is a modeling concept comparable to Ecore. It is defined by the Object Management Group \cite{OMG} to define UML2. Essential Meta-Object Facility (EMOF) is the lightweight core of MOF that closely resembles Ecore. EMF can read and write EMOF's serialization format. \cite{EMP}
+Meta-Object Facility (MOF) is a modeling concept comparable to Ecore. It is defined by the Object Management Group \cite{OMG} to define UML2. Essential Meta-Object Facility (EMOF) is the lightweight core of MOF that closely resembles Ecore. EMF can read and write EMOF's serialization format \cite{EMP}.
 
 \paragraph{XML Metadata Interchange (XMI)}
-XMI is the standard serialization format of EMF models in XML. The "XMI format (...) could technically be considered a concrete syntax, although it's sometimes called a serialization syntax." \cite{EMP}
+XMI is the standard serialization format of EMF models in XML. The ``XMI format (...) could technically be considered a concrete syntax, although it's sometimes called a serialization syntax.'' \cite{EMP}.
 
 
 \subsection{Eclipse Modeling Framework (EMF) }
 "EMF is a Java framework and code generation facility for building tools and other applications based on a structured (data) model" \cite{EMFDoc}. 
-It does not depend on Eclipse. EMF unifies a subset of Java, XML and a subset of UML by models, which are definable using XML Schema, annotated Java interfaces or UML modeling tools. EMF bridges the gap between modelers and Java programmers by relating modeling concepts to a simple Java representation of these concepts. \cite{EMF2nd}\\
+It does not depend on Eclipse. EMF unifies a subset of Java, XML and a subset of UML by models, which are definable using XML Schema, annotated Java interfaces or UML modeling tools. EMF bridges the gap between modelers and Java programmers by relating modeling concepts to a simple Java representation of these concepts \cite{EMF2nd}.\\
 
 EMF's runtime framework\footnote{\raggedright The runtime framework distinguishes the part of EMF's framework from the one which is necessary for code generation.} allows data to be validated, persisted and edited in an user interface editor. Change recording and notification as well as meta data by reflection is available. EMF is the foundation for fine-grained interoperability and data sharing among tools, for example, Model Transaction \footnote{\raggedright \url{http://www.eclipse.org/modeling/emf/?project=transaction}}, graphical editors like the Graphical Modeling Framework GMF \footnote{\raggedright \url{http://www.eclipse.org/modeling/gmp/?project=gmf-runtime}}, database persistence \footnote{\raggedright \url{http://wiki.eclipse.org/Teneo}}, model transformation and so on.
 
 EMF also supports saving models and loads them from persistent resources. A specialized XML serialization format, called XML Metadata Interchange (XMI), is available as a default serialization. References can be persisted and they can be across multiple resources with load on demand, proxy resolution and unloading or proxy creation support. References can be bidirectional in EMF with referential integrity maintained. \cite{EMF2nd}\\
 
 \subsubsection{Ecore Meta Metamodel} \label{ecore}
-EMF uses a model to describe other EMF models. This model is called Ecore and is the center of the EMF world. A simplified version of the Ecore Metamodel which shows the central available types is presented in Figure \ref{MM:Ecore}. Ecore is itself an EMF model and can be described by itself similar to the possibility of describing the syntax of EBNF in EBNF. This makes Ecore its own metamodel, thus Ecore is a meta-metamodel. The concepts of metamodels is simple: a model which describes a model is a metamodel. A model which describes a metamodel is a meta-metamodel. \cite{EMF2nd}  A metamodel describes the abstract syntax of a language \cite{EMP} and adds validation rules to the static semantics of a language \cite{MDSD}
+EMF uses a model to describe other EMF models. This model is called Ecore and is the center of the EMF world. A simplified version of the Ecore Metamodel which shows the central available types is presented in Figure \ref{MM:Ecore}. Ecore is itself an EMF model and can be described by itself similar to the possibility of describing the syntax of EBNF in EBNF. This makes Ecore its own Metamodel, thus Ecore is a meta-Metamodel. The concepts of Metamodels is simple: a model which describes a model is a Metamodel. A model which describes a Metamodel is a meta-Metamodel. \cite{EMF2nd}  A Metamodel describes the abstract syntax of a language \cite{EMP} and adds validation rules to the static semantics of a language \cite{MDSD}
 
 Ecore supports several high level concepts which are not directly available in Java, like multiple inheritance, bidirectional relationships and containment relationships as a specialization of bidirectional relationships. Cycles in containment relations are forbidden and an \code{EObject} might just be contained in exactly one other \code{EObject}. Containment relations form trees within models. The roots of these trees are model elements without an container \code{EObject} and the leafs are \code{EObjects} without outgoing containment relations.  
 
@@ -34,14 +34,14 @@ Ecore supports several high level concepts which are not directly available in J
 Figure \ref{MM:Ecore} shows a subset of Ecore. The central elements of Ecore are:\\
 \begin{itemize}
 	\item \emph{EObject} the common supertype of all Metamodel objects \emph{and} instance objects. An \code{EObject} is similar to an Object in Java.
-	\item An \emph{EPackage} is the root of a model and contains EClassifiers and subpackages.
-	\item \emph{EClass} models classes. A class refers a number of other classes as its supertypes. They are identified by name and contain a number of attributes and references which both are structural features.
+	\item An \emph{EPackage} is the root of a model and contains \code{EClassifiers} and \code{subpackages}.
+	\item \emph{EClass} models classes. A class refers a number of other classes as its \code{supertypes}. They are identified by name and contain a number of attributes and references which both are structural features.
 	\item \emph{EStructuralFeature} is the supertype of attributes and references, it aggregates attributes like multiplicity.
 	\item \emph{EAttributes} have a type and are identified by name. They model the components of an object's data.
 	\item \emph{EDataType} represents a single type which must not impose structure. They are directly related to Java types.
 	\item \emph{EClass} and \emph{EData} types are both \emph{EClassifiers}.
 	\item \emph{EReferences} model one end of an association. They are identified by name and hold a type of the referable object. If the association is bidirectional, the \emph{eOpposite} is assigned to its inverse reference. \cite{EMF2nd}
-	\item Ecore classes hold and \emph{eAnnotation} reference. \emph{Annotations} store information which were not considered fundamental enough to explicitly support them in Ecore's metamodel, for example, documentation, OCL validation, XML serialization parameters. \cite{EMP}
+	\item Ecore classes hold and \emph{eAnnotation} reference. \emph{Annotations} store information which were not considered fundamental enough to explicitly support them in Ecore's Metamodel, for example, documentation, OCL validation, XML serialization parameters. \cite{EMP}
 	\item In addition to structural features, Ecore can also model the interfaces of behavioral features.
 \end{itemize}
 
@@ -52,10 +52,10 @@ The generator model is the model that provides access to the data needed to gene
 \subsubsection{EMF Runtime}
 EMFs runtime framework provides the basis for manipulation, change notification and serialization of EMF objects in general. \cite{EMF2nd} Change notification is based on the observer pattern \cite{patterns}, which are called adapters in EMF, because they frequently extend behavior of \code{EObject}s and adapt them. The behavior of adapters must be described in Java; EMF only declares behavior but does not specify it. All \code{EObject}s are observable, but also other EMF classes such as \code{Resource}s are.
 
-In the following, just the persistence part of EMF's runtime is described. EMF.Edit, which is also part of it, is explained separately in the Projectional Editors section. XText \cite{XTextMan} and EMFText \cite{EMFTextMan} integrate themselves in EMF as \code{Resource}, which is part of EMFs persistence concept. Resource, and ResourceSet are fundamental interfaces of EMF's persistence framework.
+In the following, just the persistence part of EMF's runtime is described. \emph{EMF.Edit}, which is also part of it, is explained separately in the Projectional Editors section. XText \cite{XTextMan} and EMFText \cite{EMFTextMan} integrate themselves in EMF as \code{Resource}, which is part of EMFs persistence concept. \code{Resource}, and \code{ResourceSet} are fundamental interfaces of EMF's persistence framework.
 
 \paragraph{Cross Resource References}
-To reference other persisted objects, EMF uses Proxies. A Proxy is an uninitialized instance of the target class, which is identified by an URI. "A Uniform Resource Identifier (URI) is a compact sequence of characters that identifies an abstract or physical resource." \cite{URI} A URI consists of five parts: scheme, authority, path, query and fragment, whereby query is not considered for this thesis. The basic format is:\\
+To reference other persisted objects, EMF uses proxies. A proxy is an uninitialized instance of the target class, which is identified by an URI. "A Uniform Resource Identifier (URI) is a compact sequence of characters that identifies an abstract or physical resource." \cite{URI} A URI consists of five parts: scheme, authority, path, query and fragment, whereby query is not considered for this thesis. The basic format is:\\
 \code{schema://authority/path\#fragment} \\
 The schema defines the interpretation of the following part. Common schemata for EMF are files, in an eclipse environment platform and http. Authority and path together identify an resource; the fragment identifies a part of a resource or, in the case of EMF, an \code{EObject}.\\
 For example:\\
@@ -64,28 +64,28 @@ which identifies the the second element stored in the containment reference \cod
 
 
 \paragraph{Resource}
-A resource is a basic unit of persistence. It is a container for one or more objects which are persisted together with their children. They can be unloaded, in which case contained referred objects are converted into proxies. A resource is identified by a URI with schema, authority and path. A resource is also responsible for creating valid URI fragments for \code{EObject}s it contains. By default, a resource returns hierarchy based XPath like fragments. Other options are intrinsic IDs and extrinsic IDs. Intrinsic IDs are IDs stored directly on the model object, whereas extrinsic IDs are stored externally. Extrinsic IDs are useful when the modeled object's state is not sufficient to constitute an ID for a given resource. XML resources manage extrinsic IDs and offer support for universally unique identifiers (UUIDs). It is possible to attach adapters to a resource, so it is, for example, possible to observe every change of a contained object and create a \code{ChangeModel} by using EMF's \code{ChangeRecorder}. This enables automatic undo support for commands. \cite{EMF2nd}.
+A \code{Resource} is a basic unit of persistence. It is a container for one or more objects which are persisted together with their children. They can be unloaded, in which case contained referred objects are converted into proxies. A \code{Resource} is identified by a URI with schema, authority and path. A resource is also responsible for creating valid URI fragments for \code{EObject}s it contains. By default, a resource returns hierarchy based XPath like fragments. Other options are intrinsic IDs and extrinsic IDs. Intrinsic IDs are IDs stored directly on the model object, whereas extrinsic IDs are stored externally. Extrinsic IDs are useful when the modeled object's state is not sufficient to constitute an ID for a given resource. XML resources manage extrinsic IDs and offer support for universally unique identifiers (UUIDs). It is possible to attach adapters to a resource, so it is, for example, possible to observe every change of a contained object and create a \code{ChangeModel} by using EMF's \code{ChangeRecorder}. This enables automatic undo support for commands. \cite{EMF2nd}.
 
 \paragraph{ResourceSet}
-A ResourceSet acts as a container for Resources and its main responsibility is to support references between objects in different resources. 
+A \code{ResourceSet} acts as a container for \code{Resource}s and its main responsibility is to support references between objects in different resources. 
 
 \subsection{Projectional Editors}
 This section describes two projectional editors for EMF models, EMF.Edit and the Graphical Modeling Framework (GMF). EMF.Edit is a framework for tree and table editors, whereas GMF is a full graphical editor.
 
 \subsubsection{EMF.Edit}
-With EMF.Edit it is possible to build editors for models, which display and edit (i.e., Copy, drag-and-drop, etc.) model instances with unlimited undo and redo. EMF.Edit is the controller in the MVC pattern which uses JFace, a SWT based user interface toolkit, viewers by default. EMF.Edit and GMF controllers are in between view and model, so the view has no direct connection to the model. EMF.Edit supports object modification based on the Command pattern \cite{patterns} and includes a number of common commands. A command offers execute, undo, redo and canExecute to check if all constraints are satisfied.  EMF.Edit includes a set of generic commands based on the reflective API like Set, Add, Remove, Move, Replace and Copy, as well as  higher level commands like CreateChild, DeleteChild, CutToClipboard, CopyToClipboard, PasteFromClipboard and DragAndDrop. Controllers are called ItemProviders in EMF.Edit, they offer to navigate their structure, modify their content, to retrieve labels, to forward notifications to the viewer as well as acting as a command factory. Controllers are in general associated with an EObject, but do not need to be, in order to let the editor display a structure different from the models structure. The central unit of EMF.Edit is the EditingDomain which encapsulates a ResourceSet, adds a command stack to support undos and redos as well as provides a controller factory \cite{EMF2nd}. EMF.Edit also provides a reflection based generic editor for \emph{any} Metamodel instance.  
+With EMF.Edit it is possible to build editors for models, which display and edit (i.e., \code{Copy, drag-and-drop}, etc.) model instances with unlimited undo and redo. EMF.Edit is the controller in the model view controller pattern which uses JFace, a SWT based user interface toolkit, viewers by default. EMF.Edit and GMF controllers are in between view and model, so the view has no direct connection to the model. EMF.Edit supports object modification based on the Command pattern \cite{patterns} and includes a number of common commands. A command offers \code{execute, undo, redo} and \code{canExecute} to check if all constraints are satisfied.  EMF.Edit includes a set of generic commands based on the reflective API like \code{Set, Add, Remove, Move, Replace} and \code{Copy}, as well as  higher level commands like \code{CreateChild, DeleteChild, CutToClipboard, CopyToClipboard, PasteFromClipboard} and \code{DragAndDrop}. Controllers are called \code{ItemProviders} in EMF.Edit, they offer to navigate their structure, modify their content, to retrieve labels, to forward notifications to the viewer as well as acting as a command factory. Controllers are in general associated with an \code{EObject}, but do not need to be, in order to let the editor display a structure different from the models structure. The central unit of EMF.Edit is the \code{EditingDomain} which encapsulates a \code{ResourceSet}, adds a command stack to support undos and redos as well as provides a controller factory \cite{EMF2nd}. EMF.Edit also provides a reflection based generic editor for \emph{any} Metamodel instance.  
 
 
 \subsubsection {Graphical Modeling Framework (GMF)}
-GMF is a framework for creating graphical eclipse editors that are based on an EMF model. It's a controller framework using EMF Models for persistence and Draw2D as View. GMF is based on the Graphical Editing Framework (GEF), and unifies GEF and EMF commands and extensively uses Eclipse extension points. Furthermore, it adds a Notation model, which persists layout information independent from the language Metamodel and model. The concept of a Notation Model and how it is integrated in GMF is explained in the following paragraphs. The main purpose of GMF, the controller, is skipped because the much simpler controllers of EMF.Edit are sufficient in the context of this thesis. To bridge the gap, it's important to note that GMF creates a controller for each View, that is the basic model element of the notation model. Creating more than one View, e.g., by the view service factory, is a common practice in GMF to separate the presentation structure from model structure. Which view should be created is hinted by the Extensible Type Registry.
+GMF is a framework for creating graphical eclipse editors that are based on an EMF model. It's a controller framework using EMF models for persistence and Draw2D as view. GMF is based on the Graphical Editing Framework (GEF), and unifies GEF and EMF commands and extensively uses Eclipse extension points. Furthermore, it adds a Notation model, which persists layout information independent from the language Metamodel and model. The concept of a Notation Model and how it is integrated in GMF is explained in the following paragraphs. The main purpose of GMF, the controller, is skipped because the much simpler controllers of EMF.Edit are sufficient in the context of this thesis. To bridge the gap, it's important to note that GMF creates a controller for each \code{View}, that is the basic model element of the Notation Model. Creating more than one \code{View}, e.g., by the view service factory, is a common practice in GMF to separate the presentation structure from model structure. Which \code{View} should be created is hinted by the Extensible Type Registry.
 
 \paragraph{Notation Model}
-GMF's notation model manages and persists the state of the diagram or view separated from the language model. It is completely domain model independent and thus can be handled generically by GMF's engine to provide common features. It manages the diagram element, position and style attributes. \cite{EMP} The base type of the notation model is View, which:
+GMF's Notation Model manages and persists the state of the diagram or \code{View} separated from the language model. It is completely domain model independent and thus can be handled generically by GMF's engine to provide common features. It manages the diagram element, position and style attributes. \cite{EMP} The base type of the notation model is \code{View}, which:
 \begin{itemize}
 	\item holds a reference to the language model element it represents 
-	\item acts as the super type for node, edge and the notation models root: diagram
+	\item acts as the super type for \code{Node, Edge} and the notation models root: \code{Diagram}
 	\item contains child nodes and refers to edges
-	\item has attributes like visibility and type
+	\item has attributes like \code{visible} and \code{type}
 \end{itemize}
 
 \begin{figure}
@@ -97,20 +97,20 @@ GMF's notation model manages and persists the state of the diagram or view separ
 
 Part of the design considerations for the Notation Metamodel were \cite{GMFDoc}:
 \begin{itemize}
-	\item The notation meta-model was designed to minimize merging conflicts through the separation of style into granular properties. They can be merged independently.
+	\item The Notation Metamodel was designed to minimize merging conflicts through the separation of style into granular properties. They can be merged independently.
 	\item The style hierarchy has been designed to be extendable; this allows individual extensions and enhancements in the future. 
 \end{itemize}
 
 \paragraph{View Service}
-The View Service is a factory for constructing new notation view elements also based on \cite{GMFDoc}:
+The View Service is a factory for constructing new notation \code{View} elements also based on \cite{GMFDoc}:
 \begin{itemize}
 	\item the corresponding language element (EObject)
 	\item the type determined by the Extensible Type Registry.
-	\item the container view  
+	\item the container \code{View}  
 \end{itemize}
 
 \paragraph{Extensible Type Registry}
-``The Extensible Type Registry provides a way for GMF clients to define an application-specific classification system based on, but alternative to, the metaclasses defined by an Ecore metamodel'' \cite{GMFDoc}. This means that it is possible to introduce specialized GMF internal types, e.g., on the state of the referred EObject or the state of another EObject referring to the current one.
+``The Extensible Type Registry provides a way for GMF clients to define an application-specific classification system based on, but alternative to, the metaclasses defined by an Ecore Metamodel'' \cite{GMFDoc}. This means that it is possible to introduce specialized GMF internal types, e.g., on the state of the referenced \code{EObject} or the state of another \code{EObject} referencing to the current one.
 
 
 
@@ -125,16 +125,16 @@ The View Service is a factory for constructing new notation view elements also b
  
 
 \subsection{Textual Editing}
-This section describes how texts are integrated in EMF. At the beginning, the relationship between context free grammars and MOF based Metamodels is described. In the following, Xtext's \cite{XTextMan} grammar and architecture are described. EMFText \cite{EMFTextMan} is besides Xtext the other well documented, still active developed textual framework for EMF. In contrast to Xtext, it allows the user to automatically derive a textual notation from a Metamodel and layout information in grammar rules. From the abstract point of view of this thesis, these are similar except that EMFText's documentation does not indicate how isomorphism from EClass to grammar rule can be circumvented. The relevance of this is discussed in section \ref{sec:isomorph}. This section closes with the editing strategy of Textual Editing Framework (TEF).
+This section describes how texts are integrated in EMF. At the beginning, the relationship between context free grammars and MOF based Metamodels is described. In the following, Xtext's grammar and architecture are described, based on the Xtext manual \cite{XTextMan}. EMFText \cite{EMFTextMan} is besides Xtext the other well documented, still active developed textual framework for EMF. In contrast to Xtext, it allows the user to automatically derive a textual notation from a Metamodel and layout information in grammar rules. From the abstract point of view of this thesis, these are similar except that EMFText's documentation does not indicate how isomorphism from EClass to grammar rule can be circumvented. The relevance of this is discussed in section \ref{sec:isomorph}. This section closes with the editing strategy of Textual Editing Framework (TEF).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \subsubsection{Relation of Metamodels and Context Free Grammars} \label{sec:MM:CFGs}
-To connect the textual languages, which are typically denoted by context free grammars and modeling languages, which are described by metamodels, a mapping between the concepts of BNF and Ecore has to be established. Because Ecore is more expressive than BNF, it is possible to map BNF to Ecore, but just a subset of Ecore to BNF.
+To connect the textual languages, which are typically denoted by context free grammars and modeling languages, which are described by Metamodels, a mapping between the concepts of BNF and Ecore has to be established. Because Ecore is more expressive than BNF, it is possible to map BNF to Ecore, but just a subset of Ecore to BNF.
 
-Algorithms for mapping a subset of MOF to BNF and BNF to MOF are described in \cite{MofCfg}. Note that \cite{MofCfg} uses a subset of MOF which is also a subset of Ecore and uses enumerations for fixed string literals (keywords), which is an optional specialization of the presented attribute mapping. Also,  \cite{MofCfg} maintains an attribute order by generating lexical ordered structural feature names. Whereby an attribute order is crucial, this is not necessary regarding Ecore. EMF implements unordered multiple values as lists, which are ordered. This implementation characteristic is documented \cite{EMF2nd}.  \cite{MofCfg} mentions that it's possible to create "invalid" models of the grammar metamodel, which requires additional verification with the target context free grammar. This topic is discussed later in section \ref{para:xtextVal}.
+Algorithms for mapping a subset of MOF to BNF and BNF to MOF are described in \cite{MofCfg}. Note that \cite{MofCfg} uses a subset of MOF which is also a subset of Ecore and uses enumerations for fixed string literals (keywords), which is an optional specialization of the presented attribute mapping. Also,  \cite{MofCfg} maintains an attribute order by generating lexical ordered structural feature names. Whereby an attribute order is crucial, this is not necessary regarding Ecore. EMF implements unordered multiple values as lists, which are ordered. This implementation characteristic is documented \cite{EMF2nd}.  \cite{MofCfg} mentions that it's possible to create ``invalid'' models of the grammar Metamodel, which requires additional verification with the target context free grammar. This topic is discussed later in section \ref{para:xtextVal}.
 
 The general idea of context free grammars to Metamodels mappings is:
 \begin{enumerate}
@@ -148,30 +148,30 @@ The mapping is straightforward, just the alternative to subclass mapping might s
 
 Mapping Metamodels to context free grammars adds the problem of representing cross-references for which there is no correspondence in BNF. They can however be represented as terminals identifying the referenced element.   
 
-This mapping defines the foundation to bridge between Metamodels and context free grammars. It describes how a model represents a Parse Tree. The Parse Tree is bound by the concrete textual syntax. In general, however, Ecore models describe the abstract syntax of a language and not the Parse Tree of one textual representation. To gain more flexibility, the EBNF description is enriched by an synthesized attributed grammar which defines the AST. The mapping between S-attributed Grammar and Ecore will be described after a discussion of XTexts grammar.
+This mapping defines the foundation to bridge between Metamodels and context free grammars. It describes how a model represents a Parse Tree. The Parse Tree is bound by the concrete textual syntax. In general, however, Ecore models describe the abstract syntax of a language and not the Parse Tree of one textual representation. To gain more flexibility, the EBNF description is enriched by an synthesized attributed grammar which defines the AST. The mapping between S-attributed grammar and Ecore will be described after a discussion of XTexts grammar.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \subsubsection{Xtext Grammar}
-XTexts grammar language is a domain-specific language to describe textual languages. The main idea is to describe the concrete syntax and its mapping to an in-memory representation - the ``semantic model''. Xtext supports grammar mixins, which is the reuse of existing grammars. It can infer Ecore models from a grammar, but it's also possible to import existing Ecore models instead. In the following, the XText grammar will be explained by example in conjuction with the optional Ecore inference. The metamodel created by inference aids in the understanding of how Metamodel and synthesized attributed EBNF constrain each other. In case of the manually maintained metamodel, this metamodel must follow certain constraints. Based on the Liskovs substitution principle, the classes of the manual metamodel must be a substitute of the classes of the inferred metamodel which would have to be created. In case of model inference, the created structural features are normalized, meaning if all subclasses share a feature with the same name, type and multiplicity, they are merged together in the common superclass.
+XTexts grammar language is a domain-specific language to describe textual languages. The main idea is to describe the concrete syntax and its mapping to an in-memory representation - the ``semantic model''. Xtext supports grammar mixins, which is the reuse of existing grammars. It can infer Ecore models from a grammar, but it's also possible to import existing Ecore models instead. In the following, the XText grammar will be explained by example in conjunction with the optional Ecore inference. The Metamodel created by inference aids in the understanding of how Metamodel and synthesized attributed EBNF constrain each other. In case of the manually maintained Metamodel, this Metamodel must follow certain constraints. Based on the Liskovs substitution principle, the classes of the manual Metamodel must be a substitute of the classes of the inferred Metamodel which would have to be created. In case of model inference, the created structural features are normalized, meaning if all subclasses share a feature with the same name, type and multiplicity, they are merged together in the common superclass.
 
 XText uses an EBNF with the following notation extensions:
 \begin{itemize}
-	\item Option, meaning one or none is denoted by '?'
-	\item Any, meaning zero or more is denoted by the Kleene star '*'
-	\item One or more is denoted by the Kleene cross '+'
-	\item Keywords are enclosed in '' or '', e.g., ``keyword'' or ''anotherKeyword''
-	\item Grouping is possible by enclosing brackets '(' and  ')', e.g.  ( A b C)
+	\item Option, meaning one or none is denoted by \code{?}
+	\item Any, meaning zero or more is denoted by the Kleene star \code{*}
+	\item One or more is denoted by the Kleene cross \code{+}
+	\item Keywords are enclosed in \code{'} or \code{"}, e.g., \code{"keyword"} or \code{'anotherKeyword'}
+	\item Grouping is possible by enclosing brackets \code{(} and  \code{)}, e.g. \code{( A b C)}
 \end{itemize}
 
 \paragraph{Lexer Rules}
 In XText there are Lexer rules, which extend the EBNF notation by:
 \begin{itemize}
-	\item Character Ranges, which are denoted by start character '..' stop character, e.g., '0'..'9' 
-	\item Wildcards, which allow any character are denoted by '.'
-	\item Negation, denoted by '!'
-	\item the end of file token, denoted by 'EOF'
-	\item Until token, which consumes everything until the stop token occurs is denoted by '->', e.g. '/*' -> '*/'
+	\item \emph{Character Ranges}, which are denoted by start character \code{..} stop character, e.g., \code{'0'..'9'}
+	\item \emph{Wildcards}, which allow any character are denoted by '\code{.}'
+	\item \emph{Negation}, denoted by \code{!}
+	\item the \emph{end of file} token, denoted by \code{EOF}
+	\item \emph{Until token}, which consumes everything until the stop token occurs is denoted by \code{->}, e.g. \code{'/*' -> '*/'}
 \end{itemize}
 A terminal rule looks like for example:
 \begin{xtxt}
@@ -181,13 +181,13 @@ this is equivalent to
 \begin{xtxt}
 terminal SL_COMMENT returns ecore::EString : "//" !'\n'* '\n';
 \end{xtxt}
-The return type is optional and by default EString. The order of terminal rules is important, because they shadow each other. Terminal rule names are written in capital letters as a naming convention. Terminal rules are mapped to the data type following the returns keyword and are converted to it using the ValueConverters.
+The return type is optional and by default \code{EString}. The order of terminal rules is important, because they shadow each other. Terminal rule names are written in capital letters as a naming convention. Terminal rules are mapped to the data type following the returns keyword and are converted to it using the \code{ValueConverter}s.
 
 \paragraph{Parser Rules}
-A parser rule produces a tree of terminal and non-terminal tokens and all parser rules together produce the Parse Tree, which is also referred to as Node Model in Xtext. Additionally, parser rules are the building plan for the creation of EDataTypes or EObjects which form the AST. In XText the AST is also called semantic model. EObjects are created lazy by default. Actions and assignments are used to derive types, to force their instance creation and to build the AST accordingly. The first parser rule in the grammar is the start production. It's possible to hide terminal tokens from the parser, like comments. Hidden tokens are ignored in the parser, but should be preserved during deserialization.
+A parser rule produces a tree of terminal and non-terminal tokens and all parser rules together produce the Parse Tree, which is also referred to as Node Model in Xtext. Additionally, parser rules are the building plan for the creation of \code{EDataType}s or \code{EObject}s which form the AST. In XText the AST is also called semantic model. \code{EObject}s are created lazy by default. Actions and assignments are used to derive types, to force their instance creation and to build the AST accordingly. The first parser rule in the grammar is the start production. It's possible to hide terminal tokens from the parser, like comments. Hidden tokens are ignored in the parser, but should be preserved during deserialization.
 
 \subparagraph{DataType Rules}
-\code{DataType} rules are parsing-phase rules, which return \code{EDataType}s. They are similar to terminal rules, but because they are parser rules, they are context sensitive. Rules that don't call parser rules, nor contain actions or assignments are considered data type rules with the default return type EString. 
+\code{DataType} rules are parsing-phase rules, which return \code{EDataType}s. They are similar to terminal rules, but because they are parser rules, they are context sensitive. Rules that don't call parser rules, nor contain actions or assignments are considered data type rules with the default return type \code{EString}. 
 \begin{xtxt}
 Number returns ecore::EInt : NUM ('.' NUM*)?;}
 \end{xtxt}
@@ -195,14 +195,14 @@ Number returns ecore::EInt : NUM ('.' NUM*)?;}
 \subparagraph{Assignments}
 Assignments are the synthesized attribution of the EBNF dialect. They assign the information of a consumed symbol to the structural feature of the currently produced object, e.g.:
 \begin{xtxt}
-Person : "Person" age=Number;
+Person : "P" age=Number;
 \end{xtxt}
-This creates a Metaclass named Person with an attribute named age of type EInt. 
-The type of the current object(a subtype of EClass) is the return type of the parser rule. The type's name is equal to the rule's name by default.
+This creates a Metaclass named \code{Person} with an attribute named \code{age} of type \code{EInt}. 
+The type of the current object(a subtype of \code{EClass}) is the return type of the parser rule. The type's name is equal to the rule's name by default.
 \begin{xtxt}
 Person : "Person" ("alias:" aliases+=ID)+;
 \end{xtxt}
-This rule creates a multi-valued structural feature for aliases and adds each ID occurrence to it. Also '?=' exists which assigns true to a boolean value if the right side was consumed.
+This rule creates a multi-valued structural feature for \code{aliases} and adds each ID occurrence to it. Also \code{?=} exists which assigns true to a boolean value if the right side was consumed.
 \begin{xtxt}
 Class : "class" (public?="public")?
 \end{xtxt}
@@ -212,7 +212,7 @@ Class returns Class : "class" (public?="public")?
 \end{xtxt}
 
 \subparagraph{Unassigned Rule Calls}
-If a rule does not contain any assignments, but calls Parser Rules, it's called an unassigned rule. The return type of this rule is an abstract class, which has to be a supertype of returned types of TokenA, TokenB and TokenC. Xtext generates an abstract class named \code{AbstractToken} for this example by default.
+If a rule does not contain any assignments, but calls Parser Rules, it's called an unassigned rule. The return type of this rule is an abstract class, which has to be a supertype of returned types of \code{TokenA, TokenB} and \code{TokenC}. Xtext generates an abstract class named \code{AbstractToken} for this example by default.
 \begin{xtxt}
 AbstractToken :	TokenA |	TokenB |	TokenC
 \end{xtxt}
@@ -223,7 +223,7 @@ Xtext allows the declaration of cross-references in the grammar as terminal toke
 \begin{xtxt}
 Reference:  "Ref" event = [MyEvent| VALID_EVENT_ID]
 \end{xtxt}
-In this example, it's important to note that MyEvent is the referenced types EClass, not a parser rule. The \kode{|VALID_EVENT_ID} is optional and refers to an EDataType rule or uses a string by default.
+In this example, it's important to note that \code{MyEvent} is the referenced types \code{EClass}, not a parser rule. The \kode{|VALID_EVENT_ID} is optional and refers to an \code{EDataType} rule or uses a string by default.
 
 \subparagraph{Enumeration Rules}
 Enumeration Rules convert between enumeration literals and strings and are a shortcut for data type rules with specific value converts.
@@ -236,7 +236,7 @@ Z 	: 	{B} "A" v=ID
 \end{xtxt}
 Xtext requires and infers that \code{B} and \code{C} are subtypes of \code{Z}. 
 
-Assigned actions are used for tree rewriting which is necessary to cope with shortcomings of the underlying parser technique. Because XText uses the ANTLR parser generator framework, which is based on the LL(*) algorithm, it can't handle left recursive grammars. It is therefore necessary to rewrite or 'massage' the grammar, which is called "left-factoring" in the case left recursion is dissolved. Because this left-factoring ends in an unwanted AST, it is possible to rewrite the tree by assigning the current EObject to a structural feature of the returned EObject, e.g., 
+Assigned actions are used for tree rewriting which is necessary to cope with shortcomings of the underlying parser technique. Because XText uses the ANTLR parser generator framework, which is based on the LL(*) algorithm, it can't handle left recursive grammars. It is therefore necessary to rewrite or 'massage' the grammar, which is called ``left-factoring'' in the case left recursion is dissolved. Because this left-factoring ends in an unwanted AST, it is possible to rewrite the tree by assigning the \code{current EObject} to a structural feature of the returned \code{EObject}, e.g., 
 \begin{xtxt}
 Expression 	: 	LExpression 
 	 	( "&&" {And.left=current}  right=Expression)
@@ -251,7 +251,7 @@ XText offers the possibility of syntactic predicates, which are necessary to sol
 \subsubsection{Xtext Architecture} \label{cha:xtextarch}
 This section describes a subset of Xtexts architecture. It focuses on parsing, Parse Tree construction, the gap between abstract syntax and parse tree and linking.
 
-XText converts the input grammar to an EMF model, saves it and provides helper methods for runtime grammar access. XText integrates itself in EMF as a Resource named \code{XTextResource}, which is shown in figure \ref{XtextArch}.  The basic components of a XText resources are the Serializer, to convert EObjects to text, the Parser, to convert text to EObjects or to deserialize the EObjects and the Linker which manages Cross-References. 
+XText converts the input grammar to an EMF model, saves it and provides helper methods for runtime grammar access. XText integrates itself in EMF as a \code{Resource} named \code{XTextResource}, which is shown in figure \ref{XtextArch}.  The basic components of a XText resources are the \code{Serializer}, to convert \code{EObject}s to text, the \code{Parser}, to convert text to \code{EObject}s or to deserialize the \code{EObject}s and the \code{Linker} which manages cross-references. 
 
 \begin{figure}
 \centering
@@ -261,29 +261,29 @@ XText converts the input grammar to an EMF model, saves it and provides helper m
 \end{figure}
 The main drawbacks of this solution are:
 \begin{itemize}
-	\item During incremental changes, the XText parser replaces subtrees instead of updating them, so existing EObjects become stale. The XText documentation advises against the use of a "self-synchronizing (...) editor" on the same model as XText but suggests working on a copy.
-	\item The implementation to identify EObject in a resource has to return stable fragments.
+	\item During incremental changes, the XText parser replaces subtrees instead of updating them, so existing \code{EObject}s become stale. The XText documentation advises against the use of a ``self-synchronizing (...) editor'' on the same model as XText but suggests working on a copy.
+	\item The implementation to identify \code{EObject} in a \code{Resource} has to return stable fragments.
 \end{itemize}
 
 \paragraph{XText Phases during deserialization}
 The parsing process in XText is separated into the following phases:
 \begin{enumerate}
-	\item Lexing and Parsing: The lexing phase transforms a sequence of characters into tokens. Tokens are a strongly typed part of the input sequence. They represent an atomic symbol and their type is determined by a particular terminal rule or keyword. The parsing phase requests tokens and builds a ParseTree and an AST according to the grammar rules.
-	\item Linking resolves the textual identification of ``referrenced'' targets to Cross References after parsing is complete.
-	\item The Validation Phase is optional.
+	\item Lexing and Parsing: The lexing phase transforms a sequence of characters into tokens. Tokens are a strongly typed part of the input sequence. They represent an atomic symbol and their type is determined by a particular terminal rule or keyword. The parsing phase requests tokens and builds a Parse Tree and an AST according to the grammar rules.
+	\item Linking resolves the textual identification of referenced targets to cross references after parsing is complete.
+	\item The validation phase is optional.
 \end{enumerate}
 
 \paragraph{Value Converters}
-Because Xtext translates between an abstract syntax tree and a stream of characters in both directions, the sequence of characters inevitably has to be converted to a proper data type and vice versa. This bidirectional transformation is the job of \code{ValueConverter}s and is done by two (inverse) unidirectional transformations. Converters are used by the Lexers Terminal Rules and Parser Rules.
+Because Xtext translates between an abstract syntax tree and a stream of characters in both directions, the sequence of characters inevitably has to be converted to a proper data type and vice versa. This bidirectional transformation is the job of \code{ValueConverter}s and is done by two (inverse) unidirectional transformations. Converters are used by the lexers terminal rules and parser rules.
 
 
 \paragraph{Parsing}
-XText uses ANTLR \cite{ANTLR} for parser creation. It creates ANTLR grammar files with ANTLR Grammar Actions to create the AST and ParseTree. The rules return EObjects, 'init' and 'after' actions are used as guidance of the current stack position for the creation of nodes. The returned EObjects form the AST and relate to them and a node model is created which is related to the AST. 
+XText uses ANTLR \cite{ANTLR} for parser creation. It creates ANTLR grammar files with ANTLR grammar Actions to create the AST and Parse Tree. The rules return \code{EObject}s, 'init' and 'after' actions are used as guidance of the current stack position for the creation of nodes. The returned \code{EObject}s form the AST and relate to them and a Node Model is created which is related to the AST. 
 
 \subparagraph{Node Model}
-The node model is created during parsing. The term ``node model'' is defined by Xtext and does not conform to the model definition of this thesis, because no metamodel exists. The base interface of the node model is INode which  is described as "A node in the parse tree" \cite{XTextAPI}. Nodes are either composite nodes if they represent non-terminals or leaf nodes if they represent terminals. Nodes hold a reference to the grammar element they represent and leafs to the represented token additionally. Nodes are added to the EObjects as Adapters instead of referred to with an EReference.
+The Node Model is created during parsing. The term ``Node Model'' is defined by Xtext and does not conform to the model definition of this thesis, because no Metamodel exists. The base interface of the Node Model is \code{INode} which  is described as ``A node in the parse tree'' \cite{XTextAPI}. Nodes are either composite nodes if they represent non-terminals or leaf nodes if they represent terminals. Nodes hold a reference to the grammar element they represent and leafs to the represented token additionally. Nodes are added to the \code{EObject}s as adapters instead of referred to with an \code{EReference}.
 
-The roles of the node model during serializations are:
+The roles of the Node Model during serializations are:
 \begin{itemize}
 	\item preserves existing white spaces
 	\item preserves existing comments
@@ -293,40 +293,40 @@ The roles of the node model during serializations are:
 
 \paragraph{Linking}
 \label{sec:xtextarch:Linking}
-Linking of Cross-References by means of textual identifiers can be separated into two parts:
+Linking of cross-references by means of textual identifiers can be separated into two parts:
 \begin{itemize}
-	\item how XText copes with the mismatch between cross references and text in general. In this case, just inner resource references are considered. 
-	\item how does XText resources cope with integration in EMF as an EMF resource.
+	\item how XText copes with the mismatch between cross-references and text in general. In this case, just inner resource references are considered. 
+	\item how does \code{XTextResource} cope with integration in EMF as an EMF resource.
 \end{itemize}
-The general idea of linking in XText is that every grammar rule which contains a reference is visited after the ANTLR parser finished. While visiting the AST, an ILinker instance is consulted to resolve each link. How the link is resolved is specified by the language designer by programmatically using the textual representation saved in the node model and the context, which is the EObject holding the reference which has to be resolved. XText strongly encourages the usage of lazy linkers, which replaces the link with an EMF proxy containing the proper URI.
+The general idea of linking in XText is that every grammar rule which contains a reference is visited after the ANTLR parser finished. While visiting the AST, an \code{ILinker} instance is consulted to resolve each link. How the link is resolved is specified by the language designer by programmatically using the textual representation saved in the Node Model and the context, which is the \code{EObject} holding the reference which has to be resolved. XText strongly encourages the usage of lazy linkers, which replaces the link with an EMF proxy containing the proper URI.
 
-Besides the option to export just a subset of XText's created EObjects, to achieve full EMF integration every EObject has to be referable, so the resource must be able to return the URI fragment of the given contained EObject and the EObject for a URI fragment. By default, XText's Fragment Provider uses path fragments like \kode{//@classes.0/@methods.0/@localVariables.3/@name}. XText's documentation states that path references are fragile and that UUIDs should not be used regarding the users. 
+Besides the option to export just a subset of XText's created \code{EObject}s, to achieve full EMF integration every \code{EObject} has to be referable, so the resource must be able to return the URI fragment of the given contained \code{EObject} and the \code{EObject} for a URI fragment. By default, XText's Fragment Provider uses path fragments like \kode{//@classes.0/@methods.0/@localVariables.3/@name}. XText's documentation states that path references are fragile and that UUIDs should not be used regarding the users. 
 
 \paragraph{Concrete Syntax Validation Constraints} \label{para:xtextVal}
-As mentioned in \cite{MofCfg}, it is possible to create invalid metamodels, where no valid textual representation can be deduced, even if the metamodel was inferred from the EBNF. The concrete syntax validation constraints describe how the grammar rules constrain a model, so it can be turned into word. They are used to validate if a textual representation is possible and also used to guide the serialization process to distinguish between different production and grammar rules, e.g.,
+As mentioned in \cite{MofCfg}, it is possible to create invalid Metamodels, where no valid textual representation can be deduced, even if the Metamodel was inferred from the EBNF. The concrete syntax validation constraints describe how the grammar rules constrain a model, so it can be turned into word. They are used to validate if a textual representation is possible and also used to guide the serialization process to distinguish between different production and grammar rules, e.g.,
 \begin{xtxt}
 Z 	:  "A" v=ID  
 	|  "B" n=INT;
 \end{xtxt}
-given an instance of 'Z', it depends on if 'v' or 'n' is assigned to properly serialize 'Z'.
+given an instance of \code{Z}, it depends on if \code{v} or \code{n} is assigned to properly serialize \code{Z}.
 Given the rule
 \begin{xtxt}
 MyRule:	({MySubRule} "sub")? (strVal+=ID intVal+=INT)*;
 \end{xtxt}
 several constraints are implied:
 \begin{enumerate}
-	\item Types: just instances of MyRule and MySubRule are allowed. Further specialized Subtypes are prohibited. 
-	\item Features: if other structural features beside strVal and intVal exist, they must be either transient, unassigned or contain the default value.
-	\item Quantities: the size of strVal and intVal must be equal.
-	\item Values: all values must be convertable to valid terminal tokens.
+	\item \emph{Types}: just instances of \code{MyRule} and \code{MySubRule} are allowed. Further specialized Subtypes are prohibited. 
+	\item \emph{Features}: if other structural features beside \code{strVal} and \code{intVal} exist, they must be either transient, unassigned or contain the default value.
+	\item \emph{Quantities}: the size of \code{strVal} and \code{intVal} must be equal.
+	\item \emph{Values}: all values must be convertable to valid terminal tokens.
 \end{enumerate}
-These constraints are created per production rule, not only per grammar rule. In the case of 'Z', two independent sets of constraints are created, one for the production starting with "A" and one for the production starting with "B".
+These constraints are created per production rule, not only per grammar rule. In the case of \code{Z}, two independent sets of constraints are created, one for the production starting with \code{"A"} and one for the production starting with \code{"B"}.
 XText's concrete syntax validation is not capable of regarding:
 \begin{enumerate}
 	\item assigned actions, e.g., 
 	\kode!{MyType.myFeature=current}!
 	\item unassigned rule calls to assigned actions
-	\item the order within list features, e.g., In \kode{Rule: (foo+=R1 foo+=R2)*} foo must contain R1 and R2 in alternating order
+	\item the order within list features, e.g., In \kode{Rule: (foo+=R1 foo+=R2)*} foo must contain \code{R1} and \code{R2} in alternating order
 \end{enumerate}
 
 \paragraph{Serialization}
@@ -334,7 +334,7 @@ The serialization process complements parsing and lexing by transforming EMF mod
 
 \begin{enumerate}
 	\item Validation
-	\item Matching model elements with grammar rules by the parse tree constructor
+	\item Matching model elements with grammar rules by the Parse Tree Constructor
 	\item Associating comments
 	\item Associating existing nodes
 	\item Merging white spaces and line wraps
@@ -343,13 +343,13 @@ The serialization process complements parsing and lexing by transforming EMF mod
 
 In this thesis, only the parse tree constructor is discussed because:
 \begin{itemize}
-	\item Validation is optional and is done with less meaningful error messages by the parse tree constructor.
+	\item Validation is optional and is done with less meaningful error messages by the Parse Tree Constructor.
 	\item Comments, white spaces, line wraps are layout information without grammar relation.
 	\item Runtime analysis showed that the existing node model is already accessed by the parse tree constructor, which indicates a gap in documentation and implementation.
 \end{itemize}
 
 \paragraph{Serialization contract}
-"The contract of serialization says that a model which is saved (serialized) to its textual representation and then loaded (parsed) again yields a new model that is equal to the original model."\cite{XTextMan}
+``The contract of serialization says that a model which is saved (serialized) to its textual representation and then loaded (parsed) again yields a new model that is equal to the original model.''\cite{XTextMan}
 
 The following must hold:\\
 I) $load(save(model)) \rightarrow model$\\
@@ -357,16 +357,16 @@ The inverse does not always hold, thus:\\
 II) $save(load(text)) \nrightarrow text$\\
 If the node model still exists, II) holds in most cases. 
 
-Given the XText example, that for the following rule first all xvals and then all yvals will be written to the token stream.
+Given the XText example, that for the following rule first all \code{xvals} and then all \code{yvals} will be written to the token stream.
 \begin{xtxt}
 MyRule: (xval+=ID | yval+=INT)*; 
 \end{xtxt}
-This indicates that XText follows the EObject containment order instead of the one of the node model.
+This indicates that XText follows the \code{EObject} containment order instead of the one of the node model.
 
 \paragraph{Parse Tree Constructor}  \label{xtxt:ptc}
-In actuality the Parse Tree Constructor does \emph{not} construct nodes of the node model, it finds valid grammar rules for each EObject of the AST. 
+In actuality the Parse Tree Constructor does \emph{not} construct nodes of the node model, it finds valid grammar rules for each \code{EObject} of the AST. 
 
-It succeeds if all EObjects are visited and no concrete syntax validation constraint is violated. Therefore, the Parse Tree Constructor has to find a valid allocation for the traversed AST in which all grammar constraints hold.  This is, like parsing, a constraint satisfaction problem. XText solves this constraint satisfaction problem using top down backtracking, which results in potential exponential runtime of the serialization of a model. This is done by the Parse Tree Constructor finding valid 'paths' from the root to a leaf node constrained by the grammar. The Parse Tree Constructor stops after the first valid solution has been found. 
+It succeeds if all \code{EObject}s are visited and no concrete syntax validation constraint is violated. Therefore, the Parse Tree Constructor has to find a valid allocation for the traversed AST in which all grammar constraints hold.  This is, like parsing, a constraint satisfaction problem. XText solves this constraint satisfaction problem using top down backtracking, which results in potential exponential runtime of the serialization of a model. This is done by the Parse Tree Constructor finding valid 'paths' from the root to a leaf node constrained by the grammar. The Parse Tree Constructor stops after the first valid solution has been found. 
 
 If there is no representation of a choice in the AST, a default needs to be specified, for example, in the case: 
 \begin{xtxt}

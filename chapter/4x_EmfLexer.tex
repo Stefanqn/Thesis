@@ -5,13 +5,13 @@ This chapter presents a concept to embed structured data in an atomic character.
 The task of an ID Character is to uniquely identify an object in a serializable context. 
 The ideal characteristics are:
 \begin{itemize}
-	\item Bindable and existence dependent on another character or standalone.
-	\item Unlimited number of unique identifiers.
-	\item Atomic. The integrity of the identification should be preserved and not be breakable.
-	\item Standardized. There should be a long term guarantee that they're available for use.
-	\item Ubiquitously available. They should be available on every platform.
-	\item Abstract characters. They should be quickly distinguishable from non-ID characters.
-	\item Private. They should not cause any conflicts or be missinterpretable in any way.
+	\item \emph{Bindable} and existence dependent on another character or standalone.
+	\item \emph{Unlimited} number of unique identifiers.
+	\item \emph{Atomic}. The integrity of the identification should be preserved and not be breakable.
+	\item \emph{Standardized}. There should be a long term guarantee that they're available for use.
+	\item \emph{Ubiquitously} available. They should be available on every platform.
+	\item \emph{Abstract} characters. They should be quickly distinguishable from non-ID characters.
+	\item \emph{Private}. They should not cause any conflicts or be missinterpretable in any way.
 \end{itemize}
 
 \subsubsection{Unicode Private-Use Characters}
@@ -19,12 +19,12 @@ Unicode \cite{Unicode} offers a possible solution. Unicode is a universal charac
 The private use characters are intended for software developers. Compared to the ideal characteristics:
 \begin{itemize}
 	\item They are stand alone characters and are not bindable per se.
-	\item The number of identifiers is limited to 137,468, in which 6,400 are in the private use area U+E000 to U+F8FF and 65,534 are in each supplementary private use Area-A and Area-B. 
-	\item They are single characters and thus atomic. 
-	\item Unicode is standardized and private-use characters are permanently designated for private use.
-	\item Unicode, especially the UTF-8 encoding, is wide spread and nearly ubiquitously available on modern personal computer platforms.
+	\item The number of identifiers is \emph{limited} to 137,468, in which 6,400 are in the private use area U+E000 to U+F8FF and 65,534 are in each supplementary private use Area-A and Area-B. 
+	\item They are single characters and thus \emph{atomic}. 
+	\item Unicode is \emph{standardized and private-use} characters are permanently designated for private use.
+	\item Unicode, especially the UTF-8 encoding, is wide spread and nearly \emph{ubiquitously} available on modern personal computer platforms.
 	\item There are three code-blocks for private-use characters. A three range check for a code point is sufficient to determine its private-use.
-	\item Private-use characters are, as the name states, explicitly designed for private use.
+	\item Private-use characters are, as the name states, explicitly designed for \emph{private} use.
 \end{itemize}
 The restriction of a limited number of available identifiers could be solved by implementing a non-standard character encoding, such as a variable-width encoding.
 
@@ -37,10 +37,10 @@ The ID character can be to
 	\item add an ID to another token.
 	\item use the ID to refer to an object.
 \end{itemize}
-In both cases, additional data must be preserved. Because the character stream is used for serialization, the additional data should also be serialized in an adjacent file. Figure \ref{EMFLexer} sketches an EMF based Lexer extension. The adjacent file is named \code{EMF Document} on the right, whereas the token stream is read from the \code{Text Document} at the bottom. The wrapping Lexer is named \code{EMF Lexer} in figure \ref{EMFLexer}, whereas the wrapped Lexer is called \code{Original Lexer}.  
+In both cases, additional data must be preserved. Because the character stream is used for serialization, the additional data should also be serialized in an adjacent file. Figure \ref{EMFLexer} sketches an EMF based lexer extension. The adjacent file is named \code{EMF Document} on the right, whereas the token stream is read from the \code{Text Document} at the bottom. The wrapping lexer is named \code{EMF Lexer} in figure \ref{EMFLexer}, whereas the wrapped lexer is called \code{Original Lexer}.  
 
 % ID giving
-\paragraph{Adding an Identifier} To add an identifier to the following or previous token is useful in regards to enabling stable references and enhancing compare based updated approaches. This identifier providing use is \emph{not of interest for this thesis}. An associativity flag is required for right, none or left associativity.  Right associativity is easy to implement, because the wrapping Lexer can distinguish and filter the ID character, resolve the identifier and append it to the token value of the token returned by the wrapped Lexer. If left associativity may occur, this requires the wrapping Lexer to additionally cache one token of the wrapped Lexer and request another token from the wrapped Lexer. Aside from being easily distinguishable from the normal textual representation, ID characters clutter the output and should not be considered human readable without preprocessing. 
+\paragraph{Adding an Identifier} To add an identifier to the following or previous token is useful in regards to enabling stable references and enhancing compare based updated approaches. This identifier providing use is \emph{not of interest for this thesis}. An associativity flag is required for right, none or left associativity.  Right associativity is easy to implement, because the wrapping Lexer can distinguish and filter the ID character, resolve the identifier and append it to the token value of the token returned by the wrapped lexer. If left associativity may occur, this requires the wrapping lexer to additionally cache one token of the wrapped Lexer and request another token from the wrapped lexer. Aside from being easily distinguishable from the normal textual representation, ID characters clutter the output and should not be considered human readable without preprocessing. 
  
 % ref EObject 
 \paragraph{Referring character} \label{lexer:RefEObj} Using the ID characters to refer to objects conceptually enables structured data on the character stream. This even exceeds the complexity of normal token values, which contain a sequence of characters in general. Restricting the referred objects to be serializable would be sufficient, but restricting the references to \code{EObject} eliminates impedance mismatch for a character to \code{EObject} mapping and also ensures a non-binary XMI serialization. Figure \ref{EMFLexer} realizes this by a map from UTF8 character to a triple, $c \rightarrow (o,a,i)$, where $o$ is the referred object, $a$ is the associativity and $i$ is the extrinsic identifier. The associativity determines if it's a plain ID or a reference character. \code{None} associative characters are EObject references. $o$ and $i$ can be tree structures, because if $o$ contains other \code{EObject}s, multiple UUIDs adjacent to each \code{EObject} must be persisted in $i$. References between the serialized \code{EObject}s are by the use of UUIDs stable, but stability of references to textually described \code{EObject}s depend on the quality of the resource implementation and are problematic. \\
